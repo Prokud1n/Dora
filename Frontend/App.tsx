@@ -1,11 +1,11 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import CreateAccountPassword from './src/page/CreateAccount/CreateAccountPassword/CreateAccountPassword';
+import CreateAccountEmail from './src/page/CreateAccount/CreateAccountEmail/CreateAccountEmail';
 
 export default function App() {
     return (
         <View style={styles.container}>
-            <CreateAccountPassword />
+            <CreateAccountEmail />
         </View>
     );
 }

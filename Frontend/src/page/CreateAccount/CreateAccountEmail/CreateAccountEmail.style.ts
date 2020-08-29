@@ -38,6 +38,11 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         paddingTop: 13,
         fontSize: 17
+    },
+    errorMessage: {
+        color: '#FF3826',
+        textAlign: 'center',
+        fontSize: 12
     }
 });
 
