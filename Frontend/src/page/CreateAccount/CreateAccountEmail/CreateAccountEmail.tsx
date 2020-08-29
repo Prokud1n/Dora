@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import { Button, SafeAreaView, TextInput, View, Text } from 'react-native';
-import styles from './CreateAccountEmail.style';
+import { useHistory } from 'react-router-native';
 import HeaderTitle from '../../../components/HeaderTitle/HeaderTitle';
 import regexpEmail from '../../../constants/regexpEmail';
 import CustomButton from '../../../components/CustomButton/CustomButton';
 
+import styles from './CreateAccountEmail.style';
+
 const CreateAccountEmail = () => {
+    const history = useHistory();
     const [email, setEmail] = useState('');
     const [isValidEmail, setIsValidEmail] = useState(true);
 
@@ -17,11 +20,15 @@ const CreateAccountEmail = () => {
         }
     };
 
+    const handleRedirectToAuthorization = () => {
+        history.goBack();
+    };
+
     return (
         <SafeAreaView>
             <View style={styles.containerPage}>
                 <View style={styles.containerButton}>
-                    <Button title="Назад" />
+                    <Button title="Назад" onPress={handleRedirectToAuthorization} />
                 </View>
                 <HeaderTitle title="Впишите почту" subtitle="Мы вышлем вам пароль сиюминутно, не переживайте" />
                 <View style={styles.containerInput}>
