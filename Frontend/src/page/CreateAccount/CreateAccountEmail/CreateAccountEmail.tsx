@@ -1,12 +1,21 @@
 import React, { useState } from 'react';
-import { Button, SafeAreaView, Text, TextInput, View } from 'react-native';
+import { Button, SafeAreaView, TextInput, View, Text } from 'react-native';
 import styles from './CreateAccountEmail.style';
 import HeaderTitle from '../../../components/HeaderTitle/HeaderTitle';
+import regexpEmail from '../../../constants/regexpEmail';
+import CustomButton from '../../../components/CustomButton/CustomButton';
 
 const CreateAccountEmail = () => {
     const [email, setEmail] = useState('');
+    const [isValidEmail, setIsValidEmail] = useState(true);
 
-    const handleNext = () => {};
+    const handleValidateEmail = () => {
+        if (regexpEmail.test(email)) {
+            setIsValidEmail(true);
+        } else {
+            setIsValidEmail(false);
+        }
+    };
 
     return (
         <SafeAreaView>
@@ -16,13 +25,16 @@ const CreateAccountEmail = () => {
                 </View>
                 <HeaderTitle title="Впишите почту" subtitle="Мы вышлем вам пароль сиюминутно, не переживайте" />
                 <View style={styles.containerInput}>
-                    <TextInput style={styles.input} value={email} onChangeText={setEmail} placeholder="Электропочта" />
+                    <TextInput
+                        style={styles.input}
+                        value={email}
+                        onChangeText={setEmail}
+                        onEndEditing={handleValidateEmail}
+                        placeholder="Электропочта"
+                    />
                 </View>
-                <View style={styles.containerNextButton}>
-                    <Text style={styles.nextButton} onPress={handleNext}>
-                        Далее
-                    </Text>
-                </View>
+                {!isValidEmail && <Text style={styles.errorMessage}>Это точно почта?</Text>}
+                <CustomButton title="Далее" disabled={email.length === 0} />
             </View>
         </SafeAreaView>
     );
