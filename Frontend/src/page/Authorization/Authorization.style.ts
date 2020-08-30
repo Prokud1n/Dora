@@ -41,6 +41,11 @@ const styles = StyleSheet.create({
         marginRight: 15,
         paddingLeft: 26
     },
+    errorMessage: {
+        color: '#FF3826',
+        textAlign: 'center',
+        fontSize: 12
+    },
     containerActionButton: {
         display: 'flex',
         flexDirection: 'row',
