@@ -32,15 +32,6 @@ const styles = StyleSheet.create({
     containerInput: {
         marginTop: 25
     },
-    input: {
-        backgroundColor: '#F0F0F0',
-        borderRadius: 25,
-        height: 45,
-        marginBottom: 16,
-        marginLeft: 15,
-        marginRight: 15,
-        paddingLeft: 26
-    },
     errorMessage: {
         color: '#FF3826',
         textAlign: 'center',

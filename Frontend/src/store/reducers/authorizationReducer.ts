@@ -45,6 +45,12 @@ function authorizationReducer(state: AuthorizationState = initialState, action: 
             return { ...state, ...action.payload, requestStatus: REQUEST.STILL };
         case 'SIGN_IN_ERROR':
             return { ...state, requestStatus: REQUEST.ERROR };
+        case 'RESET_PASSWORD_START':
+            return { ...state, requestStatus: REQUEST.LOADING };
+        case 'RESET_PASSWORD_SUCCESS':
+            return { ...state, requestStatus: REQUEST.STILL };
+        case 'RESET_PASSWORD_ERROR':
+            return { ...state, requestStatus: REQUEST.ERROR };
         case 'SET_EMAIL_STORE':
             return { ...state, ...action.payload };
         default:

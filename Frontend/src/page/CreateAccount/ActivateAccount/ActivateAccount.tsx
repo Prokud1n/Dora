@@ -1,4 +1,4 @@
-import { ActivityIndicator, Button, SafeAreaView, TextInput, View } from 'react-native';
+import { ActivityIndicator, SafeAreaView, TextInput, View } from 'react-native';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -6,10 +6,10 @@ import HeaderTitle from '../../../components/HeaderTitle/HeaderTitle';
 import CustomButton from '../../../components/CustomButton/CustomButton';
 import AuthorizationActions from '../../../store/actions/authorizationActions';
 import { RootState } from '../../../store/reducers/rootReducer';
+import REQUEST from '../../../constants/REQUEST';
+import ErrorMessage from '../../../components/ErrorMessage/ErrorMessage';
 
 import styles from './ActivateAccount.style';
-import REQUEST from '../../../constants/REQUEST';
-import ErrorIndicator from '../../../components/ErrorBoundary/ErrorIndicator/ErrorIndicator';
 
 const ActivateAccount = () => {
     const history = useHistory();
@@ -23,25 +23,12 @@ const ActivateAccount = () => {
         history.push('/coupons');
     };
 
-    const handleRedirectBack = () => {
-        history.goBack();
-    };
-
     if (requestStatus === REQUEST.LOADING) {
         return <ActivityIndicator />;
     }
 
     if (requestStatus === REQUEST.ERROR) {
-        return (
-            <SafeAreaView>
-                <View style={styles.containerPage}>
-                    <View style={styles.containerButton}>
-                        <Button title="Назад" onPress={handleRedirectBack} />
-                    </View>
-                    <ErrorIndicator message="Не верный код" />
-                </View>
-            </SafeAreaView>
-        );
+        return <ErrorMessage errorMessage="Не верный код" />;
     }
 
     return (

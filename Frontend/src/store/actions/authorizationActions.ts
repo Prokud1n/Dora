@@ -69,4 +69,17 @@ export default class AuthorizationActions {
             }
         };
     }
+
+    static getCodeToEmail(email) {
+        return async (dispatch) => {
+            dispatch({ type: 'RESET_PASSWORD_START' });
+            try {
+                await axios.post('/api/reset/email', { email });
+
+                dispatch({ type: 'RESET_PASSWORD_SUCCESS' });
+            } catch {
+                dispatch({ type: 'RESET_PASSWORD_ERROR' });
+            }
+        };
+    }
 }

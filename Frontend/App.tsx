@@ -9,6 +9,7 @@ import CreateAccountPassword from './src/page/CreateAccount/CreateAccountPasswor
 import ErrorBoundary from './src/components/ErrorBoundary/ErrorBoundary';
 import ActivateAccount from './src/page/CreateAccount/ActivateAccount/ActivateAccount';
 import CouponsList from './src/page/CouponsList/CouponsList';
+import ForgetPasswordInputEmail from './src/page/ForgetAccount/ForgetPasswordInputEmail/ForgetPasswordInputEmail';
 
 export default function App() {
     return (
@@ -21,6 +22,7 @@ export default function App() {
                         <Route path="/create-account-password" component={CreateAccountPassword} />
                         <Route path="/activate-account" component={ActivateAccount} />
                         <Route path="/coupons" component={CouponsList} />
+                        <Route path="/forget-password-email" component={ForgetPasswordInputEmail} />
                     </View>
                 </NativeRouter>
             </Provider>

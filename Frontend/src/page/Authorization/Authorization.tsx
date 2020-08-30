@@ -1,4 +1,4 @@
-import { ActivityIndicator, Button, SafeAreaView, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Button, SafeAreaView, Text, View } from 'react-native';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -7,6 +7,10 @@ import HeaderTitle from '../../components/HeaderTitle/HeaderTitle';
 import AuthorizationActions from '../../store/actions/authorizationActions';
 import { RootState } from '../../store/reducers/rootReducer';
 import REQUEST from '../../constants/REQUEST';
+import InputEmail from '../../components/InputEmail/InputEmail';
+import InputPassword from '../../components/InputPassword/InputPassword';
+import CustomButton from '../../components/CustomButton/CustomButton';
+import BackStepButton from '../../components/BackStepButton/BackStepButton';
 
 const Authorization = () => {
     const dispatch = useDispatch();
@@ -36,30 +40,22 @@ const Authorization = () => {
     return (
         <SafeAreaView>
             <View style={styles.containerPage}>
-                <View style={styles.containerButton}>
-                    <Button title="Назад" />
-                </View>
+                <BackStepButton />
                 <HeaderTitle title="Уже с нами?" subtitle="Тогда введите почту с паролем от аккаунта и начнем работу" />
                 <View style={styles.containerInput}>
-                    <TextInput style={styles.input} value={email} onChangeText={setEmail} placeholder="Электропочта" />
-                    <TextInput
-                        style={styles.input}
-                        value={password}
-                        onChangeText={setPassword}
-                        placeholder="Пароль"
-                        secureTextEntry
-                    />
+                    <InputEmail email={email} onChangeText={setEmail} />
+                    <InputPassword password={password} onChangeText={setPassword} />
                 </View>
                 {!isValidUser && <Text style={styles.errorMessage}>Проверьте правильность введенных данных</Text>}
                 <View style={styles.containerActionButton}>
-                    <Button title="Забыли пароль?" />
+                    <Button title="Забыли пароль?" onPress={handleRedirectToCreateAccount} />
                     <Button title="Создать аккаунт?" onPress={handleRedirectToCreateAccount} />
                 </View>
-                <View style={styles.containerLoginButton}>
-                    <Text style={styles.loginButton} onPress={handleAuthorization}>
-                        Войти
-                    </Text>
-                </View>
+                <CustomButton
+                    title="Войти"
+                    onPress={handleAuthorization}
+                    disabled={password.length === 0 || email.length === 0}
+                />
             </View>
         </SafeAreaView>
     );

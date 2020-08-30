@@ -1,5 +1,7 @@
-import { SafeAreaView, TextInput, View, Text } from 'react-native';
 import React, { useState } from 'react';
+import { SafeAreaView, TextInput, View, Text } from 'react-native';
+import BackStepButton from '../../components/BackStepButton/BackStepButton';
+
 import styles from './CouponsList.style';
 
 const CouponsList = () => {
@@ -8,6 +10,7 @@ const CouponsList = () => {
     return (
         <SafeAreaView>
             <View style={styles.containerPage}>
+                <BackStepButton />
                 <View style={styles.containerInput}>
                     <TextInput
                         style={styles.input}

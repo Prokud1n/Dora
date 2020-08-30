@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
-import { ActivityIndicator, Button, SafeAreaView, TextInput, View } from 'react-native';
+import { ActivityIndicator, SafeAreaView, View } from 'react-native';
 import { useHistory } from 'react-router-native';
 import { useDispatch, useSelector } from 'react-redux';
+import InputPassword from '../../../components/InputPassword/InputPassword';
+import ErrorMessage from '../../../components/ErrorMessage/ErrorMessage';
 import HeaderTitle from '../../../components/HeaderTitle/HeaderTitle';
-
-import styles from './CreateAccountPassword.style';
 import { RootState } from '../../../store/reducers/rootReducer';
 import CustomButton from '../../../components/CustomButton/CustomButton';
 import AuthorizationActions from '../../../store/actions/authorizationActions';
 import REQUEST from '../../../constants/REQUEST';
-import ErrorIndicator from '../../../components/ErrorBoundary/ErrorIndicator/ErrorIndicator';
+
+import styles from './CreateAccountPassword.style';
+import BackStepButton from '../../../components/BackStepButton/BackStepButton';
 
 const CreateAccountPassword = () => {
     const history = useHistory();
@@ -17,10 +19,6 @@ const CreateAccountPassword = () => {
     const email = useSelector((state: RootState) => state.authorization.email);
     const requestStatus = useSelector((state: RootState) => state.authorization.requestStatus);
     const [password, setPassword] = useState('');
-
-    const handleRedirectBack = () => {
-        history.goBack();
-    };
 
     const handleRegistration = () => {
         dispatch(AuthorizationActions.sendCodeToEmail(email, password));
@@ -32,36 +30,19 @@ const CreateAccountPassword = () => {
     }
 
     if (requestStatus === REQUEST.ERROR) {
-        return (
-            <SafeAreaView>
-                <View style={styles.containerPage}>
-                    <View style={styles.containerButton}>
-                        <Button title="Назад" onPress={handleRedirectBack} />
-                    </View>
-                    <ErrorIndicator message="Не удалось зарегистрироваться" />
-                </View>
-            </SafeAreaView>
-        );
+        return <ErrorMessage errorMessage="Не удалось зарегистрироваться" />;
     }
 
     return (
         <SafeAreaView>
             <View style={styles.containerPage}>
-                <View style={styles.containerButton}>
-                    <Button title="Назад" onPress={handleRedirectBack} />
-                </View>
+                <BackStepButton />
                 <HeaderTitle
                     title="Впишите пароль"
                     subtitle="В пароле нужно не меньше 8 символов и хотя бы одна цифра.  Так надежнее"
                 />
                 <View style={styles.containerInput}>
-                    <TextInput
-                        style={styles.input}
-                        value={password}
-                        onChangeText={setPassword}
-                        placeholder="Пароль"
-                        secureTextEntry
-                    />
+                    <InputPassword password={password} onChangeText={setPassword} />
                 </View>
                 <CustomButton
                     width={228}
