@@ -9,9 +9,9 @@ import ErrorMessage from '../../../components/ErrorMessage/ErrorMessage';
 import HeaderTitle from '../../../components/HeaderTitle/HeaderTitle';
 import CustomButton from '../../../components/CustomButton/CustomButton';
 
-import styles from './ForgetPasswordInputCode.style';
+import styles from './ForgotPasswordInputCode.style';
 
-const ForgetPasswordInputCode = () => {
+const ForgotPasswordInputCode = () => {
     const dispatch = useDispatch();
 
     const [value, setValue] = useState('');
@@ -69,4 +69,4 @@ const ForgetPasswordInputCode = () => {
     );
 };
 
-export default ForgetPasswordInputCode;
+export default ForgotPasswordInputCode;

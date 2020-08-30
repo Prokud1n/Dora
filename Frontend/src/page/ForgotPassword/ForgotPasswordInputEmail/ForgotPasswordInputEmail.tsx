@@ -11,9 +11,9 @@ import ErrorMessage from '../../../components/ErrorMessage/ErrorMessage';
 import BackStepButton from '../../../components/BackStepButton/BackStepButton';
 import REQUEST from '../../../constants/REQUEST';
 
-import styles from './ForgetPasswordInputEmail.style';
+import styles from './ForgotPasswordInputEmail.style';
 
-const ForgetPasswordInputEmail = () => {
+const ForgotPasswordInputEmail = () => {
     const history = useHistory();
     const [email, setEmail] = useState('');
     const [isValidEmail, setIsValidEmail] = useState(true);
@@ -77,4 +77,4 @@ const ForgetPasswordInputEmail = () => {
     );
 };
 
-export default ForgetPasswordInputEmail;
+export default ForgotPasswordInputEmail;
