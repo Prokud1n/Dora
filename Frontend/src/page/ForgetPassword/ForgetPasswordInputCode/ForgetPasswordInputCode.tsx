@@ -1,19 +1,18 @@
-import { ActivityIndicator, SafeAreaView, Text, View } from 'react-native';
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell } from 'react-native-confirmation-code-field';
-import HeaderTitle from '../../../components/HeaderTitle/HeaderTitle';
-import CustomButton from '../../../components/CustomButton/CustomButton';
-import AuthorizationActions from '../../../store/actions/authorizationActions';
+import { ActivityIndicator, SafeAreaView, View, Text } from 'react-native';
 import { RootState } from '../../../store/reducers/rootReducer';
+import AuthorizationActions from '../../../store/actions/authorizationActions';
 import REQUEST from '../../../constants/REQUEST';
 import ErrorMessage from '../../../components/ErrorMessage/ErrorMessage';
+import HeaderTitle from '../../../components/HeaderTitle/HeaderTitle';
+import CustomButton from '../../../components/CustomButton/CustomButton';
 
-import styles from './ActivateAccount.style';
+import styles from './ForgetPasswordInputCode.style';
 
-const ActivateAccount = () => {
-    const history = useHistory();
+const ForgetPasswordInputCode = () => {
+    const dispatch = useDispatch();
 
     const [value, setValue] = useState('');
     const ref = useBlurOnFulfill({ value, cellCount: 4 });
@@ -23,18 +22,10 @@ const ActivateAccount = () => {
     });
 
     const userId = useSelector((state: RootState) => state.authorization.auth.id);
-    const [requestStatus, setRequestStatus] = useState(REQUEST.STILL);
+    const requestStatus = useSelector((state: RootState) => state.authorization.requestStatus);
 
     const handleActivateAccount = () => {
-        setRequestStatus(REQUEST.LOADING);
-        AuthorizationActions.activateAccount(userId, value)
-            .then(() => {
-                setRequestStatus(REQUEST.STILL);
-                history.push('/coupons');
-            })
-            .catch(() => {
-                setRequestStatus(REQUEST.ERROR);
-            });
+        dispatch(AuthorizationActions.activateAccount(userId, value));
     };
 
     if (requestStatus === REQUEST.LOADING) {
@@ -42,7 +33,7 @@ const ActivateAccount = () => {
     }
 
     if (requestStatus === REQUEST.ERROR) {
-        return <ErrorMessage errorMessage="Неверный код" />;
+        return <ErrorMessage errorMessage="Не верный код" />;
     }
 
     return (
@@ -78,4 +69,4 @@ const ActivateAccount = () => {
     );
 };
 
-export default ActivateAccount;
+export default ForgetPasswordInputCode;

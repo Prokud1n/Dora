@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { SafeAreaView, View, Text, ActivityIndicator } from 'react-native';
 import { useHistory } from 'react-router-native';
-import { useDispatch, useSelector } from 'react-redux';
 import HeaderTitle from '../../../components/HeaderTitle/HeaderTitle';
 import regexpEmail from '../../../constants/regexpEmail';
 import CustomButton from '../../../components/CustomButton/CustomButton';
@@ -10,17 +9,15 @@ import DismissKeyboard from '../../../components/DismissKeyboard/DismissKeyboard
 import InputEmail from '../../../components/InputEmail/InputEmail';
 import ErrorMessage from '../../../components/ErrorMessage/ErrorMessage';
 import BackStepButton from '../../../components/BackStepButton/BackStepButton';
-import { RootState } from '../../../store/reducers/rootReducer';
 import REQUEST from '../../../constants/REQUEST';
 
 import styles from './ForgetPasswordInputEmail.style';
 
 const ForgetPasswordInputEmail = () => {
-    const dispatch = useDispatch();
     const history = useHistory();
     const [email, setEmail] = useState('');
     const [isValidEmail, setIsValidEmail] = useState(true);
-    const requestStatus = useSelector((state: RootState) => state.authorization.requestStatus);
+    const [requestStatus, setRequestStatus] = useState(REQUEST.STILL);
 
     const getValidateEmail = () => {
         const isValid = regexpEmail.test(email);
@@ -38,8 +35,15 @@ const ForgetPasswordInputEmail = () => {
         const isValidEmail = getValidateEmail();
 
         if (isValidEmail) {
-            dispatch(AuthorizationActions.getCodeToEmail(email));
-            history.push('/create-account-password');
+            setRequestStatus(REQUEST.LOADING);
+            AuthorizationActions.getCodeToEmail(email)
+                .then(() => {
+                    setRequestStatus(REQUEST.STILL);
+                    history.push('/forget-password-code');
+                })
+                .catch(() => {
+                    setRequestStatus(REQUEST.ERROR);
+                });
         }
     };
 
@@ -62,6 +66,7 @@ const ForgetPasswordInputEmail = () => {
                     </View>
                     {!isValidEmail && <Text style={styles.errorMessage}>Это точно почта?</Text>}
                     <CustomButton
+                        width={228}
                         title="Получить код"
                         disabled={email.length === 0}
                         onPress={handleRedirectToCreateAccountEmail}
