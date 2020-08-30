@@ -3,7 +3,7 @@ import { SafeAreaView, View } from 'react-native';
 import ErrorIndicator from '../ErrorBoundary/ErrorIndicator/ErrorIndicator';
 import BackStepButton from '../BackStepButton/BackStepButton';
 
-import styles from '../../page/ForgetPassword/ForgetPasswordInputEmail/ForgetPasswordInputEmail.style';
+import styles from './ErrorMessage.style';
 
 type Props = {
     errorMessage: string;

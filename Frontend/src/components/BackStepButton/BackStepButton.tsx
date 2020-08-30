@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router-native';
 import { Button, View } from 'react-native';
 
-import styles from '../../page/ForgetPassword/ForgetPasswordInputEmail/ForgetPasswordInputEmail.style';
+import styles from './BackStepButton.style';
 
 const BackStepButton = () => {
     const history = useHistory();
