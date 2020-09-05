@@ -14,6 +14,7 @@ export type AuthorizationState = {
     auth: Auth;
     requestStatus: number;
     email: string;
+    code: string;
 };
 
 const initialState = {
@@ -22,7 +23,8 @@ const initialState = {
         varified: false
     },
     requestStatus: REQUEST.STILL,
-    email: ''
+    email: '',
+    code: ''
 };
 
 function authorizationReducer(state: AuthorizationState = initialState, action: AuthorizationAction) {
@@ -52,6 +54,8 @@ function authorizationReducer(state: AuthorizationState = initialState, action: 
         case 'RESET_PASSWORD_ERROR':
             return { ...state, requestStatus: REQUEST.ERROR };
         case 'SET_EMAIL_STORE':
+            return { ...state, ...action.payload };
+        case 'SET_CODE_STORE':
             return { ...state, ...action.payload };
         default:
             return state;

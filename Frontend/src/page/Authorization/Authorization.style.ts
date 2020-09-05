@@ -9,11 +9,6 @@ const styles = StyleSheet.create({
     containerInput: {
         marginTop: 25
     },
-    errorMessage: {
-        color: '#FF3826',
-        textAlign: 'center',
-        fontSize: 12
-    },
     containerActionButton: {
         display: 'flex',
         flexDirection: 'row',

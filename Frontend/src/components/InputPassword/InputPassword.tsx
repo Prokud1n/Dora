@@ -1,20 +1,23 @@
 import React from 'react';
-import { TextInput } from 'react-native';
+import { NativeSyntheticEvent, TextInput, TextInputEndEditingEventData } from 'react-native';
 
 import styles from './InputPassword.style';
 
 type Props = {
     password: string;
     onChangeText: (v: string) => void;
+    onEndEditing?: (_: NativeSyntheticEvent<TextInputEndEditingEventData>) => void;
+    placeholder?: string;
 };
 
-const InputPassword = ({ password, onChangeText }: Props) => {
+const InputPassword = ({ password, onChangeText, onEndEditing, placeholder = 'Пароль' }: Props) => {
     return (
         <TextInput
             style={styles.input}
             value={password}
             onChangeText={onChangeText}
-            placeholder="Пароль"
+            onEndEditing={onEndEditing}
+            placeholder={placeholder}
             secureTextEntry
         />
     );

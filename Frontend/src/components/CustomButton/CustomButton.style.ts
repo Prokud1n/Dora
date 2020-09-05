@@ -4,7 +4,6 @@ const styles = StyleSheet.create({
     containerButton: {
         marginLeft: 'auto',
         marginRight: 'auto',
-        marginTop: 74,
         height: 44,
         backgroundColor: '#fff',
         borderRadius: 35

@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { SafeAreaView, View, Text, ActivityIndicator } from 'react-native';
+import { SafeAreaView, View, ActivityIndicator } from 'react-native';
 import { useHistory } from 'react-router-native';
+import { useDispatch } from 'react-redux';
 import HeaderTitle from '../../../components/HeaderTitle/HeaderTitle';
+import ValidError from '../../../components/ValidError/ValidError';
 import regexpEmail from '../../../constants/regexpEmail';
 import CustomButton from '../../../components/CustomButton/CustomButton';
 import AuthorizationActions from '../../../store/actions/authorizationActions';
@@ -14,6 +16,7 @@ import REQUEST from '../../../constants/REQUEST';
 import styles from './ForgotPasswordInputEmail.style';
 
 const ForgotPasswordInputEmail = () => {
+    const dispatch = useDispatch();
     const history = useHistory();
     const [email, setEmail] = useState('');
     const [isValidEmail, setIsValidEmail] = useState(true);
@@ -36,9 +39,10 @@ const ForgotPasswordInputEmail = () => {
 
         if (isValidEmail) {
             setRequestStatus(REQUEST.LOADING);
-            AuthorizationActions.getCodeToEmail(email)
+            AuthorizationActions.sendCodeToEmailForResetPassword(email)
                 .then(() => {
                     setRequestStatus(REQUEST.STILL);
+                    dispatch(AuthorizationActions.setEmailToStore(email));
                     history.push('/forget-password-code');
                 })
                 .catch(() => {
@@ -64,7 +68,7 @@ const ForgotPasswordInputEmail = () => {
                     <View style={styles.containerInput}>
                         <InputEmail email={email} onChangeText={setEmail} />
                     </View>
-                    {!isValidEmail && <Text style={styles.errorMessage}>Это точно почта?</Text>}
+                    {!isValidEmail && <ValidError>Это точно почта?</ValidError>}
                     <CustomButton
                         width={228}
                         title="Получить код"

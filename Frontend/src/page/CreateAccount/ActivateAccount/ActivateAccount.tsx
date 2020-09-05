@@ -5,10 +5,10 @@ import { useSelector } from 'react-redux';
 import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell } from 'react-native-confirmation-code-field';
 import HeaderTitle from '../../../components/HeaderTitle/HeaderTitle';
 import CustomButton from '../../../components/CustomButton/CustomButton';
+import ValidError from '../../../components/ValidError/ValidError';
 import AuthorizationActions from '../../../store/actions/authorizationActions';
 import { RootState } from '../../../store/reducers/rootReducer';
 import REQUEST from '../../../constants/REQUEST';
-import ErrorMessage from '../../../components/ErrorMessage/ErrorMessage';
 
 import styles from './ActivateAccount.style';
 
@@ -24,6 +24,13 @@ const ActivateAccount = () => {
 
     const userId = useSelector((state: RootState) => state.authorization.auth.id);
     const [requestStatus, setRequestStatus] = useState(REQUEST.STILL);
+
+    const handleSendCodeToEmail = () => {
+        setRequestStatus(REQUEST.LOADING);
+        AuthorizationActions.sendCodeToEmailForActivateAccount(userId)
+            .then(() => setRequestStatus(REQUEST.STILL))
+            .catch(() => setRequestStatus(REQUEST.ERROR));
+    };
 
     const handleActivateAccount = () => {
         setRequestStatus(REQUEST.LOADING);
@@ -41,14 +48,10 @@ const ActivateAccount = () => {
         return <ActivityIndicator />;
     }
 
-    if (requestStatus === REQUEST.ERROR) {
-        return <ErrorMessage errorMessage="Неверный код" />;
-    }
-
     return (
         <SafeAreaView>
             <View style={styles.containerPage}>
-                <HeaderTitle title="Введите код для сброса пароля" subtitle="Мы выслали вам код на почту" />
+                <HeaderTitle title="Введите код для активации аккаунта" subtitle="Мы выслали его вам на почту" />
                 <CodeField
                     ref={ref}
                     {...props}
@@ -67,11 +70,19 @@ const ActivateAccount = () => {
                         </Text>
                     )}
                 />
+                {requestStatus === REQUEST.ERROR && <ValidError>Неверный код</ValidError>}
                 <CustomButton
                     width={228}
+                    onPress={handleSendCodeToEmail}
+                    disabled={value.length !== 4}
+                    title="Отправить код повторно"
+                />
+                <CustomButton
+                    width={228}
+                    marginTop={20}
                     onPress={handleActivateAccount}
                     disabled={value.length !== 4}
-                    title="Сбросить пароль"
+                    title="Активировать аккаунт"
                 />
             </View>
         </SafeAreaView>

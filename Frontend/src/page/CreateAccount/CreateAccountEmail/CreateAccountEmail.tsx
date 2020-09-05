@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { SafeAreaView, View, Text } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
 import { useHistory } from 'react-router-native';
 import { useDispatch } from 'react-redux';
 import HeaderTitle from '../../../components/HeaderTitle/HeaderTitle';
+import ValidError from '../../../components/ValidError/ValidError';
 import regexpEmail from '../../../constants/regexpEmail';
 import CustomButton from '../../../components/CustomButton/CustomButton';
 import AuthorizationActions from '../../../store/actions/authorizationActions';
@@ -51,7 +52,7 @@ const CreateAccountEmail = () => {
                     <View style={styles.containerInput}>
                         <InputEmail email={email} onChangeText={setEmail} />
                     </View>
-                    {!isValidEmail && <Text style={styles.errorMessage}>Это точно почта?</Text>}
+                    {!isValidEmail && <ValidError>Это точно почта?</ValidError>}
                     <CustomButton
                         title="Далее"
                         disabled={email.length === 0}

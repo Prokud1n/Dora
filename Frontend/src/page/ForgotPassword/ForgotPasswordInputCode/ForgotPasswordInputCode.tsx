@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router-native';
 import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell } from 'react-native-confirmation-code-field';
 import { ActivityIndicator, SafeAreaView, View, Text } from 'react-native';
 import { RootState } from '../../../store/reducers/rootReducer';
@@ -12,6 +13,7 @@ import CustomButton from '../../../components/CustomButton/CustomButton';
 import styles from './ForgotPasswordInputCode.style';
 
 const ForgotPasswordInputCode = () => {
+    const history = useHistory();
     const dispatch = useDispatch();
 
     const [value, setValue] = useState('');
@@ -21,11 +23,18 @@ const ForgotPasswordInputCode = () => {
         setValue
     });
 
-    const userId = useSelector((state: RootState) => state.authorization.auth.id);
-    const requestStatus = useSelector((state: RootState) => state.authorization.requestStatus);
+    const email = useSelector((state: RootState) => state.authorization.email);
+    const [requestStatus, setRequestStatus] = useState(REQUEST.STILL);
 
     const handleActivateAccount = () => {
-        dispatch(AuthorizationActions.activateAccount(userId, value));
+        setRequestStatus(REQUEST.LOADING);
+        AuthorizationActions.checkCodeFromEmail(email, value)
+            .then(() => {
+                setRequestStatus(REQUEST.STILL);
+                dispatch(AuthorizationActions.setCodeToStore(value));
+                history.push('/create-new-password');
+            })
+            .catch(() => setRequestStatus(REQUEST.ERROR));
     };
 
     if (requestStatus === REQUEST.LOADING) {

@@ -1,8 +1,9 @@
-import { ActivityIndicator, Button, SafeAreaView, Text, View } from 'react-native';
+import { ActivityIndicator, Button, SafeAreaView, View } from 'react-native';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-native';
 import { useDispatch } from 'react-redux';
 import HeaderTitle from '../../components/HeaderTitle/HeaderTitle';
+import ValidError from '../../components/ValidError/ValidError';
 import AuthorizationActions from '../../store/actions/authorizationActions';
 import REQUEST from '../../constants/REQUEST';
 import InputEmail from '../../components/InputEmail/InputEmail';
@@ -21,28 +22,48 @@ const Authorization = () => {
     const [isValidUser, setIsValidUser] = useState(true);
     const [requestStatus, setRequestStatus] = useState(REQUEST.STILL);
 
+    const sendCodeToEmailForActivateAccount = (id) => {
+        setRequestStatus(REQUEST.LOADING);
+        AuthorizationActions.sendCodeToEmailForActivateAccount(id)
+            .then(() => {
+                setRequestStatus(REQUEST.STILL);
+                history.push('/activate-account');
+            })
+            .catch(() => setRequestStatus(REQUEST.ERROR));
+    };
+
+    const signIn = () => {
+        setRequestStatus(REQUEST.LOADING);
+        AuthorizationActions.signIn(email, password)
+            .then((response) => {
+                const { verified, id } = response.data.data;
+                const payload = {
+                    auth: {
+                        id,
+                        verified
+                    }
+                };
+
+                dispatch({ type: 'SIGN_IN_SUCCESS', payload });
+
+                if (verified) {
+                    history.push('/coupons');
+                } else {
+                    sendCodeToEmailForActivateAccount(id);
+                }
+                setRequestStatus(REQUEST.STILL);
+            })
+            .catch(() => {
+                setIsValidUser(false);
+                setRequestStatus(REQUEST.ERROR);
+            });
+    };
+
     const handleAuthorization = () => {
         const isValidEmail = regexpEmail.test(email);
 
         if (isValidEmail) {
-            setRequestStatus(REQUEST.LOADING);
-            AuthorizationActions.signIn(email, password)
-                .then((response) => {
-                    const payload = {
-                        auth: {
-                            id: response.data.data.id,
-                            varified: response.data.data.verified
-                        }
-                    };
-
-                    dispatch({ type: 'SIGN_IN_SUCCESS', payload });
-                    setRequestStatus(REQUEST.STILL);
-                    history.push('/coupons');
-                })
-                .catch(() => {
-                    setIsValidUser(false);
-                    setRequestStatus(REQUEST.ERROR);
-                });
+            signIn();
         } else {
             setIsValidUser(false);
         }
@@ -69,7 +90,7 @@ const Authorization = () => {
                     <InputEmail email={email} onChangeText={setEmail} />
                     <InputPassword password={password} onChangeText={setPassword} />
                 </View>
-                {!isValidUser && <Text style={styles.errorMessage}>Проверьте правильность введенных данных</Text>}
+                {!isValidUser && <ValidError>Проверьте правильность введенных данных</ValidError>}
                 <View style={styles.containerActionButton}>
                     <Button title="Забыли пароль?" onPress={handleRedirectToForgetPasswordPage} />
                     <Button title="Создать аккаунт?" onPress={handleRedirectToCreateAccount} />

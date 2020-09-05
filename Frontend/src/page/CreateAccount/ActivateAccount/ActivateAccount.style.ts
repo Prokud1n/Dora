@@ -10,7 +10,8 @@ const styles = StyleSheet.create({
         marginTop: 40,
         width: '50%',
         marginLeft: 'auto',
-        marginRight: 'auto'
+        marginRight: 'auto',
+        marginBottom: 10
     },
     cell: {
         width: 40,

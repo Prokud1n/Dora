@@ -11,6 +11,7 @@ import ActivateAccount from './src/page/CreateAccount/ActivateAccount/ActivateAc
 import CouponsList from './src/page/CouponsList/CouponsList';
 import ForgotPasswordInputEmail from './src/page/ForgotPassword/ForgotPasswordInputEmail/ForgotPasswordInputEmail';
 import ForgotPasswordInputCode from './src/page/ForgotPassword/ForgotPasswordInputCode/ForgotPasswordInputCode';
+import CreateNewPassword from './src/page/ForgotPassword/CreateNewPassword/CreateNewPassword';
 
 export default function App() {
     return (
@@ -25,6 +26,7 @@ export default function App() {
                         <Route path="/coupons" component={CouponsList} />
                         <Route path="/forget-password-email" component={ForgotPasswordInputEmail} />
                         <Route path="/forget-password-code" component={ForgotPasswordInputCode} />
+                        <Route path="/create-new-password" component={CreateNewPassword} />
                     </View>
                 </NativeRouter>
             </Provider>

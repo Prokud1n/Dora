@@ -24,7 +24,7 @@ const CreateAccountPassword = () => {
         setRequestStatus(REQUEST.LOADING);
 
         try {
-            const response = await AuthorizationActions.sendCodeToEmail(email, password);
+            const response = await AuthorizationActions.registration(email, password);
             const payload = {
                 auth: {
                     id: response.data.data.id,

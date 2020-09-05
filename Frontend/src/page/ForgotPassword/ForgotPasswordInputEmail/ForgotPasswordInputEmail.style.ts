@@ -8,11 +8,6 @@ const styles = StyleSheet.create({
     },
     containerInput: {
         marginTop: 39
-    },
-    errorMessage: {
-        color: '#FF3826',
-        textAlign: 'center',
-        fontSize: 12
     }
 });
 
