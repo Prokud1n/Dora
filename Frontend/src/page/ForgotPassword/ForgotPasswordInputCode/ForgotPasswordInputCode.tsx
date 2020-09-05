@@ -12,6 +12,7 @@ import AuthorizationActions from '../../../store/actions/authorizationActions';
 import REQUEST from '../../../constants/REQUEST';
 
 import styles from './ForgotPasswordInputCode.style';
+import BackStepButton from '../../../components/BackStepButton/BackStepButton';
 
 const ForgotPasswordInputCode = () => {
     const history = useHistory();
@@ -53,6 +54,7 @@ const ForgotPasswordInputCode = () => {
     return (
         <SafeAreaView>
             <View style={styles.containerPage}>
+                <BackStepButton />
                 <HeaderTitle title="Введите код для сброса пароля" subtitle="Мы выслали вам код на почту" />
                 <CodeField
                     ref={ref}

@@ -12,6 +12,7 @@ import { RootState } from '../../../store/reducers/rootReducer';
 import REQUEST from '../../../constants/REQUEST';
 
 import styles from './ActivateAccount.style';
+import BackStepButton from '../../../components/BackStepButton/BackStepButton';
 
 const ActivateAccount = () => {
     const history = useHistory();
@@ -52,6 +53,7 @@ const ActivateAccount = () => {
     return (
         <SafeAreaView>
             <View style={styles.containerPage}>
+                <BackStepButton />
                 <HeaderTitle title="Введите код для активации аккаунта" subtitle="Мы выслали его вам на почту" />
                 <CodeField
                     ref={ref}
