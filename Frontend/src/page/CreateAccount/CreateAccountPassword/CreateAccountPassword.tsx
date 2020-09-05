@@ -13,6 +13,7 @@ import AuthorizationActions from '../../../store/actions/authorizationActions';
 import REQUEST from '../../../constants/REQUEST';
 
 import styles from './CreateAccountPassword.style';
+import ValidError from '../../../components/ValidError/ValidError';
 
 const CreateAccountPassword = () => {
     const history = useHistory();
@@ -20,25 +21,53 @@ const CreateAccountPassword = () => {
     const email = useSelector((state: RootState) => state.authorization.email);
     const [requestStatus, setRequestStatus] = useState(REQUEST.STILL);
     const [password, setPassword] = useState('');
+    const [isValidPassword, setIsValidPassword] = useState(true);
+    const [validMessage, setValidMessage] = useState('');
+
+    const getValidPassword = () => {
+        const isValidLenght = password.length > 7;
+        const hasNumber = /\d/.test(password);
+        const isValidPassword = isValidLenght && hasNumber;
+
+        if (!hasNumber) {
+            setValidMessage('Добавьте хотя бы одну цифру');
+        }
+
+        if (!isValidLenght) {
+            setValidMessage('Пароль должен содержать не меньше 8 символов');
+        }
+
+        if (isValidPassword) {
+            setIsValidPassword(true);
+        } else {
+            setIsValidPassword(false);
+        }
+
+        return isValidPassword;
+    };
 
     const handleRegistration = async () => {
-        setRequestStatus(REQUEST.LOADING);
+        const isValidPassword = getValidPassword();
 
-        try {
-            const response = await AuthorizationActions.registration(email, password);
-            const payload = {
-                auth: {
-                    id: response.data.data.id,
-                    varified: response.data.data.verified
-                }
-            };
+        if (isValidPassword) {
+            setRequestStatus(REQUEST.LOADING);
 
-            await AsyncStorage.setItem('token', response.data.data.token);
-            setRequestStatus(REQUEST.STILL);
-            dispatch({ type: 'SEND_EMAIL_CODE_SUCCESS', payload });
-            history.push('/activate-account');
-        } catch {
-            setRequestStatus(REQUEST.ERROR);
+            try {
+                const response = await AuthorizationActions.registration(email, password);
+                const payload = {
+                    auth: {
+                        id: response.data.data.id,
+                        varified: response.data.data.verified
+                    }
+                };
+
+                await AsyncStorage.setItem('token', response.data.data.token);
+                setRequestStatus(REQUEST.STILL);
+                dispatch({ type: 'SEND_EMAIL_CODE_SUCCESS', payload });
+                history.push('/activate-account');
+            } catch {
+                setRequestStatus(REQUEST.ERROR);
+            }
         }
     };
 
@@ -59,8 +88,9 @@ const CreateAccountPassword = () => {
                     subtitle="В пароле нужно не меньше 8 символов и хотя бы одна цифра.  Так надежнее"
                 />
                 <View style={styles.containerInput}>
-                    <InputPassword password={password} onChangeText={setPassword} />
+                    <InputPassword password={password} onChangeText={setPassword} onEndEditing={getValidPassword} />
                 </View>
+                {!isValidPassword && <ValidError>{validMessage}</ValidError>}
                 <CustomButton
                     width={228}
                     onPress={handleRegistration}
