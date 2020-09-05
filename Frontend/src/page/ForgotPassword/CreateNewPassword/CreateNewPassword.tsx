@@ -1,6 +1,6 @@
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-native';
 import { useSelector } from 'react-redux';
-import React, { useState } from 'react';
 import { SafeAreaView, View } from 'react-native';
 import ErrorMessage from '../../../components/ErrorMessage/ErrorMessage';
 import BackStepButton from '../../../components/BackStepButton/BackStepButton';
@@ -13,7 +13,7 @@ import { RootState } from '../../../store/reducers/rootReducer';
 import REQUEST from '../../../constants/REQUEST';
 import AuthorizationActions from '../../../store/actions/authorizationActions';
 
-import styles from '../../CreateAccount/CreateAccountPassword/CreateAccountPassword.style';
+import styles from './CreateNewPassword.style';
 
 const CreateNewPassword = () => {
     const history = useHistory();

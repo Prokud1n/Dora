@@ -14,6 +14,7 @@ import ForgotPasswordInputCode from './src/page/ForgotPassword/ForgotPasswordInp
 import CreateNewPassword from './src/page/ForgotPassword/CreateNewPassword/CreateNewPassword';
 import AboutUs from './src/page/AboutUs/AboutUs';
 import CreateAccountWithSocialNetwork from './src/page/CreateAccountWithSocialNetwork/CreateAccountWithSocialNetwork';
+import Settings from './src/page/Settings/Settings';
 
 const styles = StyleSheet.create({
     container: {
@@ -34,6 +35,7 @@ export default function App() {
                         <Route path="/create-account-password" component={CreateAccountPassword} />
                         <Route path="/activate-account" component={ActivateAccount} />
                         <Route path="/coupons" component={CouponsList} />
+                        <Route path="/settings" component={Settings} />
                         <Route path="/forget-password-email" component={ForgotPasswordInputEmail} />
                         <Route path="/forget-password-code" component={ForgotPasswordInputCode} />
                         <Route path="/create-new-password" component={CreateNewPassword} />
