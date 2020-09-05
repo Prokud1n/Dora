@@ -4,9 +4,7 @@ const styles = StyleSheet.create({
     containerButton: {
         marginLeft: 'auto',
         marginRight: 'auto',
-        marginTop: 74,
         height: 44,
-        width: 118,
         backgroundColor: '#fff',
         borderRadius: 35
     },
@@ -14,7 +12,7 @@ const styles = StyleSheet.create({
         color: '#8DC4FF'
     },
     button: {
-        color: '#8DC4FF',
+        color: '#007AFF',
         textAlign: 'center',
         alignSelf: 'center',
         paddingTop: 13,

@@ -5,9 +5,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#E5E5E5',
         height: '100%',
         width: '100%'
-    },
-    containerInput: {
-        marginTop: 39
     }
 });
 
