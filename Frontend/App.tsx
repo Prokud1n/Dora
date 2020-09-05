@@ -13,6 +13,12 @@ import ForgotPasswordInputEmail from './src/page/ForgotPassword/ForgotPasswordIn
 import ForgotPasswordInputCode from './src/page/ForgotPassword/ForgotPasswordInputCode/ForgotPasswordInputCode';
 import CreateNewPassword from './src/page/ForgotPassword/CreateNewPassword/CreateNewPassword';
 
+const styles = StyleSheet.create({
+    container: {
+        marginTop: 20
+    }
+});
+
 export default function App() {
     return (
         <ErrorBoundary>
@@ -33,9 +39,3 @@ export default function App() {
         </ErrorBoundary>
     );
 }
-
-const styles = StyleSheet.create({
-    container: {
-        marginTop: 20
-    }
-});

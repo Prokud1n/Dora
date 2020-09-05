@@ -24,6 +24,13 @@ const CreateNewPassword = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [isPasswordsEqual, setIsPasswordsEqual] = useState(true);
+    const [isValidPassword, setIsValidPassword] = useState(true);
+    const [validMessage, setValidMessage] = useState('');
+
+    const handleEndEditing = () => {
+        checkEqualPasswords();
+        getValidPassword();
+    };
 
     const checkEqualPasswords = () => {
         if (password.length !== 0 && confirmPassword.length !== 0) {
@@ -31,8 +38,33 @@ const CreateNewPassword = () => {
         }
     };
 
+    const getValidPassword = () => {
+        const isValidLenght = password.length > 7;
+        const hasNumber = /\d/.test(password);
+        const isValidPassword = isValidLenght && hasNumber;
+
+        if (!hasNumber) {
+            setValidMessage('Добавьте хотя бы одну цифру');
+        }
+
+        if (!isValidLenght) {
+            setValidMessage('Пароль должен содержать не меньше 8 символов');
+        }
+
+        if (isValidPassword) {
+            setIsValidPassword(true);
+        } else {
+            setIsValidPassword(false);
+        }
+
+        return isValidPassword;
+    };
+
     const handleRegistration = async () => {
-        if (confirmPassword === password) {
+        const isValidPassword = getValidPassword();
+        const isEqualPasswords = confirmPassword === password;
+
+        if (isValidPassword && isEqualPasswords) {
             setRequestStatus(REQUEST.LOADING);
 
             try {
@@ -42,7 +74,9 @@ const CreateNewPassword = () => {
             } catch {
                 setRequestStatus(REQUEST.ERROR);
             }
-        } else {
+        }
+
+        if (!isEqualPasswords) {
             setIsPasswordsEqual(false);
         }
     };
@@ -67,16 +101,17 @@ const CreateNewPassword = () => {
                     <InputPassword
                         password={password}
                         onChangeText={setPassword}
-                        onEndEditing={checkEqualPasswords}
+                        onEndEditing={handleEndEditing}
                         placeholder="Новый пароль"
                     />
                     <InputPassword
                         password={confirmPassword}
                         onChangeText={setConfirmPassword}
-                        onEndEditing={checkEqualPasswords}
+                        onEndEditing={handleEndEditing}
                         placeholder="Подтвердите новый пароль"
                     />
                 </View>
+                {!isValidPassword && <ValidError>{validMessage}</ValidError>}
                 {!isPasswordsEqual && <ValidError>Пароли не совпадают</ValidError>}
                 <CustomButton
                     width={228}
