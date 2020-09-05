@@ -12,6 +12,8 @@ import CouponsList from './src/page/CouponsList/CouponsList';
 import ForgotPasswordInputEmail from './src/page/ForgotPassword/ForgotPasswordInputEmail/ForgotPasswordInputEmail';
 import ForgotPasswordInputCode from './src/page/ForgotPassword/ForgotPasswordInputCode/ForgotPasswordInputCode';
 import CreateNewPassword from './src/page/ForgotPassword/CreateNewPassword/CreateNewPassword';
+import AboutUs from './src/page/AboutUs/AboutUs';
+import CreateAccountWithSocialNetwork from './src/page/CreateAccountWithSocialNetwork/CreateAccountWithSocialNetwork';
 
 const styles = StyleSheet.create({
     container: {
@@ -25,7 +27,9 @@ export default function App() {
             <Provider store={store}>
                 <NativeRouter>
                     <View style={styles.container}>
-                        <Route exact path="/" component={Authorization} />
+                        <Route exact path="/" component={AboutUs} />
+                        <Route exact path="/create-account" component={CreateAccountWithSocialNetwork} />
+                        <Route exact path="/authorization" component={Authorization} />
                         <Route path="/create-account-email" component={CreateAccountEmail} />
                         <Route path="/create-account-password" component={CreateAccountPassword} />
                         <Route path="/activate-account" component={ActivateAccount} />

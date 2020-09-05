@@ -27,11 +27,6 @@ const CreateNewPassword = () => {
     const [isValidPassword, setIsValidPassword] = useState(true);
     const [validMessage, setValidMessage] = useState('');
 
-    const handleEndEditing = () => {
-        checkEqualPasswords();
-        getValidPassword();
-    };
-
     const checkEqualPasswords = () => {
         if (password.length !== 0 && confirmPassword.length !== 0) {
             setIsPasswordsEqual(password === confirmPassword);
@@ -60,6 +55,11 @@ const CreateNewPassword = () => {
         return isValidPassword;
     };
 
+    const handleEndEditing = () => {
+        checkEqualPasswords();
+        getValidPassword();
+    };
+
     const handleRegistration = async () => {
         const isValidPassword = getValidPassword();
         const isEqualPasswords = confirmPassword === password;
@@ -70,7 +70,7 @@ const CreateNewPassword = () => {
             try {
                 await AuthorizationActions.resetPassword(code, email, password);
                 setRequestStatus(REQUEST.STILL);
-                history.push('/');
+                history.push('/authorization');
             } catch {
                 setRequestStatus(REQUEST.ERROR);
             }

@@ -1,12 +1,10 @@
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
-    header: {
-        fontSize: 22,
-        fontWeight: '600'
-    },
-    info: {
-        fontSize: 14
+    containerPage: {
+        backgroundColor: '#E5E5E5',
+        height: '100%',
+        width: '100%'
     }
 });
 
