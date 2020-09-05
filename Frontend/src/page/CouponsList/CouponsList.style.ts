@@ -6,13 +6,28 @@ const styles = StyleSheet.create({
         height: '100%',
         width: '100%'
     },
-    containerInput: {
-        marginTop: 39
+    containerHeader: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'flex-start'
+    },
+    containerCoupons: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+    },
+    notFoundText: {
+        fontSize: 17,
+        lineHeight: 20,
+        textAlign: 'center',
+        color: '#8C8C8C'
     },
     input: {
         backgroundColor: '#F0F0F0',
         borderRadius: 25,
-        height: 45,
+        height: 51,
+        width: '65%',
         marginBottom: 16,
         marginLeft: 15,
         marginRight: 15,

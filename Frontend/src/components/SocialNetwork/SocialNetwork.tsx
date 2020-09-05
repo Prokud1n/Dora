@@ -1,7 +1,6 @@
 import React from 'react';
 import { Text, TouchableOpacity, View } from 'react-native';
-import { SvgXml } from 'react-native-svg';
-import getXML from '../../utils/getXML';
+import SVG from '../SVG/SVG';
 
 import styles from './SocialNetwork.style';
 
@@ -12,13 +11,11 @@ type Props = {
 };
 
 const SocialNetwork = ({ text, icon, onPress }: Props) => {
-    const xml = getXML(icon);
-
     return (
         <TouchableOpacity onPress={onPress}>
             <View style={styles.containerSocialNetwork}>
                 <View style={styles.socialNetwork}>
-                    <SvgXml xml={xml} width="50%" height="50%" />
+                    <SVG svg={icon} width="50%" height="50%" />
                     <Text style={styles.text}>{text}</Text>
                 </View>
             </View>
