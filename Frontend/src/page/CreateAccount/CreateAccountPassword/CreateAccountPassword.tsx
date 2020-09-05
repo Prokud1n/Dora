@@ -88,7 +88,7 @@ const CreateAccountPassword = () => {
                     subtitle="В пароле нужно не меньше 8 символов и хотя бы одна цифра.  Так надежнее"
                 />
                 <View style={styles.containerInput}>
-                    <InputPassword password={password} onChangeText={setPassword} />
+                    <InputPassword password={password} onChangeText={setPassword} onEndEditing={getValidPassword} />
                 </View>
                 {!isValidPassword && <ValidError>{validMessage}</ValidError>}
                 <CustomButton
