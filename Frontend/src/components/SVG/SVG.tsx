@@ -3,15 +3,16 @@ import React from 'react';
 import getXML from '../../utils/getXML';
 
 type Props = {
-    svg: 'Google' | 'FB' | 'Mail' | 'VK' | 'addCoupon' | 'settings' | 'notFoundCoupons';
+    svg: 'Google' | 'FB' | 'Mail' | 'VK' | 'Telegram' | 'addCoupon' | 'settings' | 'notFoundCoupons';
     width: string;
     height: string;
+    onPress?: () => void;
 };
 
-const SVG = ({ svg, width, height }: Props) => {
+const SVG = ({ svg, width, height, onPress }: Props) => {
     const xml = getXML(svg);
 
-    return <SvgXml xml={xml} width={width} height={height} />;
+    return <SvgXml xml={xml} width={width} height={height} onPress={onPress} />;
 };
 
 export default SVG;

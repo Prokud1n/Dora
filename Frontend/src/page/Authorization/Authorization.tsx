@@ -46,6 +46,7 @@ const Authorization = () => {
                 };
 
                 dispatch({ type: 'SIGN_IN_SUCCESS', payload });
+                dispatch(AuthorizationActions.setEmailToStore(email));
 
                 setRequestStatus(REQUEST.STILL);
 
