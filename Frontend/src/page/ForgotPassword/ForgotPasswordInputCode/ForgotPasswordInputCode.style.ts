@@ -8,6 +8,7 @@ const styles = StyleSheet.create({
     },
     codeFieldRoot: {
         marginTop: 40,
+        marginBottom: 10,
         width: '50%',
         marginLeft: 'auto',
         marginRight: 'auto'

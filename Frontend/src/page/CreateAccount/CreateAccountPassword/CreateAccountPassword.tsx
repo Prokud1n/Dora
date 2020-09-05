@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { ActivityIndicator, AsyncStorage, SafeAreaView, View } from 'react-native';
+import { AsyncStorage, SafeAreaView, View } from 'react-native';
 import { useHistory } from 'react-router-native';
 import { useDispatch, useSelector } from 'react-redux';
 import InputPassword from '../../../components/InputPassword/InputPassword';
 import ErrorMessage from '../../../components/ErrorMessage/ErrorMessage';
 import HeaderTitle from '../../../components/HeaderTitle/HeaderTitle';
 import BackStepButton from '../../../components/BackStepButton/BackStepButton';
-import { RootState } from '../../../store/reducers/rootReducer';
+import Loader from '../../../components/Loader/Loader';
 import CustomButton from '../../../components/CustomButton/CustomButton';
+import { RootState } from '../../../store/reducers/rootReducer';
 import AuthorizationActions from '../../../store/actions/authorizationActions';
 import REQUEST from '../../../constants/REQUEST';
 
@@ -42,7 +43,7 @@ const CreateAccountPassword = () => {
     };
 
     if (requestStatus === REQUEST.LOADING) {
-        return <ActivityIndicator />;
+        return <Loader />;
     }
 
     if (requestStatus === REQUEST.ERROR) {

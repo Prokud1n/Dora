@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
-import { SafeAreaView, View, ActivityIndicator } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
 import { useHistory } from 'react-router-native';
 import { useDispatch } from 'react-redux';
 import HeaderTitle from '../../../components/HeaderTitle/HeaderTitle';
 import ValidError from '../../../components/ValidError/ValidError';
-import regexpEmail from '../../../constants/regexpEmail';
+import Loader from '../../../components/Loader/Loader';
 import CustomButton from '../../../components/CustomButton/CustomButton';
-import AuthorizationActions from '../../../store/actions/authorizationActions';
 import DismissKeyboard from '../../../components/DismissKeyboard/DismissKeyboard';
 import InputEmail from '../../../components/InputEmail/InputEmail';
 import ErrorMessage from '../../../components/ErrorMessage/ErrorMessage';
 import BackStepButton from '../../../components/BackStepButton/BackStepButton';
+import AuthorizationActions from '../../../store/actions/authorizationActions';
+import regexpEmail from '../../../constants/regexpEmail';
 import REQUEST from '../../../constants/REQUEST';
 
 import styles from './ForgotPasswordInputEmail.style';
@@ -52,7 +53,7 @@ const ForgotPasswordInputEmail = () => {
     };
 
     if (requestStatus === REQUEST.LOADING) {
-        return <ActivityIndicator />;
+        return <Loader />;
     }
 
     if (requestStatus === REQUEST.ERROR) {

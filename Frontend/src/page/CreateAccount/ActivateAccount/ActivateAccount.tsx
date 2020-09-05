@@ -1,4 +1,4 @@
-import { ActivityIndicator, SafeAreaView, Text, View } from 'react-native';
+import { SafeAreaView, Text, View } from 'react-native';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-native';
 import { useSelector } from 'react-redux';
@@ -6,6 +6,7 @@ import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell } from 'react-
 import HeaderTitle from '../../../components/HeaderTitle/HeaderTitle';
 import CustomButton from '../../../components/CustomButton/CustomButton';
 import ValidError from '../../../components/ValidError/ValidError';
+import Loader from '../../../components/Loader/Loader';
 import AuthorizationActions from '../../../store/actions/authorizationActions';
 import { RootState } from '../../../store/reducers/rootReducer';
 import REQUEST from '../../../constants/REQUEST';
@@ -45,7 +46,7 @@ const ActivateAccount = () => {
     };
 
     if (requestStatus === REQUEST.LOADING) {
-        return <ActivityIndicator />;
+        return <Loader />;
     }
 
     return (
@@ -74,7 +75,7 @@ const ActivateAccount = () => {
                 <CustomButton
                     width={228}
                     onPress={handleSendCodeToEmail}
-                    disabled={value.length !== 4}
+                    disabled={false}
                     title="Отправить код повторно"
                 />
                 <CustomButton

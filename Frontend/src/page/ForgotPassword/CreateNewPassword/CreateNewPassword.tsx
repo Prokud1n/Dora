@@ -1,13 +1,14 @@
 import { useHistory } from 'react-router-native';
 import { useSelector } from 'react-redux';
 import React, { useState } from 'react';
-import { ActivityIndicator, SafeAreaView, View } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
 import ErrorMessage from '../../../components/ErrorMessage/ErrorMessage';
 import BackStepButton from '../../../components/BackStepButton/BackStepButton';
 import HeaderTitle from '../../../components/HeaderTitle/HeaderTitle';
 import InputPassword from '../../../components/InputPassword/InputPassword';
 import CustomButton from '../../../components/CustomButton/CustomButton';
 import ValidError from '../../../components/ValidError/ValidError';
+import Loader from '../../../components/Loader/Loader';
 import { RootState } from '../../../store/reducers/rootReducer';
 import REQUEST from '../../../constants/REQUEST';
 import AuthorizationActions from '../../../store/actions/authorizationActions';
@@ -47,7 +48,7 @@ const CreateNewPassword = () => {
     };
 
     if (requestStatus === REQUEST.LOADING) {
-        return <ActivityIndicator />;
+        return <Loader />;
     }
 
     if (requestStatus === REQUEST.ERROR) {

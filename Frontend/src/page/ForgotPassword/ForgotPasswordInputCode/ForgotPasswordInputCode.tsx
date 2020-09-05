@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-native';
 import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell } from 'react-native-confirmation-code-field';
-import { ActivityIndicator, SafeAreaView, View, Text } from 'react-native';
+import { SafeAreaView, View, Text } from 'react-native';
+import HeaderTitle from '../../../components/HeaderTitle/HeaderTitle';
+import ValidError from '../../../components/ValidError/ValidError';
+import CustomButton from '../../../components/CustomButton/CustomButton';
+import Loader from '../../../components/Loader/Loader';
 import { RootState } from '../../../store/reducers/rootReducer';
 import AuthorizationActions from '../../../store/actions/authorizationActions';
 import REQUEST from '../../../constants/REQUEST';
-import ErrorMessage from '../../../components/ErrorMessage/ErrorMessage';
-import HeaderTitle from '../../../components/HeaderTitle/HeaderTitle';
-import CustomButton from '../../../components/CustomButton/CustomButton';
 
 import styles from './ForgotPasswordInputCode.style';
 
@@ -24,7 +25,15 @@ const ForgotPasswordInputCode = () => {
     });
 
     const email = useSelector((state: RootState) => state.authorization.email);
+    const userId = useSelector((state: RootState) => state.authorization.auth.id);
     const [requestStatus, setRequestStatus] = useState(REQUEST.STILL);
+
+    const handleSendCodeToEmail = () => {
+        setRequestStatus(REQUEST.LOADING);
+        AuthorizationActions.sendCodeToEmailForActivateAccount(userId)
+            .then(() => setRequestStatus(REQUEST.STILL))
+            .catch(() => setRequestStatus(REQUEST.ERROR));
+    };
 
     const handleActivateAccount = () => {
         setRequestStatus(REQUEST.LOADING);
@@ -38,11 +47,7 @@ const ForgotPasswordInputCode = () => {
     };
 
     if (requestStatus === REQUEST.LOADING) {
-        return <ActivityIndicator />;
-    }
-
-    if (requestStatus === REQUEST.ERROR) {
-        return <ErrorMessage errorMessage="Не верный код" />;
+        return <Loader />;
     }
 
     return (
@@ -67,8 +72,16 @@ const ForgotPasswordInputCode = () => {
                         </Text>
                     )}
                 />
+                {requestStatus === REQUEST.ERROR && <ValidError>Неверный код</ValidError>}
                 <CustomButton
                     width={228}
+                    onPress={handleSendCodeToEmail}
+                    disabled={false}
+                    title="Отправить код повторно"
+                />
+                <CustomButton
+                    width={228}
+                    marginTop={20}
                     onPress={handleActivateAccount}
                     disabled={value.length !== 4}
                     title="Сбросить пароль"

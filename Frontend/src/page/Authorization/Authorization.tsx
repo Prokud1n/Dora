@@ -1,15 +1,16 @@
-import { ActivityIndicator, Button, SafeAreaView, View } from 'react-native';
+import { Button, SafeAreaView, View } from 'react-native';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-native';
 import { useDispatch } from 'react-redux';
 import HeaderTitle from '../../components/HeaderTitle/HeaderTitle';
 import ValidError from '../../components/ValidError/ValidError';
-import AuthorizationActions from '../../store/actions/authorizationActions';
-import REQUEST from '../../constants/REQUEST';
 import InputEmail from '../../components/InputEmail/InputEmail';
 import InputPassword from '../../components/InputPassword/InputPassword';
 import CustomButton from '../../components/CustomButton/CustomButton';
 import BackStepButton from '../../components/BackStepButton/BackStepButton';
+import Loader from '../../components/Loader/Loader';
+import AuthorizationActions from '../../store/actions/authorizationActions';
+import REQUEST from '../../constants/REQUEST';
 import regexpEmail from '../../constants/regexpEmail';
 
 import styles from './Authorization.style';
@@ -46,12 +47,13 @@ const Authorization = () => {
 
                 dispatch({ type: 'SIGN_IN_SUCCESS', payload });
 
+                setRequestStatus(REQUEST.STILL);
+
                 if (verified) {
                     history.push('/coupons');
                 } else {
                     sendCodeToEmailForActivateAccount(id);
                 }
-                setRequestStatus(REQUEST.STILL);
             })
             .catch(() => {
                 setIsValidUser(false);
@@ -78,7 +80,7 @@ const Authorization = () => {
     };
 
     if (requestStatus === REQUEST.LOADING) {
-        return <ActivityIndicator />;
+        return <Loader />;
     }
 
     return (
