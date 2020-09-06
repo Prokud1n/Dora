@@ -57,7 +57,7 @@ const CreateAccountPassword = () => {
                 const payload = {
                     auth: {
                         id: response.data.data.id,
-                        varified: response.data.data.verified
+                        verified: response.data.data.verified
                     }
                 };
 

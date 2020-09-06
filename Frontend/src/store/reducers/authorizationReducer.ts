@@ -1,6 +1,6 @@
 export type Auth = {
     id: string;
-    varified: boolean;
+    verified: boolean;
 };
 
 export type AuthorizationAction = {
@@ -17,7 +17,7 @@ export type AuthorizationState = {
 const initialState = {
     auth: {
         id: '',
-        varified: false
+        verified: false
     },
     email: '',
     code: ''
