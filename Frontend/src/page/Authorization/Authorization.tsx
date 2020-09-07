@@ -80,6 +80,10 @@ const Authorization = () => {
         history.push('/forget-password-email');
     };
 
+    const handleChangeEmail = (value) => {
+        setEmail(value.trim());
+    };
+
     if (requestStatus === REQUEST.LOADING) {
         return <Loader />;
     }
@@ -90,7 +94,7 @@ const Authorization = () => {
                 <BackStepButton />
                 <HeaderTitle title="Уже с нами?" subtitle="Тогда введите почту с паролем от аккаунта и начнем работу" />
                 <View style={styles.containerInput}>
-                    <InputEmail email={email} onChangeText={setEmail} />
+                    <InputEmail email={email} onChangeText={handleChangeEmail} />
                     <InputPassword password={password} onChangeText={setPassword} />
                 </View>
                 {!isValidUser && <ValidError>Проверьте правильность введенных данных</ValidError>}

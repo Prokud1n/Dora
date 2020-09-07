@@ -35,6 +35,10 @@ const ForgotPasswordInputEmail = () => {
         return isValid;
     };
 
+    const handleChangeEmail = (value) => {
+        setEmail(value.trim());
+    };
+
     const handleRedirectToCreateAccountEmail = async () => {
         const isValidEmail = getValidateEmail();
 
@@ -67,7 +71,7 @@ const ForgotPasswordInputEmail = () => {
                     <BackStepButton />
                     <HeaderTitle title="Впишите почту" subtitle="Мы вышлем вам код сиюминутно, не переживайте" />
                     <View style={styles.containerInput}>
-                        <InputEmail email={email} onChangeText={setEmail} />
+                        <InputEmail email={email} onChangeText={handleChangeEmail} />
                     </View>
                     {!isValidEmail && <ValidError>Это точно почта?</ValidError>}
                     <CustomButton
