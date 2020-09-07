@@ -16,21 +16,14 @@ const Settings = () => {
     const history = useHistory();
 
     const email = useSelector((state: RootState) => state.authorization.email);
-    const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('');
-    const [isPasswordsEqual, setIsPasswordsEqual] = useState(true);
+    const [oldPassword, setOldPassword] = useState('');
+    const [newPassword, setNewPassword] = useState('');
     const [isValidPassword, setIsValidPassword] = useState(true);
     const [validMessage, setValidMessage] = useState('');
 
-    const checkEqualPasswords = () => {
-        if (password.length !== 0 && confirmPassword.length !== 0) {
-            setIsPasswordsEqual(password === confirmPassword);
-        }
-    };
-
     const getValidPassword = () => {
-        const isValidLenght = password.length > 7;
-        const hasNumber = /\d/.test(password);
+        const isValidLenght = newPassword.length > 7;
+        const hasNumber = /\d/.test(newPassword);
         const isValidPassword = isValidLenght && hasNumber;
 
         if (!hasNumber) {
@@ -51,7 +44,6 @@ const Settings = () => {
     };
 
     const handleEndEditing = () => {
-        checkEqualPasswords();
         getValidPassword();
     };
 
@@ -60,7 +52,6 @@ const Settings = () => {
     };
 
     const handleChangePassword = () => {
-        checkEqualPasswords();
         getValidPassword();
     };
 
@@ -76,20 +67,19 @@ const Settings = () => {
                     <Text style={styles.email}>{email}</Text>
                 </View>
                 <View style={styles.containerInput}>
-                    <InputPassword password={password} onChangeText={setPassword} placeholder="Старый пароль" />
+                    <InputPassword password={oldPassword} onChangeText={setOldPassword} placeholder="Старый пароль" />
                     <InputPassword
-                        password={confirmPassword}
-                        onChangeText={setConfirmPassword}
+                        password={newPassword}
+                        onChangeText={setNewPassword}
                         onEndEditing={handleEndEditing}
                         placeholder="Новый пароль"
                     />
                 </View>
                 {!isValidPassword && <ValidError>{validMessage}</ValidError>}
-                {!isPasswordsEqual && <ValidError>Пароли не совпадают</ValidError>}
                 <CustomButton
                     title="Сменить пароль"
                     width={228}
-                    disabled={password.length === 0 || confirmPassword.length === 0}
+                    disabled={oldPassword.length === 0 || newPassword.length === 0}
                     marginTop={30}
                     color="#8C8C8C"
                     onPress={handleChangePassword}
