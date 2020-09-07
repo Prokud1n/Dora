@@ -40,6 +40,10 @@ const CreateAccountEmail = () => {
         }
     };
 
+    const handleChangeEmail = (value) => {
+        setEmail(value.trim());
+    };
+
     return (
         <DismissKeyboard>
             <SafeAreaView>
@@ -50,7 +54,7 @@ const CreateAccountEmail = () => {
                         subtitle="Это поможет нам связаться в случае непредвиденных обстоятельствах"
                     />
                     <View style={styles.containerInput}>
-                        <InputEmail email={email} onChangeText={setEmail} />
+                        <InputEmail email={email} onChangeText={handleChangeEmail} />
                     </View>
                     {!isValidEmail && <ValidError>Это точно почта?</ValidError>}
                     <CustomButton
