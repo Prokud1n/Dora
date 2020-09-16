@@ -64,6 +64,8 @@ const Settings = () => {
             AuthorizationActions.changePassword(userId, oldPassword, newPassword)
                 .then(() => {
                     setRequestStatus(REQUEST.STILL);
+                    setOldPassword('');
+                    setNewPassword('');
                 })
                 .catch(() => {
                     setRequestStatus(REQUEST.ERROR);
