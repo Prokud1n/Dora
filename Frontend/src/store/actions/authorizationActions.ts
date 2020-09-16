@@ -49,4 +49,22 @@ export default class AuthorizationActions {
             }
         });
     };
+
+    static changePassword = async (user_id, old_password, new_password) => {
+        const token = await AsyncStorage.getItem('token');
+
+        return axios.post(
+            '/api/change/password/email',
+            {
+                user_id,
+                old_password,
+                new_password
+            },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+    };
 }

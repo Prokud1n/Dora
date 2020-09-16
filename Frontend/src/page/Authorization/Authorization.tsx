@@ -1,4 +1,4 @@
-import { Button, SafeAreaView, View } from 'react-native';
+import { AsyncStorage, Button, SafeAreaView, View } from 'react-native';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-native';
 import { useDispatch } from 'react-redux';
@@ -37,13 +37,15 @@ const Authorization = () => {
         setRequestStatus(REQUEST.LOADING);
         AuthorizationActions.signIn(email, password)
             .then((response) => {
-                const { verified, id } = response.data.data;
+                const { verified, id, token } = response.data.data;
                 const payload = {
                     auth: {
                         id,
                         verified
                     }
                 };
+
+                AsyncStorage.setItem('token', token);
 
                 dispatch({ type: 'SIGN_IN_SUCCESS', payload });
                 dispatch(AuthorizationActions.setEmailToStore(email));

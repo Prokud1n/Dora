@@ -9,6 +9,9 @@ import InputPassword from '../../components/InputPassword/InputPassword';
 import CustomButton from '../../components/CustomButton/CustomButton';
 import HeaderTitle from '../../components/HeaderTitle/HeaderTitle';
 import ValidError from '../../components/ValidError/ValidError';
+import AuthorizationActions from '../../store/actions/authorizationActions';
+import REQUEST from '../../constants/REQUEST';
+import Loader from '../../components/Loader/Loader';
 
 import styles from './Settings.style';
 
@@ -16,10 +19,12 @@ const Settings = () => {
     const history = useHistory();
 
     const email = useSelector((state: RootState) => state.authorization.email);
+    const userId = useSelector((state: RootState) => state.authorization.auth.id);
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [isValidPassword, setIsValidPassword] = useState(true);
     const [validMessage, setValidMessage] = useState('');
+    const [requestStatus, setRequestStatus] = useState(REQUEST.STILL);
 
     const getValidPassword = () => {
         const isValidLenght = newPassword.length > 7;
@@ -52,8 +57,25 @@ const Settings = () => {
     };
 
     const handleChangePassword = () => {
-        getValidPassword();
+        const isValid = getValidPassword();
+
+        if (isValid) {
+            setRequestStatus(REQUEST.LOADING);
+            AuthorizationActions.changePassword(userId, oldPassword, newPassword)
+                .then(() => {
+                    setRequestStatus(REQUEST.STILL);
+                    setOldPassword('');
+                    setNewPassword('');
+                })
+                .catch(() => {
+                    setRequestStatus(REQUEST.ERROR);
+                });
+        }
     };
+
+    if (requestStatus === REQUEST.LOADING) {
+        return <Loader />;
+    }
 
     return (
         <SafeAreaView>
@@ -76,6 +98,7 @@ const Settings = () => {
                     />
                 </View>
                 {!isValidPassword && <ValidError>{validMessage}</ValidError>}
+                {requestStatus === REQUEST.ERROR && <ValidError>Не удалось сменить пароль</ValidError>}
                 <CustomButton
                     title="Сменить пароль"
                     width={228}
