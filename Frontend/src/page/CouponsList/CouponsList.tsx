@@ -16,7 +16,7 @@ const CouponsList = () => {
     };
 
     const handleRedirectToInfoPurchase = () => {
-        history.push('/info-purchase');
+        history.push('/category');
     };
 
     return (

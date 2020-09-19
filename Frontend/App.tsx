@@ -16,6 +16,7 @@ import AboutUs from './src/page/AboutUs/AboutUs';
 import CreateAccountWithSocialNetwork from './src/page/CreateAccountWithSocialNetwork/CreateAccountWithSocialNetwork';
 import Settings from './src/page/Settings/Settings';
 import AddCouponInfoAboutPurchase from './src/page/AddCoupon/AddCouponInfoAboutPurchase/AddCouponInfoAboutPurchase';
+import AddCouponCategory from './src/page/AddCoupon/AddCouponCategory/AddCouponCategory';
 
 const styles = StyleSheet.create({
     container: {
@@ -40,6 +41,7 @@ export default function App() {
                         <Route path="/forget-password-email" component={ForgotPasswordInputEmail} />
                         <Route path="/forget-password-code" component={ForgotPasswordInputCode} />
                         <Route path="/create-new-password" component={CreateNewPassword} />
+                        <Route path="/category" component={AddCouponCategory} />
                         <Route path="/info-purchase" component={AddCouponInfoAboutPurchase} />
                     </View>
                 </NativeRouter>

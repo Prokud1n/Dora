@@ -3,12 +3,12 @@ import React, { useMemo, useState } from 'react';
 import RNPickerSelect from 'react-native-picker-select';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useHistory } from 'react-router-native';
-import BackStepButton from '../../../components/BackStepButton/BackStepButton';
 import CustomButton from '../../../components/CustomButton/CustomButton';
-
-import styles from './AddCouponInfoAboutPurchase.style';
 import DatePurchase from '../../../components/DatePurchase/DatePurchase';
 import getFormatDate from '../../../utils/getFormatDate';
+import HeaderAddCoupon from '../../../components/HeaderAddCoupon/HeaderAddCoupon';
+
+import styles from './AddCouponInfoAboutPurchase.style';
 
 const AddCouponInfoAboutPurchase = () => {
     const history = useHistory();
@@ -59,10 +59,7 @@ const AddCouponInfoAboutPurchase = () => {
     return (
         <SafeAreaView>
             <View style={styles.containerPage}>
-                <View style={styles.containerHeader}>
-                    <BackStepButton />
-                    <Text style={styles.text}>Новый талон</Text>
-                </View>
+                <HeaderAddCoupon />
                 <Text style={styles.label}>Добавьте данные о покупке</Text>
                 <View style={styles.containerInput}>
                     <TextInput
@@ -97,7 +94,9 @@ const AddCouponInfoAboutPurchase = () => {
                         />
                     </View>
                 </View>
-                <CustomButton title="Далее" onPress={handleRedirectToCategory} disabled={disabledNextButton} />
+                <View style={styles.footer}>
+                    <CustomButton title="Далее" onPress={handleRedirectToCategory} disabled={disabledNextButton} />
+                </View>
                 {show && (
                     <>
                         <View style={styles.containerHidePicker}>

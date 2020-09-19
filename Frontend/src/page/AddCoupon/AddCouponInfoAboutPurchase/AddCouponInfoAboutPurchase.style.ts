@@ -6,19 +6,6 @@ const styles = StyleSheet.create({
         height: '100%',
         width: '100%'
     },
-    containerHeader: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 30
-    },
-    text: {
-        fontStyle: 'normal',
-        fontWeight: '600',
-        fontSize: 17,
-        lineHeight: 22,
-        marginLeft: 70
-    },
     label: {
         fontStyle: 'normal',
         fontWeight: '600',
@@ -71,6 +58,13 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'flex-end'
+    },
+    footer: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        marginBottom: 30
     }
 });
 
