@@ -23,8 +23,8 @@ const AddCouponInfoAboutPurchase = () => {
     const disabledNextButton =
         couponName.length === 0 && shop.length === 0 && days.length === 0 && date === null && dimension.length === 0;
 
-    const handleRedirectToCategory = () => {
-        history.push('/category');
+    const handleRedirectToPhoto = () => {
+        history.push('/photo');
     };
 
     const onChange = (event, selectedDate) => {
@@ -95,7 +95,7 @@ const AddCouponInfoAboutPurchase = () => {
                     </View>
                 </View>
                 <View style={styles.footer}>
-                    <CustomButton title="Далее" onPress={handleRedirectToCategory} disabled={disabledNextButton} />
+                    <CustomButton title="Далее" onPress={handleRedirectToPhoto} disabled={disabledNextButton} />
                 </View>
                 {show && (
                     <>

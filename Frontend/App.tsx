@@ -17,6 +17,8 @@ import CreateAccountWithSocialNetwork from './src/page/CreateAccountWithSocialNe
 import Settings from './src/page/Settings/Settings';
 import AddCouponInfoAboutPurchase from './src/page/AddCoupon/AddCouponInfoAboutPurchase/AddCouponInfoAboutPurchase';
 import AddCouponCategory from './src/page/AddCoupon/AddCouponCategory/AddCouponCategory';
+import AddCouponPhoto from './src/page/AddCoupon/AddCouponPhoto/AddCouponPhoto';
+import Camera from './src/page/Camera/Camera';
 
 const styles = StyleSheet.create({
     container: {
@@ -43,6 +45,8 @@ export default function App() {
                         <Route path="/create-new-password" component={CreateNewPassword} />
                         <Route path="/category" component={AddCouponCategory} />
                         <Route path="/info-purchase" component={AddCouponInfoAboutPurchase} />
+                        <Route path="/photo" component={AddCouponPhoto} />
+                        <Route path="/camera" component={Camera} />
                     </View>
                 </NativeRouter>
             </Provider>
