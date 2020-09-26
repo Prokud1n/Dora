@@ -52,7 +52,7 @@ export default class CameraPage extends React.Component {
 
     render() {
         const { hasCameraPermission, flashMode, cameraType, capturing, captures } = this.state;
-        const { width, height } = this.props;
+        const { width, height, withToolbar = true } = this.props;
 
         if (hasCameraPermission === null) {
             return <View />;
@@ -72,17 +72,19 @@ export default class CameraPage extends React.Component {
                     />
                 </View>
                 {captures.length > 0 && <Gallery captures={captures} />}
-                <Toolbar
-                    capturing={capturing}
-                    flashMode={flashMode}
-                    cameraType={cameraType}
-                    setFlashMode={this.setFlashMode}
-                    setCameraType={this.setCameraType}
-                    onCaptureIn={this.handleCaptureIn}
-                    onCaptureOut={this.handleCaptureOut}
-                    onLongCapture={this.handleLongCapture}
-                    onShortCapture={this.handleShortCapture}
-                />
+                {withToolbar && (
+                    <Toolbar
+                        capturing={capturing}
+                        flashMode={flashMode}
+                        cameraType={cameraType}
+                        setFlashMode={this.setFlashMode}
+                        setCameraType={this.setCameraType}
+                        onCaptureIn={this.handleCaptureIn}
+                        onCaptureOut={this.handleCaptureOut}
+                        onLongCapture={this.handleLongCapture}
+                        onShortCapture={this.handleShortCapture}
+                    />
+                )}
             </React.Fragment>
         );
     }

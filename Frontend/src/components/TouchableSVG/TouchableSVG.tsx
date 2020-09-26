@@ -19,7 +19,8 @@ type Props = {
         | 'appliances'
         | 'clothesAndShoes'
         | 'otherGoods'
-        | 'goodsForAuto';
+        | 'goodsForAuto'
+        | 'photo';
     width: string;
     height: string;
     onPress?: () => void;
