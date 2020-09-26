@@ -32,11 +32,25 @@ const styles = StyleSheet.create({
         marginTop: 30
     },
     photo: {
+        position: 'relative',
         width: 92,
         height: 92,
         borderRadius: 15,
         marginRight: 6,
         marginBottom: 6
+    },
+    containerCheckMark: {
+        position: 'absolute',
+        top: -17,
+        right: -12,
+        zIndex: 1
+    },
+    footer: {
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        marginBottom: 30
     }
 });
 

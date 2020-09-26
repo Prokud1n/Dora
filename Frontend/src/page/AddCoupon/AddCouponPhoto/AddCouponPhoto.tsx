@@ -5,26 +5,44 @@ import * as MediaLibrary from 'expo-media-library';
 import Camera from '../../Camera/Camera';
 import HeaderAddCoupon from '../../../components/HeaderAddCoupon/HeaderAddCoupon';
 import TouchableSVG from '../../../components/TouchableSVG/TouchableSVG';
+import CheckMarkPhoto from '../../../components/CheckMarkPhoto/CheckMarkPhoto';
 
 import styles from './AddCouponPhoto.style';
+import CustomButton from '../../../components/CustomButton/CustomButton';
 
 const AddCouponPhoto = () => {
     const history = useHistory();
-    const [photos, setPhotos] = useState([]);
+    const [photosGallery, setPhotosGallery] = useState([]);
+    const [checkedPhoto, setCheckedPhoto] = useState([]);
 
     useEffect(() => {
         (async () => {
             const media = await MediaLibrary.getAssetsAsync({
-                first: 20,
+                first: 9,
                 mediaType: ['photo']
             });
 
-            setPhotos(media.assets);
+            setPhotosGallery(media.assets);
         })();
     }, []);
 
+    const handleCheckPhoto = (photoUri) => {
+        const newCheckedPhoto = [...checkedPhoto];
+
+        if (newCheckedPhoto.includes(photoUri)) {
+            setCheckedPhoto(newCheckedPhoto.filter((uri) => uri !== photoUri));
+        } else {
+            newCheckedPhoto.push(photoUri);
+            setCheckedPhoto(newCheckedPhoto);
+        }
+    };
+
     const handleRedirectToCamera = () => {
         history.push('/camera');
+    };
+
+    const handleRedirectToCouponsList = () => {
+        history.push('/coupons');
     };
 
     return (
@@ -39,9 +57,27 @@ const AddCouponPhoto = () => {
                     <TouchableSVG svg="photo" width="100%" height="100%" onPress={handleRedirectToCamera} />
                 </View>
                 <View style={styles.containerPhoto}>
-                    {photos.map((p) => (
-                        <Image key={p.creationTime} style={styles.photo} source={{ uri: p.uri }} />
+                    {photosGallery.map((p) => (
+                        <View key={p.creationTime}>
+                            <View style={styles.containerCheckMark}>
+                                <CheckMarkPhoto
+                                    width="60%"
+                                    height="60%"
+                                    checked={checkedPhoto.includes(p.uri)}
+                                    onPress={handleCheckPhoto}
+                                    uri={p.uri}
+                                />
+                            </View>
+                            <Image style={styles.photo} source={{ uri: p.uri }} />
+                        </View>
                     ))}
+                </View>
+                <View style={styles.footer}>
+                    <CustomButton
+                        title="Далее"
+                        onPress={handleRedirectToCouponsList}
+                        disabled={checkedPhoto.length === 0}
+                    />
                 </View>
             </View>
         </SafeAreaView>

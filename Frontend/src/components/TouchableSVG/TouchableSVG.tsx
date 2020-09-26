@@ -20,6 +20,8 @@ type Props = {
         | 'clothesAndShoes'
         | 'otherGoods'
         | 'goodsForAuto'
+        | 'checkMark'
+        | 'activeCheckMark'
         | 'photo';
     width: string;
     height: string;
