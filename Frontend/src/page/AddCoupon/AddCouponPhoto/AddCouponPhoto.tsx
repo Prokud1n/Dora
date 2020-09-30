@@ -1,29 +1,47 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, Text, View, Image } from 'react-native';
+import { SafeAreaView, Text, View } from 'react-native';
 import { useHistory } from 'react-router-native';
 import * as MediaLibrary from 'expo-media-library';
+import { useDispatch, useSelector } from 'react-redux';
 import Camera from '../../Camera/Camera';
 import HeaderAddCoupon from '../../../components/HeaderAddCoupon/HeaderAddCoupon';
 import TouchableSVG from '../../../components/TouchableSVG/TouchableSVG';
-import CheckMarkPhoto from '../../../components/CheckMarkPhoto/CheckMarkPhoto';
+import CustomButton from '../../../components/CustomButton/CustomButton';
+import REQUEST from '../../../constants/REQUEST';
+import PhotoGallery from '../../../components/PhotoGallery/PhotoGallery';
 
 import styles from './AddCouponPhoto.style';
-import CustomButton from '../../../components/CustomButton/CustomButton';
+import AddCouponActions from '../../../store/actions/addCouponActions';
+import { RootState } from '../../../store/reducers/rootReducer';
 
 const AddCouponPhoto = () => {
     const history = useHistory();
+    const dispatch = useDispatch();
+    const initialCheckedPhone = useSelector((state: RootState) => state.addCoupon.checkedPhoto);
+    const [requestStatus, setRequestStatus] = useState(REQUEST.STILL);
     const [photosGallery, setPhotosGallery] = useState([]);
-    const [checkedPhoto, setCheckedPhoto] = useState([]);
+    const [checkedPhoto, setCheckedPhoto] = useState(initialCheckedPhone);
 
     useEffect(() => {
         (async () => {
-            const media = await MediaLibrary.getAssetsAsync({
-                first: 9,
-                mediaType: ['photo']
-            });
+            setRequestStatus(REQUEST.LOADING);
 
-            setPhotosGallery(media.assets);
+            try {
+                const media = await MediaLibrary.getAssetsAsync({
+                    first: 9,
+                    mediaType: ['photo']
+                });
+
+                setPhotosGallery(media.assets);
+                setRequestStatus(REQUEST.STILL);
+            } catch {
+                setRequestStatus(REQUEST.ERROR);
+            }
         })();
+
+        return () => {
+            dispatch(AddCouponActions.updateCheckedPhoto(checkedPhoto));
+        };
     }, []);
 
     const handleCheckPhoto = (photoUri) => {
@@ -57,20 +75,12 @@ const AddCouponPhoto = () => {
                     <TouchableSVG svg="photo" width="100%" height="100%" onPress={handleRedirectToCamera} />
                 </View>
                 <View style={styles.containerPhoto}>
-                    {photosGallery.map((p) => (
-                        <View key={p.creationTime}>
-                            <View style={styles.containerCheckMark}>
-                                <CheckMarkPhoto
-                                    width="60%"
-                                    height="60%"
-                                    checked={checkedPhoto.includes(p.uri)}
-                                    onPress={handleCheckPhoto}
-                                    uri={p.uri}
-                                />
-                            </View>
-                            <Image style={styles.photo} source={{ uri: p.uri }} />
-                        </View>
-                    ))}
+                    <PhotoGallery
+                        photosGallery={photosGallery}
+                        onPress={handleCheckPhoto}
+                        checkedPhoto={checkedPhoto}
+                        requestStatus={requestStatus}
+                    />
                 </View>
                 <View style={styles.footer}>
                     <CustomButton

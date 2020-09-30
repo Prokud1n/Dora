@@ -16,9 +16,10 @@ import AboutUs from './src/page/AboutUs/AboutUs';
 import CreateAccountWithSocialNetwork from './src/page/CreateAccountWithSocialNetwork/CreateAccountWithSocialNetwork';
 import Settings from './src/page/Settings/Settings';
 import AddCouponInfoAboutPurchase from './src/page/AddCoupon/AddCouponInfoAboutPurchase/AddCouponInfoAboutPurchase';
-import AddCouponCategory from './src/page/AddCoupon/AddCouponCategory/AddCouponCategory';
 import AddCouponPhoto from './src/page/AddCoupon/AddCouponPhoto/AddCouponPhoto';
 import Camera from './src/page/Camera/Camera';
+import AddCouponCategory from './src/page/AddCoupon/AddCouponCategory/AddCouponCategory';
+import ViewPhoto from './src/page/ViewPhoto/ViewPhoto';
 
 const styles = StyleSheet.create({
     container: {
@@ -47,6 +48,7 @@ export default function App() {
                         <Route path="/info-purchase" component={AddCouponInfoAboutPurchase} />
                         <Route path="/photo" component={AddCouponPhoto} />
                         <Route path="/camera" component={Camera} />
+                        <Route path="/viewPhoto" component={ViewPhoto} />
                     </View>
                 </NativeRouter>
             </Provider>
