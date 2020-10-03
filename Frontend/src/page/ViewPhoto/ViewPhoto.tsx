@@ -4,9 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-native';
 import { RootState } from '../../store/reducers/rootReducer';
 import BackStepButton from '../../components/BackStepButton/BackStepButton';
+import AddCouponActions from '../../store/actions/addCouponActions';
 
 import styles from './ViewPhoto.style';
-import AddCouponActions from '../../store/actions/addCouponActions';
 
 const ViewPhoto = () => {
     const dispatch = useDispatch();
@@ -15,9 +15,9 @@ const ViewPhoto = () => {
     const checkedPhoto = useSelector((state: RootState) => state.addCoupon.checkedPhoto);
 
     const handleCheck = () => {
-        const newCheckedPhoto = [...checkedPhoto];
+        const newCheckedPhoto = { ...checkedPhoto };
 
-        newCheckedPhoto.push(uri);
+        newCheckedPhoto[uri] = true;
         dispatch(AddCouponActions.updateCheckedPhoto(newCheckedPhoto));
         history.push('./photo');
     };

@@ -1,6 +1,7 @@
 export type AddCouponState = {
     uri: string;
-    checkedPhoto: any[];
+    checkedPhoto: any;
+    photosGallery: any;
 };
 
 type AddCouponAction = {
@@ -12,18 +13,21 @@ type AddCouponAction = {
 
 const initialState = {
     uri: '',
-    checkedPhoto: []
+    checkedPhoto: {},
+    photosGallery: []
 };
 
 function addCouponReducer(state: AddCouponState = initialState, action: AddCouponAction) {
-    if (action.type === 'VIEW_PHOTO') {
-        return { ...state, ...action.payload };
+    switch (action.type) {
+        case 'VIEW_PHOTO':
+            return { ...state, ...action.payload };
+        case 'UPDATE_CHECKED_PHOTO':
+            return { ...state, ...action.payload };
+        case 'SAVE_PHOTOS_GALLERY':
+            return { ...state, ...action.payload };
+        default:
+            return state;
     }
-    if (action.type === 'UPDATE_CHECKED_PHOTO') {
-        return { ...state, ...action.payload };
-    }
-
-    return state;
 }
 
 export default addCouponReducer;

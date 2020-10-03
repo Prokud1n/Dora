@@ -24,4 +24,4 @@ const CheckMarkPhoto = ({ width, height, onPress, uri, checked }: Props) => {
     );
 };
 
-export default CheckMarkPhoto;
+export default React.memo(CheckMarkPhoto);

@@ -12,7 +12,7 @@ import styles from '../../page/AddCoupon/AddCouponPhoto/AddCouponPhoto.style';
 
 type Props = {
     photosGallery: any;
-    checkedPhoto: string[];
+    checkedPhoto: any;
     onPress: (uri: string) => void;
     requestStatus: number;
 };
@@ -36,13 +36,7 @@ const PhotoGallery = ({ photosGallery, checkedPhoto, onPress, requestStatus }: P
     return photosGallery.map((p) => (
         <View key={p.creationTime}>
             <View style={styles.containerCheckMark}>
-                <CheckMarkPhoto
-                    width="60%"
-                    height="60%"
-                    checked={checkedPhoto.includes(p.uri)}
-                    onPress={onPress}
-                    uri={p.uri}
-                />
+                <CheckMarkPhoto width="60%" height="60%" checked={checkedPhoto[p.uri]} onPress={onPress} uri={p.uri} />
             </View>
             <TouchableOpacity onPress={() => handleOpenPhoto(p.uri)}>
                 <Image style={styles.photo} source={{ uri: p.uri }} />
@@ -51,4 +45,4 @@ const PhotoGallery = ({ photosGallery, checkedPhoto, onPress, requestStatus }: P
     ));
 };
 
-export default PhotoGallery;
+export default React.memo(PhotoGallery);

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, Text, View } from 'react-native';
+import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 import { useHistory } from 'react-router-native';
 import * as MediaLibrary from 'expo-media-library';
 import { useDispatch, useSelector } from 'react-redux';
@@ -9,35 +9,41 @@ import TouchableSVG from '../../../components/TouchableSVG/TouchableSVG';
 import CustomButton from '../../../components/CustomButton/CustomButton';
 import REQUEST from '../../../constants/REQUEST';
 import PhotoGallery from '../../../components/PhotoGallery/PhotoGallery';
-
-import styles from './AddCouponPhoto.style';
 import AddCouponActions from '../../../store/actions/addCouponActions';
 import { RootState } from '../../../store/reducers/rootReducer';
+
+import styles from './AddCouponPhoto.style';
 
 const AddCouponPhoto = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const initialCheckedPhone = useSelector((state: RootState) => state.addCoupon.checkedPhoto);
+    const photosGallery = useSelector((state: RootState) => state.addCoupon.photosGallery);
     const [requestStatus, setRequestStatus] = useState(REQUEST.STILL);
-    const [photosGallery, setPhotosGallery] = useState([]);
     const [checkedPhoto, setCheckedPhoto] = useState(initialCheckedPhone);
 
-    useEffect(() => {
+    const getPhoto = () => {
         (async () => {
             setRequestStatus(REQUEST.LOADING);
 
             try {
                 const media = await MediaLibrary.getAssetsAsync({
-                    first: 9,
+                    first: 50,
                     mediaType: ['photo']
                 });
 
-                setPhotosGallery(media.assets);
+                dispatch(AddCouponActions.savePhotosGallery(media.assets));
                 setRequestStatus(REQUEST.STILL);
             } catch {
                 setRequestStatus(REQUEST.ERROR);
             }
         })();
+    };
+
+    useEffect(() => {
+        if (photosGallery.length === 0) {
+            getPhoto();
+        }
 
         return () => {
             dispatch(AddCouponActions.updateCheckedPhoto(checkedPhoto));
@@ -45,12 +51,12 @@ const AddCouponPhoto = () => {
     }, []);
 
     const handleCheckPhoto = (photoUri) => {
-        const newCheckedPhoto = [...checkedPhoto];
+        const newCheckedPhoto = { ...checkedPhoto };
 
-        if (newCheckedPhoto.includes(photoUri)) {
-            setCheckedPhoto(newCheckedPhoto.filter((uri) => uri !== photoUri));
+        if (newCheckedPhoto[photoUri]) {
+            newCheckedPhoto[photoUri] = false;
         } else {
-            newCheckedPhoto.push(photoUri);
+            newCheckedPhoto[photoUri] = true;
             setCheckedPhoto(newCheckedPhoto);
         }
     };
@@ -74,14 +80,14 @@ const AddCouponPhoto = () => {
                 <View style={styles.containerCameraSVG}>
                     <TouchableSVG svg="photo" width="100%" height="100%" onPress={handleRedirectToCamera} />
                 </View>
-                <View style={styles.containerPhoto}>
+                <ScrollView contentContainerStyle={styles.containerPhoto}>
                     <PhotoGallery
                         photosGallery={photosGallery}
                         onPress={handleCheckPhoto}
                         checkedPhoto={checkedPhoto}
                         requestStatus={requestStatus}
                     />
-                </View>
+                </ScrollView>
                 <View style={styles.footer}>
                     <CustomButton
                         title="Далее"
