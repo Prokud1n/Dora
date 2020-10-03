@@ -17,6 +17,10 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         paddingTop: 13,
         fontSize: 17
+    },
+    footer: {
+        position: 'absolute',
+        bottom: 0
     }
 });
 

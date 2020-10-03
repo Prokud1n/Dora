@@ -6,7 +6,28 @@ import getXML from '../../utils/getXML';
 import styles from './TouchableSVG.style';
 
 type Props = {
-    svg: 'Google' | 'FB' | 'Mail' | 'VK' | 'Telegram' | 'addCoupon' | 'settings' | 'notFoundCoupons';
+    svg:
+        | 'Google'
+        | 'FB'
+        | 'Mail'
+        | 'VK'
+        | 'Telegram'
+        | 'addCoupon'
+        | 'settings'
+        | 'notFoundCoupons'
+        | 'householdProducts'
+        | 'householdProductsActive'
+        | 'appliances'
+        | 'appliancesActive'
+        | 'clothesAndShoes'
+        | 'clothesAndShoesActive'
+        | 'otherGoods'
+        | 'otherGoodsActive'
+        | 'goodsForAuto'
+        | 'goodsForAutoActive'
+        | 'checkMark'
+        | 'activeCheckMark'
+        | 'photo';
     width: string;
     height: string;
     onPress?: () => void;

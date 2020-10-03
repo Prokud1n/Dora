@@ -15,6 +15,10 @@ const CouponsList = () => {
         history.push('/settings');
     };
 
+    const handleRedirectToInfoPurchase = () => {
+        history.push('/category');
+    };
+
     return (
         <SafeAreaView>
             <View style={styles.containerPage}>
@@ -27,7 +31,7 @@ const CouponsList = () => {
                         onChangeText={setSearch}
                         placeholder="Поиск по талонам"
                     />
-                    <TouchableSVG svg="addCoupon" height="100%" width="100%" />
+                    <TouchableSVG svg="addCoupon" height="100%" width="100%" onPress={handleRedirectToInfoPurchase} />
                 </View>
                 <View style={styles.containerCoupons}>
                     <SVG svg="notFoundCoupons" height="70%" width="50%" />
