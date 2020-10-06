@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SafeAreaView, TextInput, View, Text } from 'react-native';
+import { SafeAreaView, TextInput, View, Text, ScrollView } from 'react-native';
 import { SwipeRow } from 'react-native-swipe-list-view';
 import { useHistory } from 'react-router-native';
 import BackStepButton from '../../components/BackStepButton/BackStepButton';
@@ -10,8 +10,8 @@ import ActiveCoupon from '../../components/ActiveCoupon/ActiveCoupon';
 import styles from './CouponsList.style';
 
 const coupons = [
-    { name: 'Sennheiser cx-302', status: 'Товар на экспертизе', category: 'appliancesWhite', id: 1 },
-    { name: 'Iphone', status: 'Осталось 7 дней', category: 'appliancesWhite', id: 2 }
+    { name: 'Sennheiser cx-302', status: 'Товар на экспертизе', category: 'appliancesWhite', id: 1, shop: 'DNS shop' },
+    { name: 'Iphone', status: 'Осталось 7 дней', category: 'appliancesWhite', id: 2, shop: 'DNS shop' }
 ];
 
 const CouponsList = () => {
@@ -48,15 +48,17 @@ const CouponsList = () => {
                 ) : (
                     <>
                         <Text style={styles.header}>Активная гарантия</Text>
-                        {coupons.map(({ name, status, category, id }) => (
-                            <SwipeRow rightOpenValue={-130} key={id}>
-                                <View style={styles.containerSVG}>
-                                    <TouchableSVG svg="delete" height="100%" width="100%" />
-                                    <TouchableSVG svg="edit" height="100%" width="100%" />
-                                </View>
-                                <ActiveCoupon name={name} status={status} category={category} />
-                            </SwipeRow>
-                        ))}
+                        <ScrollView>
+                            {coupons.map(({ name, status, category, id, shop }) => (
+                                <SwipeRow rightOpenValue={-130} key={id}>
+                                    <View style={styles.containerSVG}>
+                                        <TouchableSVG svg="delete" height="100%" width="100%" />
+                                        <TouchableSVG svg="edit" height="100%" width="100%" />
+                                    </View>
+                                    <ActiveCoupon name={name} status={status} category={category} shop={shop} />
+                                </SwipeRow>
+                            ))}
+                        </ScrollView>
                     </>
                 )}
             </View>
