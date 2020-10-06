@@ -4,8 +4,14 @@ import { useHistory } from 'react-router-native';
 import BackStepButton from '../../components/BackStepButton/BackStepButton';
 import SVG from '../../components/SVG/SVG';
 import TouchableSVG from '../../components/TouchableSVG/TouchableSVG';
+import ActiveCoupon from '../../components/ActiveCoupon/ActiveCoupon';
 
 import styles from './CouponsList.style';
+
+const coupons = [
+    { name: 'Sennheiser cx-302', status: 'Товар на экспертизе', category: 'appliancesWhite', id: 1 },
+    { name: 'Iphone', status: 'Осталось 7 дней', category: 'appliancesWhite', id: 2 }
+];
 
 const CouponsList = () => {
     const history = useHistory();
@@ -33,10 +39,19 @@ const CouponsList = () => {
                     />
                     <TouchableSVG svg="addCoupon" height="100%" width="100%" onPress={handleRedirectToInfoPurchase} />
                 </View>
-                <View style={styles.containerCoupons}>
-                    <SVG svg="notFoundCoupons" height="70%" width="50%" />
-                    <Text style={styles.notFoundText}>Пока здесь ничего нет. Нужно добавить талонов.</Text>
-                </View>
+                {coupons.length === 0 ? (
+                    <View style={styles.containerCoupons}>
+                        <SVG svg="notFoundCoupons" height="70%" width="50%" />
+                        <Text style={styles.notFoundText}>Пока здесь ничего нет. Нужно добавить талонов.</Text>
+                    </View>
+                ) : (
+                    <>
+                        <Text style={styles.header}>Активная гарантия</Text>
+                        {coupons.map(({ name, status, category, id }) => (
+                            <ActiveCoupon key={id} name={name} status={status} category={category} />
+                        ))}
+                    </>
+                )}
             </View>
         </SafeAreaView>
     );

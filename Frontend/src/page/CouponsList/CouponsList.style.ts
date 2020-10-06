@@ -32,6 +32,12 @@ const styles = StyleSheet.create({
         marginLeft: 15,
         marginRight: 15,
         paddingLeft: 26
+    },
+    header: {
+        fontSize: 22,
+        fontWeight: '600',
+        marginLeft: 16,
+        marginBottom: 16
     }
 });
 

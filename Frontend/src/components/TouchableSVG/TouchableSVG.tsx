@@ -19,6 +19,7 @@ type Props = {
         | 'householdProductsActive'
         | 'appliances'
         | 'appliancesActive'
+        | 'appliancesWhite'
         | 'clothesAndShoes'
         | 'clothesAndShoesActive'
         | 'otherGoods'
