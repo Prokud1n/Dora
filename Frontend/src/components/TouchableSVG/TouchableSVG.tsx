@@ -28,6 +28,8 @@ type Props = {
         | 'goodsForAutoActive'
         | 'checkMark'
         | 'activeCheckMark'
+        | 'delete'
+        | 'edit'
         | 'photo';
     width: string;
     height: string;

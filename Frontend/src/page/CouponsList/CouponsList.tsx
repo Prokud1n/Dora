@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { SafeAreaView, TextInput, View, Text } from 'react-native';
+import { SwipeRow } from 'react-native-swipe-list-view';
 import { useHistory } from 'react-router-native';
 import BackStepButton from '../../components/BackStepButton/BackStepButton';
 import SVG from '../../components/SVG/SVG';
@@ -48,7 +49,13 @@ const CouponsList = () => {
                     <>
                         <Text style={styles.header}>Активная гарантия</Text>
                         {coupons.map(({ name, status, category, id }) => (
-                            <ActiveCoupon key={id} name={name} status={status} category={category} />
+                            <SwipeRow rightOpenValue={-130} key={id}>
+                                <View style={styles.containerSVG}>
+                                    <TouchableSVG svg="delete" height="100%" width="100%" />
+                                    <TouchableSVG svg="edit" height="100%" width="100%" />
+                                </View>
+                                <ActiveCoupon name={name} status={status} category={category} />
+                            </SwipeRow>
                         ))}
                     </>
                 )}

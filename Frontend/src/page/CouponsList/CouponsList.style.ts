@@ -38,6 +38,15 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         marginLeft: 16,
         marginBottom: 16
+    },
+    containerSVG: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        paddingTop: 25
+    },
+    deleteSVG: {
+        marginLeft: 10
     }
 });
 
