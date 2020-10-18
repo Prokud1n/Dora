@@ -75,6 +75,31 @@ const styles = StyleSheet.create({
         borderBottomStartRadius: 35,
         backgroundColor: '#E5E5E5',
         marginRight: 8
+    },
+    containerWarrantyCase: {
+        marginLeft: 16,
+        marginRight: 16
+    },
+    openWarrantyCase: {
+        backgroundColor: '#fff',
+        borderRadius: 35,
+        paddingRight: 30,
+        paddingLeft: 21,
+        paddingBottom: 30
+    },
+    warrantyCaseLabel: {
+        fontSize: 17
+    },
+    warrantyCaseTitle: {
+        fontSize: 12,
+        color: '#8C8C8C'
+    },
+    containerWarrantyCaseInfo: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginTop: 16
     }
 });
 
