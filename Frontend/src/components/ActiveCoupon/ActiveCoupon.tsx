@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, TextInput, Image } from 'react-native';
+import React, { useMemo, useState } from 'react';
+import { Dimensions, View, Text, TouchableOpacity, TextInput, Image } from 'react-native';
+
 import TouchableSVG from '../TouchableSVG/TouchableSVG';
 
 import styles from './ActiveCoupon.style';
@@ -13,6 +14,18 @@ type Props = {
 
 const ActiveCoupon = ({ name, status, category, shop }: Props) => {
     const [isOpenInfo, setIsOpenInfo] = useState(false);
+    const windowWidth = Dimensions.get('window').width;
+    const widthCircle = 10;
+
+    const getCircle = () => {
+        const circleArr = [];
+
+        for (let i = 0; i < windowWidth; i += widthCircle) {
+            circleArr.push(<View key={i} style={styles.circle} />);
+        }
+        return circleArr;
+    };
+    const circleElements = useMemo(() => getCircle(), []);
 
     const handleOpenInfo = () => {
         setIsOpenInfo(!isOpenInfo);
@@ -23,6 +36,7 @@ const ActiveCoupon = ({ name, status, category, shop }: Props) => {
             <TouchableOpacity
                 style={[styles.container, isOpenInfo && { marginLeft: 0, marginRight: 0 }]}
                 onPress={handleOpenInfo}>
+                <View style={styles.containerCircle}>{circleElements.map((i) => i)}</View>
                 <View>
                     <Text style={styles.name}>{name}</Text>
                     <Text style={styles.status}>{status}</Text>

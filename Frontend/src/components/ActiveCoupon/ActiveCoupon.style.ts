@@ -8,6 +8,7 @@ const styles = StyleSheet.create({
         marginRight: 16
     },
     container: {
+        position: 'relative',
         backgroundColor: '#fff',
         borderRadius: 35,
         marginLeft: 16,
@@ -59,6 +60,21 @@ const styles = StyleSheet.create({
         marginRight: 6,
         marginBottom: 24,
         marginTop: 12
+    },
+    containerCircle: {
+        width: '100%',
+        position: 'absolute',
+        top: -5,
+        display: 'flex',
+        flexDirection: 'row'
+    },
+    circle: {
+        minHeight: 10,
+        minWidth: 10,
+        borderBottomEndRadius: 35,
+        borderBottomStartRadius: 35,
+        backgroundColor: '#E5E5E5',
+        marginRight: 8
     }
 });
 
