@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 import { useHistory } from 'react-router-native';
 import * as MediaLibrary from 'expo-media-library';
@@ -31,6 +32,8 @@ const AddCouponPhoto = () => {
                     first: 50,
                     mediaType: ['photo']
                 });
+
+                console.log(media);
 
                 dispatch(AddCouponActions.savePhotosGallery(media.assets));
                 setRequestStatus(REQUEST.STILL);
@@ -65,8 +68,60 @@ const AddCouponPhoto = () => {
         history.push('/camera');
     };
 
-    const handleRedirectToCouponsList = () => {
-        history.push('/coupons');
+    const handleRedirectToCouponsList = async () => {
+        const uri = Object.keys(checkedPhoto)[0];
+
+        console.log('uri', uri);
+        const photo = photosGallery.find((photo) => photo.uri === uri);
+
+        const createFormData = (photo, body) => {
+            const data = new FormData();
+
+            console.log('createFormData', photo);
+
+            data.append('photo', {
+                name: photo.filename,
+                type: photo.type,
+                // uri: photo.uri.replace('assets-library://', '')
+                uri: photo.uri
+            });
+
+            Object.keys(body).forEach((key) => {
+                data.append(key, body[key]);
+            });
+
+            console.log(data);
+
+            return data;
+        };
+
+        fetch('http://192.168.1.228:3000/api/upload', {
+            method: 'POST',
+            body: createFormData(
+                {
+                    uri: photo.uri,
+                    type: 'image/jpeg',
+                    filename: photo.filename
+                },
+                { userId: '123' }
+            )
+        })
+            .then((response) => response.json())
+            .then((response) => {
+                console.log('upload succes', response);
+            })
+            .catch((error) => {
+                console.log('upload error', error);
+            });
+
+        axios
+            .get('http://192.168.1.228:3000/api/photo')
+            .then((r) => {
+                console.log('getphotosuccess', r);
+            })
+            .catch((err) => {
+                console.log('getPhotoError', err);
+            });
     };
 
     return (
