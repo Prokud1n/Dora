@@ -50,7 +50,8 @@ const ForgotPasswordInputEmail = () => {
                     dispatch(AuthorizationActions.setEmailToStore(email));
                     history.push('/forget-password-code');
                 })
-                .catch(() => {
+                .catch((err) => {
+                    console.log(err);
                     setRequestStatus(REQUEST.ERROR);
                 });
         }

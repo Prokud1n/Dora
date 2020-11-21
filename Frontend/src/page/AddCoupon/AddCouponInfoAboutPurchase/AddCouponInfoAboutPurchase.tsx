@@ -1,29 +1,63 @@
-import { SafeAreaView, TextInput, View, Text, Platform, Button } from 'react-native';
-import React, { useMemo, useState } from 'react';
+import { SafeAreaView, TextInput, View, Text, Platform, Button, Keyboard } from 'react-native';
+import React, { useEffect, useMemo, useState } from 'react';
 import RNPickerSelect from 'react-native-picker-select';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useHistory } from 'react-router-native';
+import { useDispatch, useSelector } from 'react-redux';
 import CustomButton from '../../../components/CustomButton/CustomButton';
 import DatePurchase from '../../../components/DatePurchase/DatePurchase';
 import getFormatDate from '../../../utils/getFormatDate';
 import HeaderAddCoupon from '../../../components/HeaderAddCoupon/HeaderAddCoupon';
 
 import styles from './AddCouponInfoAboutPurchase.style';
+import AddCouponActions from '../../../store/actions/addCouponActions';
+import { selectors } from '../../../store/reducers/addCouponReducer';
+
+const TYPE_WARRANTY_PERIOD = {
+    M: 'месяцев',
+    Y: 'лет',
+    D: 'дней'
+};
 
 const AddCouponInfoAboutPurchase = () => {
     const history = useHistory();
-    const [couponName, setCouponName] = useState('');
-    const [shop, setShop] = useState('');
-    const [days, setDays] = useState('100');
-    const [date, setDate] = useState(null);
+    const dispatch = useDispatch();
+    const infoPurchase = useSelector(selectors.infoPurchase);
+    const infoCategory = useSelector(selectors.infoCategory);
+    const [couponName, setCouponName] = useState(infoPurchase.couponName);
+    const [shop, setShop] = useState(infoPurchase.shopName);
+    const [warrantyPeriod, setWarrantyPeriod] = useState(String(infoCategory?.warranty_period));
+    const [date, setDate] = useState(infoPurchase.dateOfPurchase);
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
-    const [dimension, setDimension] = useState('месяцев');
+    const [typeWarrantyPeriod, setTypeWarrantyPeriod] = useState(
+        TYPE_WARRANTY_PERIOD[infoCategory?.type_warranty_period]
+    );
+
+    useEffect(() => {
+        setWarrantyPeriod(String(infoCategory?.warranty_period));
+        setTypeWarrantyPeriod(TYPE_WARRANTY_PERIOD[infoCategory?.type_warranty_period]);
+    }, [infoCategory]);
 
     const disabledNextButton =
-        couponName.length === 0 && shop.length === 0 && days.length === 0 && date === null && dimension.length === 0;
+        couponName.length === 0 &&
+        shop.length === 0 &&
+        warrantyPeriod.length === 0 &&
+        date === null &&
+        typeWarrantyPeriod.length === 0;
 
     const handleRedirectToPhoto = () => {
+        const typePeriod = Object.keys(TYPE_WARRANTY_PERIOD).find((key) => TYPE_WARRANTY_PERIOD[key]);
+
+        dispatch(
+            AddCouponActions.saveInfoAboutPurchase({
+                couponName,
+                shopName: shop,
+                dateOfPurchase: date,
+                typeWarrantyPeriod: typePeriod,
+                warrantyPeriod
+            })
+        );
         history.push('/photo');
     };
 
@@ -44,6 +78,7 @@ const AddCouponInfoAboutPurchase = () => {
     };
 
     const showDatepicker = () => {
+        Keyboard.dismiss();
         showMode('date');
     };
 
@@ -75,21 +110,25 @@ const AddCouponInfoAboutPurchase = () => {
                     <DatePurchase onPress={showDatepicker} title={dateTitle} />
                     <View style={styles.quaranteePeriod}>
                         <TextInput
-                            style={[styles.dimension, styles.colorInputDays, days.length !== 0 && styles.inputDays]}
-                            value={days}
-                            onChangeText={setDays}
-                            placeholder={`Кол-во ${dimension}`}
+                            style={[
+                                styles.dimension,
+                                styles.colorInputDays,
+                                warrantyPeriod.length !== 0 && styles.inputDays
+                            ]}
+                            value={warrantyPeriod}
+                            onChangeText={setWarrantyPeriod}
+                            placeholder={`Кол-во ${typeWarrantyPeriod}`}
                         />
                         <RNPickerSelect
                             style={{
                                 inputIOSContainer: styles.dimension
                             }}
-                            value={dimension}
-                            onValueChange={setDimension}
+                            value={typeWarrantyPeriod}
+                            onValueChange={setTypeWarrantyPeriod}
                             items={[
-                                { label: 'дней', value: 'дней' },
-                                { label: 'месяцев', value: 'месяцев' },
-                                { label: 'лет', value: 'лет' }
+                                { label: 'дней', value: TYPE_WARRANTY_PERIOD.D },
+                                { label: 'месяцев', value: TYPE_WARRANTY_PERIOD.M },
+                                { label: 'лет', value: TYPE_WARRANTY_PERIOD.Y }
                             ]}
                         />
                     </View>
@@ -104,7 +143,7 @@ const AddCouponInfoAboutPurchase = () => {
                         </View>
                         <DateTimePicker
                             testID="dateTimePicker"
-                            value={date || new Date()}
+                            value={date || Date.now()}
                             mode={mode}
                             is24Hour
                             display="default"

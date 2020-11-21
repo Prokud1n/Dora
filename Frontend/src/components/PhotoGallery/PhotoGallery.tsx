@@ -33,8 +33,9 @@ const PhotoGallery = ({ photosGallery, checkedPhoto, onPress, requestStatus }: P
     if (requestStatus === REQUEST.ERROR) {
         return <ErrorMessage errorMessage="Не удалось загрузить фото из вашей галлереи" />;
     }
+
     return photosGallery.map((p) => (
-        <View key={p.creationTime}>
+        <View key={p.creationTime + p.uri}>
             <View style={styles.containerCheckMark}>
                 <CheckMarkPhoto width="60%" height="60%" checked={checkedPhoto[p.uri]} onPress={onPress} uri={p.uri} />
             </View>

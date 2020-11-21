@@ -27,6 +27,45 @@ const styles = StyleSheet.create({
     }
 });
 
+// const _XHR = GLOBAL.originalXMLHttpRequest ? GLOBAL.originalXMLHttpRequest : GLOBAL.XMLHttpRequest;
+//
+// XMLHttpRequest = _XHR;
+
+// NativeModules.DevSettings.setIsDebuggingRemotely(true);
+//
+// global.XMLHttpRequest = global.originalXMLHttpRequest
+//     ? global.originalXMLHttpRequest
+//     : global.XMLHttpRequest;
+// global.FormData = global.originalFormData
+//     ? global.originalFormData
+//     : global.FormData;
+//
+// fetch; // Ensure to get the lazy property
+//
+// if (window.__FETCH_SUPPORT__) {
+//     // it's RNDebugger only to have
+//     window.__FETCH_SUPPORT__.blob = false;
+// } else {
+//     /*
+//      * Set __FETCH_SUPPORT__ to false is just work for `fetch`.
+//      * If you're using another way you can just use the native Blob and remove the `else` statement
+//      */
+//     global.Blob = global.originalBlob ? global.originalBlob : global.Blob;
+//     global.FileReader = global.originalFileReader
+//         ? global.originalFileReader
+//         : global.FileReader;
+// }
+
+// global.XMLHttpRequest = global.originalXMLHttpRequest || global.XMLHttpRequest;
+// global.FormData = global.originalFormData || global.FormData;
+//
+// if (window.FETCH_SUPPORT) {
+//     window.FETCH_SUPPORT.blob = false;
+// } else {
+//     global.FileReader = global.originalFileReader || global.FileReader;
+//     GLOBAL.Blob = null;
+// }
+
 export default function App() {
     return (
         <ErrorBoundary>

@@ -1,3 +1,5 @@
+import { RootState } from './rootReducer';
+
 export type Auth = {
     id: string;
     verified: boolean;
@@ -12,6 +14,10 @@ export type AuthorizationState = {
     auth: Auth;
     email: string;
     code: string;
+};
+
+export const selectors = {
+    userId: (state: RootState) => state.authorization.auth.id
 };
 
 const initialState = {
