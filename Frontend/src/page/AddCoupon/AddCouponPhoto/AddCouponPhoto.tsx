@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
 import { SafeAreaView, ScrollView, Text, View } from 'react-native';
 import { useHistory } from 'react-router-native';
 import * as MediaLibrary from 'expo-media-library';
 import { useDispatch, useSelector } from 'react-redux';
+import * as Permissions from 'expo-permissions';
 import Camera from '../../Camera/Camera';
 import HeaderAddCoupon from '../../../components/HeaderAddCoupon/HeaderAddCoupon';
 import TouchableSVG from '../../../components/TouchableSVG/TouchableSVG';
@@ -11,17 +11,48 @@ import CustomButton from '../../../components/CustomButton/CustomButton';
 import REQUEST from '../../../constants/REQUEST';
 import PhotoGallery from '../../../components/PhotoGallery/PhotoGallery';
 import AddCouponActions from '../../../store/actions/addCouponActions';
-import { RootState } from '../../../store/reducers/rootReducer';
+import { selectors as selectorsAuthorization } from '../../../store/reducers/authorizationReducer';
+import { selectors as selectorsAddCoupon } from '../../../store/reducers/addCouponReducer';
 
 import styles from './AddCouponPhoto.style';
+import Loader from '../../../components/Loader/Loader';
+
+const createDate = (date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const day = date.getDate();
+
+    return `${year}-${month < 10 ? `0${month}` : month}-${day < 10 ? `0${day}` : day}`;
+};
 
 const AddCouponPhoto = () => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const initialCheckedPhone = useSelector((state: RootState) => state.addCoupon.checkedPhoto);
-    const photosGallery = useSelector((state: RootState) => state.addCoupon.photosGallery);
+    const initialCheckedPhone = useSelector(selectorsAddCoupon.checkedPhoto);
+    const photosGallery = useSelector(selectorsAddCoupon.photosGallery);
+    const infoPurchase = useSelector(selectorsAddCoupon.infoPurchase);
+    const infoCategory = useSelector(selectorsAddCoupon.infoCategory);
+    const userId = useSelector(selectorsAuthorization.userId);
     const [requestStatus, setRequestStatus] = useState(REQUEST.STILL);
     const [checkedPhoto, setCheckedPhoto] = useState(initialCheckedPhone);
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const { couponName, shopName, dateOfPurchase, warrantyPeriod, typeWarrantyPeriod } = infoPurchase;
+
+    useEffect(() => {
+        (async () => {
+            const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
+            if (status !== 'granted') {
+                alert('Sorry, we need camera roll permissions to make this work!');
+            }
+        })();
+    }, []);
+
+    useEffect(() => {
+        if (isSubmitted) {
+            history.push('/coupons');
+        }
+    }, [isSubmitted]);
 
     const getPhoto = () => {
         (async () => {
@@ -32,8 +63,6 @@ const AddCouponPhoto = () => {
                     first: 50,
                     mediaType: ['photo']
                 });
-
-                console.log(media);
 
                 dispatch(AddCouponActions.savePhotosGallery(media.assets));
                 setRequestStatus(REQUEST.STILL);
@@ -60,69 +89,88 @@ const AddCouponPhoto = () => {
             newCheckedPhoto[photoUri] = false;
         } else {
             newCheckedPhoto[photoUri] = true;
-            setCheckedPhoto(newCheckedPhoto);
         }
+
+        setCheckedPhoto(newCheckedPhoto);
     };
 
     const handleRedirectToCamera = () => {
         history.push('/camera');
     };
 
+    const getPhotoFiles = () => {
+        const uris = Object.keys(checkedPhoto);
+
+        return uris.map((uri) => {
+            const photo = photosGallery.find((photo) => photo.uri === uri);
+            const type = photo.filename.split('.')[1];
+
+            return {
+                name: photo.filename,
+                type: `image/${type.toLowerCase()}`,
+                uri
+            };
+        });
+    };
+
     const handleRedirectToCouponsList = async () => {
-        const uri = Object.keys(checkedPhoto)[0];
+        setRequestStatus(REQUEST.LOADING);
+        const photoFiles = getPhotoFiles();
 
-        console.log('uri', uri);
-        const photo = photosGallery.find((photo) => photo.uri === uri);
-
-        const createFormData = (photo, body) => {
+        const createFormData = ({
+            userId,
+            couponName,
+            shopName,
+            dateOfPurchase,
+            warrantyPeriod,
+            typeWarrantyPeriod,
+            photoFiles
+        }) => {
             const data = new FormData();
 
-            console.log('createFormData', photo);
-
-            data.append('photo', {
-                name: photo.filename,
-                type: photo.type,
-                // uri: photo.uri.replace('assets-library://', '')
-                uri: photo.uri
+            photoFiles.forEach((photo) => {
+                data.append('files', {
+                    name: photo.name,
+                    type: photo.type,
+                    uri: photo.uri
+                });
             });
 
-            Object.keys(body).forEach((key) => {
-                data.append(key, body[key]);
-            });
-
-            console.log(data);
+            data.append('user_id', userId);
+            data.append('name', couponName);
+            data.append('shop_name', shopName);
+            data.append('date_of_purchase', createDate(dateOfPurchase));
+            data.append('warranty_period', warrantyPeriod);
+            data.append('type_warranty_period', typeWarrantyPeriod);
+            data.append('category_id', infoCategory.category_id);
 
             return data;
         };
 
-        fetch('http://192.168.1.228:3000/api/upload', {
-            method: 'POST',
-            body: createFormData(
-                {
-                    uri: photo.uri,
-                    type: 'image/jpeg',
-                    filename: photo.filename
-                },
-                { userId: '123' }
-            )
-        })
-            .then((response) => response.json())
-            .then((response) => {
-                console.log('upload succes', response);
-            })
-            .catch((error) => {
-                console.log('upload error', error);
-            });
+        const body = createFormData({
+            userId,
+            couponName,
+            shopName,
+            dateOfPurchase,
+            warrantyPeriod,
+            typeWarrantyPeriod,
+            photoFiles
+        });
 
-        axios
-            .get('http://192.168.1.228:3000/api/photo')
-            .then((r) => {
-                console.log('getphotosuccess', r);
+        AddCouponActions.addNewCoupon(body)
+            .then((_) => {
+                setRequestStatus(REQUEST.STILL);
+                setIsSubmitted(true);
             })
-            .catch((err) => {
-                console.log('getPhotoError', err);
+            .catch((_) => {
+                alert('Попробуйте ещё раз!');
+                setRequestStatus(REQUEST.STILL);
             });
     };
+
+    if (requestStatus === REQUEST.LOADING) {
+        return <Loader />;
+    }
 
     return (
         <SafeAreaView>
