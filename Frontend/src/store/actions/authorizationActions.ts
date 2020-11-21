@@ -3,7 +3,7 @@ import axios from '../../axios/axiosDora';
 
 export default class AuthorizationActions {
     static registration(email, password) {
-        return axios.post('/api/register/email', { email, password });
+        return axios.post('/api/users/register/email', { email, password });
     }
 
     static setEmailToStore(email) {
@@ -25,19 +25,19 @@ export default class AuthorizationActions {
     };
 
     static resetPassword(code, email, password) {
-        return axios.post('/api/reset', { code, email, password });
+        return axios.post('/api/users/reset', { code, email, password });
     }
 
     static checkCodeFromEmail(email, code) {
-        return axios.get(`/api/reset/${email}/check/${code}`);
+        return axios.get(`/api/users/reset/${email}/check/${code}`);
     }
 
     static signIn(email, password) {
-        return axios.post('/api/auth/email', { email, password });
+        return axios.post('/api/users/auth/email', { email, password });
     }
 
     static sendCodeToEmailForResetPassword(email) {
-        return axios.get(`/api/reset/${email}`);
+        return axios.get(`/api/users/reset/${email}`);
     }
 
     static sendCodeToEmailForActivateAccount = async (id) => {
@@ -54,7 +54,7 @@ export default class AuthorizationActions {
         const token = await AsyncStorage.getItem('token');
 
         return axios.post(
-            '/api/change/password/email',
+            '/api/users/change/password/email',
             {
                 user_id,
                 old_password,
