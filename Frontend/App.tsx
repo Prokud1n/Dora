@@ -66,6 +66,14 @@ const styles = StyleSheet.create({
 //     GLOBAL.Blob = null;
 // }
 
+// if (!global.btoa) {
+//     global.btoa = encode;
+// }
+//
+// if (!global.atob) {
+//     global.atob = decode;
+// }
+
 export default function App() {
     return (
         <ErrorBoundary>

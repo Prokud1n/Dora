@@ -10,22 +10,41 @@ import ActiveCoupon from '../../components/ActiveCoupon/ActiveCoupon';
 
 import styles from './CouponsList.style';
 import AddCouponActions from '../../store/actions/addCouponActions';
-import { selectors } from '../../store/reducers/authorizationReducer';
+import { selectors as selectorsAuthorization } from '../../store/reducers/authorizationReducer';
+import { selectors as selectorsCoupon } from '../../store/reducers/addCouponReducer';
+import Loader from '../../components/Loader/Loader';
+import REQUEST from '../../constants/REQUEST';
 
-const coupons = [
-    { name: 'Sennheiser cx-302', status: 'Товар на экспертизе', category: 'appliancesWhite', id: 1, shop: 'DNS shop' },
-    { name: 'Iphone', status: 'Осталось 7 дней', category: 'appliancesWhite', id: 2, shop: 'DNS shop' }
-];
+export const pluralForm = (num: number, form1: string, form2: string, form3: string): string => {
+    const n = Math.abs(num) % 100;
+    const n1 = n % 10;
+
+    if (n > 10 && n < 20) {
+        return form3;
+    }
+
+    if (n1 > 1 && n1 < 5) {
+        return form2;
+    }
+
+    if (n1 === 1) {
+        return form1;
+    }
+
+    return form3;
+};
 
 const CouponsList = () => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const userId = useSelector(selectors.userId);
+    const userId = useSelector(selectorsAuthorization.userId);
+    const coupons = useSelector(selectorsCoupon.coupons);
+    const requestStatusCoupons = useSelector(selectorsCoupon.requestStatusCoupons);
     const [search, setSearch] = useState('');
 
     useEffect(() => {
         dispatch(AddCouponActions.fetchCoupons(userId));
-    }, []);
+    }, [userId]);
 
     const handleRedirectToSettings = () => {
         history.push('/settings');
@@ -34,6 +53,10 @@ const CouponsList = () => {
     const handleRedirectToInfoPurchase = () => {
         history.push('/category');
     };
+
+    if (requestStatusCoupons === REQUEST.LOADING) {
+        return <Loader />;
+    }
 
     return (
         <SafeAreaView>
@@ -49,7 +72,7 @@ const CouponsList = () => {
                     />
                     <TouchableSVG svg="addCoupon" height="100%" width="100%" onPress={handleRedirectToInfoPurchase} />
                 </View>
-                {coupons.length === 0 ? (
+                {coupons.non_archived.length === 0 ? (
                     <View style={styles.containerCoupons}>
                         <SVG svg="notFoundCoupons" height="70%" width="50%" />
                         <Text style={styles.notFoundText}>Пока здесь ничего нет. Нужно добавить талонов.</Text>
@@ -58,15 +81,35 @@ const CouponsList = () => {
                     <>
                         <Text style={styles.header}>Активная гарантия</Text>
                         <ScrollView>
-                            {coupons.map(({ name, status, category, id, shop }) => (
-                                <SwipeRow rightOpenValue={-130} key={id}>
-                                    <View style={styles.containerSVG}>
-                                        <TouchableSVG svg="delete" height="100%" width="100%" />
-                                        <TouchableSVG svg="edit" height="100%" width="100%" />
-                                    </View>
-                                    <ActiveCoupon name={name} status={status} category={category} shop={shop} />
-                                </SwipeRow>
-                            ))}
+                            {coupons.non_archived.map(
+                                ({ name, category_id, id, shop_name, days_end_warranty, files }) => {
+                                    // const categoryIcon = DICTIONARY_CATEGORIES.find(
+                                    //     ({ categoryId }) => categoryId === category_id
+                                    // )?.icon;
+                                    const status = `Осталось ${days_end_warranty} ${pluralForm(
+                                        days_end_warranty,
+                                        'день',
+                                        'дня',
+                                        'дней'
+                                    )}`;
+
+                                    return (
+                                        <SwipeRow rightOpenValue={-130} key={id}>
+                                            <View style={styles.containerSVG}>
+                                                <TouchableSVG svg="delete" height="100%" width="100%" />
+                                                <TouchableSVG svg="edit" height="100%" width="100%" />
+                                            </View>
+                                            <ActiveCoupon
+                                                name={name}
+                                                status={status}
+                                                category="appliancesWhite"
+                                                shop={shop_name}
+                                                files={files}
+                                            />
+                                        </SwipeRow>
+                                    );
+                                }
+                            )}
                         </ScrollView>
                     </>
                 )}

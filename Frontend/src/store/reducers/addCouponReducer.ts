@@ -1,13 +1,18 @@
 import { RootState } from './rootReducer';
+import REQUEST, { REQUEST_TYPE } from '../../constants/REQUEST';
 
 type Coupon = {
     category_id: number;
+    date_end_expertise: string;
     date_of_purchase: string;
+    days_end_warranty: number;
+    expertise: boolean;
+    files: { file_id: number; file_url: string }[];
     id: number;
+    item_replaced: boolean;
+    money_returned: boolean;
     name: string;
     shop_name: string;
-    type_warranty_period: string;
-    warranty_period: number;
 };
 
 export type AddCouponState = {
@@ -37,6 +42,15 @@ export type AddCouponState = {
         archived: Coupon[];
         non_archived: Coupon[];
     };
+    warrantyPhoto: {
+        files: {
+            file_id: number;
+            file_url: string;
+        }[];
+        warrnaty_id: number;
+    };
+    photo: string;
+    requestStatusCoupons: REQUEST_TYPE;
 };
 
 type AddCouponAction = {
@@ -52,7 +66,9 @@ export const selectors = {
     infoPurchase: (state: RootState) => state.addCoupon.infoPurchase,
     infoCategory: (state: RootState) => state.addCoupon.infoCategory,
     categories: (state: RootState) => state.addCoupon.categories,
-    coupons: (state: RootState) => state.addCoupon.coupons
+    coupons: (state: RootState) => state.addCoupon.coupons,
+    photo: (state: RootState) => state.addCoupon.photo,
+    requestStatusCoupons: (state: RootState) => state.addCoupon.requestStatusCoupons
 };
 
 const initialState = {
@@ -68,7 +84,16 @@ const initialState = {
     },
     infoCategory: {},
     categories: [],
-    coupons: {}
+    coupons: {
+        archived: [],
+        non_archived: []
+    },
+    warrantyPhoto: {
+        files: [],
+        warranty_id: null
+    },
+    photo: '',
+    requestStatusCoupons: REQUEST.STILL
 };
 
 function addCouponReducer(state: AddCouponState = initialState, action: AddCouponAction) {
@@ -83,7 +108,15 @@ function addCouponReducer(state: AddCouponState = initialState, action: AddCoupo
             return { ...state, ...action.payload };
         case 'FETCH_CATEGORY_SUCCESS':
             return { ...state, ...action.payload };
+        case 'FETCH_COUPONS_START':
+            return { ...state, requestStatusCoupons: REQUEST.LOADING };
         case 'FETCH_COUPONS_SUCCESS':
+            return { ...state, ...action.payload, requestStatusCoupons: REQUEST.STILL };
+        case 'FETCH_COUPONS_ERROR':
+            return { ...state, requestStatusCoupons: REQUEST.ERROR };
+        case 'FETCH_WARRANTY_PHOTO_SUCCESS':
+            return { ...state, ...action.payload };
+        case 'FETCH_PHOTO_SUCCESS':
             return { ...state, ...action.payload };
         case 'SAVE_INFO_CATEGORY':
             return { ...state, ...action.payload };
