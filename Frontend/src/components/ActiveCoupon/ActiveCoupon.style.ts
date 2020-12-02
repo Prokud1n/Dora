@@ -86,20 +86,6 @@ const styles = StyleSheet.create({
         paddingRight: 30,
         paddingLeft: 21,
         paddingBottom: 30
-    },
-    warrantyCaseLabel: {
-        fontSize: 17
-    },
-    warrantyCaseTitle: {
-        fontSize: 12,
-        color: '#8C8C8C'
-    },
-    containerWarrantyCaseInfo: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginTop: 16
     }
 });
 

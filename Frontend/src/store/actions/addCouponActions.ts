@@ -86,44 +86,45 @@ export default class AddCouponActions {
         };
     }
 
-    static fetchPhoto(fileUrl) {
-        return async (dispatch) => {
-            dispatch({ type: 'FETCH_PHOTO_START' });
-            try {
-                const token = await AsyncStorage.getItem('token');
-                const response = await axios.get(fileUrl, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    },
-                    responseType: 'arraybuffer'
-                });
-
-                const url = `data:${response?.headers['content-type']};base64,${btoa(
-                    String.fromCharCode(...new Uint8Array(response?.data))
-                )}`;
-
-                console.log('url', url);
-
-                const payload = {
-                    photo: url
-                };
-
-                dispatch({ type: 'FETCH_PHOTO_SUCCESS', payload });
-            } catch (err) {
-                console.log(err);
-                dispatch({ type: 'FETCH_PHOTO_ERROR' });
-            }
-        };
-    }
-
-    // static fetchPhoto = async (fileUrl) => {
-    //     const token = await AsyncStorage.getItem('token');
+    // static fetchPhoto(fileUrl) {
+    //     return async (dispatch) => {
+    //         dispatch({ type: 'FETCH_PHOTO_START' });
+    //         try {
+    //             console.log(fileUrl);
+    //             const token = await AsyncStorage.getItem('token');
+    //             const response = await axios.get(fileUrl, {
+    //                 headers: {
+    //                     Authorization: `Bearer ${token}`
+    //                 },
+    //                 responseType: 'arraybuffer'
+    //             });
     //
-    //     return axios.get(fileUrl, {
-    //         headers: {
-    //             Authorization: `Bearer ${token}`
-    //         },
-    //         responseType: 'arraybuffer'
-    //     });
-    // };
+    //             const url = `data:${response?.headers['content-type']};base64,${btoa(
+    //                 String.fromCharCode(...new Uint8Array(response?.data))
+    //             )}`;
+    //
+    //             // console.log('url', url);
+    //
+    //             const payload = {
+    //                 photo: response?.data
+    //             };
+    //
+    //             dispatch({ type: 'FETCH_PHOTO_SUCCESS', payload });
+    //         } catch (err) {
+    //             console.log(err);
+    //             dispatch({ type: 'FETCH_PHOTO_ERROR' });
+    //         }
+    //     };
+    // }
+
+    static fetchPhoto = async (fileUrl) => {
+        const token = await AsyncStorage.getItem('token');
+
+        return axios.get(fileUrl, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+            responseType: 'arraybuffer'
+        });
+    };
 }

@@ -1,9 +1,8 @@
 import { Image, Text, TextInput, View } from 'react-native';
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useState } from 'react';
 import styles from '../ActiveCoupon.style';
 import AddCouponActions from '../../../store/actions/addCouponActions';
-import { selectors } from '../../../store/reducers/addCouponReducer';
+import ErrorIndicator from '../../ErrorBoundary/ErrorIndicator/ErrorIndicator';
 
 type Props = {
     fileUrl: string;
@@ -11,11 +10,22 @@ type Props = {
 };
 
 const ActiveCouponPhoto = ({ fileUrl, shop }: Props) => {
-    const photo = useSelector(selectors.photo);
-    const dispatch = useDispatch();
+    const [photo, setPhoto] = useState('');
+    const [isError, setIsError] = useState(false);
 
     useEffect(() => {
-        dispatch(AddCouponActions.fetchPhoto(fileUrl));
+        AddCouponActions.fetchPhoto(fileUrl)
+            .then((response) => {
+                const url = `data:${response?.headers['content-type']};base64,${btoa(
+                    String.fromCharCode(...new Uint8Array(response?.data))
+                )}`;
+
+                setPhoto(url);
+            })
+            .catch((err) => {
+                console.log(err);
+                setIsError(true);
+            });
     }, [fileUrl]);
 
     return (
@@ -30,6 +40,7 @@ const ActiveCouponPhoto = ({ fileUrl, shop }: Props) => {
                     }}
                 />
             )}
+            {isError && <ErrorIndicator message="Не удалось загрузить фото" />}
             <Text style={styles.name}>Магазин</Text>
             <TextInput style={styles.input} value={shop} editable={false} />
         </View>

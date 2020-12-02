@@ -1,7 +1,7 @@
 import { RootState } from './rootReducer';
 import REQUEST, { REQUEST_TYPE } from '../../constants/REQUEST';
 
-type Coupon = {
+export type Coupon = {
     category_id: number;
     date_end_expertise: string;
     date_of_purchase: string;
