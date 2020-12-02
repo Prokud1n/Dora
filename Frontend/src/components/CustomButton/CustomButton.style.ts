@@ -21,6 +21,13 @@ const styles = StyleSheet.create({
     footer: {
         position: 'absolute',
         bottom: 0
+    },
+    containerCircle: {
+        width: '100%',
+        position: 'absolute',
+        top: -5,
+        display: 'flex',
+        flexDirection: 'row'
     }
 });
 

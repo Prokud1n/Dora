@@ -8,7 +8,7 @@ import store from './src/store/store';
 import CreateAccountPassword from './src/page/CreateAccount/CreateAccountPassword/CreateAccountPassword';
 import ErrorBoundary from './src/components/ErrorBoundary/ErrorBoundary';
 import ActivateAccount from './src/page/CreateAccount/ActivateAccount/ActivateAccount';
-import CouponsList from './src/page/CouponsList/CouponsList';
+import CouponsPage from './src/page/CouponsPage/CouponsPage';
 import ForgotPasswordInputEmail from './src/page/ForgotPassword/ForgotPasswordInputEmail/ForgotPasswordInputEmail';
 import ForgotPasswordInputCode from './src/page/ForgotPassword/ForgotPasswordInputCode/ForgotPasswordInputCode';
 import CreateNewPassword from './src/page/ForgotPassword/CreateNewPassword/CreateNewPassword';
@@ -66,6 +66,14 @@ const styles = StyleSheet.create({
 //     GLOBAL.Blob = null;
 // }
 
+// if (!global.btoa) {
+//     global.btoa = encode;
+// }
+//
+// if (!global.atob) {
+//     global.atob = decode;
+// }
+
 export default function App() {
     return (
         <ErrorBoundary>
@@ -78,7 +86,7 @@ export default function App() {
                         <Route path="/create-account-email" component={CreateAccountEmail} />
                         <Route path="/create-account-password" component={CreateAccountPassword} />
                         <Route path="/activate-account" component={ActivateAccount} />
-                        <Route path="/coupons" component={CouponsList} />
+                        <Route path="/coupons" component={CouponsPage} />
                         <Route path="/settings" component={Settings} />
                         <Route path="/forget-password-email" component={ForgotPasswordInputEmail} />
                         <Route path="/forget-password-code" component={ForgotPasswordInputCode} />

@@ -3,7 +3,16 @@ import React from 'react';
 import getXML from '../../utils/getXML';
 
 type Props = {
-    svg: 'Google' | 'FB' | 'Mail' | 'VK' | 'Telegram' | 'addCoupon' | 'settings' | 'notFoundCoupons';
+    svg:
+        | 'Google'
+        | 'FB'
+        | 'Mail'
+        | 'VK'
+        | 'Telegram'
+        | 'addCoupon'
+        | 'settings'
+        | 'notFoundCoupons'
+        | 'warrantyCaseCheckMark';
     width: string;
     height: string;
     onPress?: () => void;

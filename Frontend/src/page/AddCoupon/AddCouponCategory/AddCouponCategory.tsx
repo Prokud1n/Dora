@@ -10,7 +10,7 @@ import styles from './AddCouponCategory.style';
 import AddCouponActions from '../../../store/actions/addCouponActions';
 import { selectors } from '../../../store/reducers/addCouponReducer';
 
-const DICTIONARY_CATEGORIES = [
+export const DICTIONARY_CATEGORIES = [
     { categoryId: 1, icon: 'householdProducts' },
     { categoryId: 2, icon: 'appliances' },
     { categoryId: 3, icon: 'goodsForAuto' },

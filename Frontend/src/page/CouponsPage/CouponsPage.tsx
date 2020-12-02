@@ -1,24 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, TextInput, View, Text } from 'react-native';
+import { SafeAreaView, TextInput, View, Text, ScrollView } from 'react-native';
 import { useHistory } from 'react-router-native';
 import { useDispatch, useSelector } from 'react-redux';
 import BackStepButton from '../../components/BackStepButton/BackStepButton';
-import SVG from '../../components/SVG/SVG';
 import TouchableSVG from '../../components/TouchableSVG/TouchableSVG';
-
-import styles from './CouponsList.style';
 import AddCouponActions from '../../store/actions/addCouponActions';
-import { selectors } from '../../store/reducers/authorizationReducer';
+import { selectors as selectorsAuthorization } from '../../store/reducers/authorizationReducer';
+import { selectors as selectorsCoupon } from '../../store/reducers/addCouponReducer';
+import Loader from '../../components/Loader/Loader';
+import REQUEST from '../../constants/REQUEST';
+import NotFoundCoupons from '../../components/NotFoundCoupons/NotFoundCoupons';
+import CouponsList from '../../components/CouponsList/CouponsList';
 
-const CouponsList = () => {
+import styles from './CouponsPage.style';
+
+const CouponsPage = () => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const userId = useSelector(selectors.userId);
+    const userId = useSelector(selectorsAuthorization.userId);
+    const coupons = useSelector(selectorsCoupon.coupons);
+    const requestStatusCoupons = useSelector(selectorsCoupon.requestStatusCoupons);
     const [search, setSearch] = useState('');
 
     useEffect(() => {
         dispatch(AddCouponActions.fetchCoupons(userId));
-    }, []);
+    }, [userId]);
 
     const handleRedirectToSettings = () => {
         history.push('/settings');
@@ -27,6 +33,10 @@ const CouponsList = () => {
     const handleRedirectToInfoPurchase = () => {
         history.push('/category');
     };
+
+    if (requestStatusCoupons === REQUEST.LOADING) {
+        return <Loader />;
+    }
 
     return (
         <SafeAreaView>
@@ -42,13 +52,19 @@ const CouponsList = () => {
                     />
                     <TouchableSVG svg="addCoupon" height="100%" width="100%" onPress={handleRedirectToInfoPurchase} />
                 </View>
-                <View style={styles.containerCoupons}>
-                    <SVG svg="notFoundCoupons" height="70%" width="50%" />
-                    <Text style={styles.notFoundText}>Пока здесь ничего нет. Нужно добавить талонов.</Text>
-                </View>
+                {coupons.non_archived.length === 0 && coupons.archived.length === 0 ? (
+                    <NotFoundCoupons />
+                ) : (
+                    <>
+                        <Text style={styles.header}>Активная гарантия</Text>
+                        <ScrollView>
+                            <CouponsList coupons={coupons.non_archived} />
+                        </ScrollView>
+                    </>
+                )}
             </View>
         </SafeAreaView>
     );
 };
 
-export default CouponsList;
+export default CouponsPage;

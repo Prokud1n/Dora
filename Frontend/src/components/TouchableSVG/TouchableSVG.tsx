@@ -19,6 +19,7 @@ type Props = {
         | 'householdProductsActive'
         | 'appliances'
         | 'appliancesActive'
+        | 'appliancesWhite'
         | 'clothesAndShoes'
         | 'clothesAndShoesActive'
         | 'otherGoods'
@@ -27,6 +28,8 @@ type Props = {
         | 'goodsForAutoActive'
         | 'checkMark'
         | 'activeCheckMark'
+        | 'delete'
+        | 'edit'
         | 'photo';
     width: string;
     height: string;

@@ -1,5 +1,4 @@
 import { AsyncStorage } from 'react-native';
-import axiosss from 'axios';
 import axios from '../../axios/axiosDora';
 
 export default class AddCouponActions {
@@ -58,7 +57,7 @@ export default class AddCouponActions {
     static addNewCoupon = async (formDataCoupon) => {
         const token = await AsyncStorage.getItem('token');
 
-        return axiosss.post('https://e52f9ca67cdf.ngrok.io/api/users/warranties', formDataCoupon, {
+        return axios.post('/api/users/warranties', formDataCoupon, {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -86,4 +85,46 @@ export default class AddCouponActions {
             }
         };
     }
+
+    // static fetchPhoto(fileUrl) {
+    //     return async (dispatch) => {
+    //         dispatch({ type: 'FETCH_PHOTO_START' });
+    //         try {
+    //             console.log(fileUrl);
+    //             const token = await AsyncStorage.getItem('token');
+    //             const response = await axios.get(fileUrl, {
+    //                 headers: {
+    //                     Authorization: `Bearer ${token}`
+    //                 },
+    //                 responseType: 'arraybuffer'
+    //             });
+    //
+    //             const url = `data:${response?.headers['content-type']};base64,${btoa(
+    //                 String.fromCharCode(...new Uint8Array(response?.data))
+    //             )}`;
+    //
+    //             // console.log('url', url);
+    //
+    //             const payload = {
+    //                 photo: response?.data
+    //             };
+    //
+    //             dispatch({ type: 'FETCH_PHOTO_SUCCESS', payload });
+    //         } catch (err) {
+    //             console.log(err);
+    //             dispatch({ type: 'FETCH_PHOTO_ERROR' });
+    //         }
+    //     };
+    // }
+
+    static fetchPhoto = async (fileUrl) => {
+        const token = await AsyncStorage.getItem('token');
+
+        return axios.get(fileUrl, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+            responseType: 'arraybuffer'
+        });
+    };
 }

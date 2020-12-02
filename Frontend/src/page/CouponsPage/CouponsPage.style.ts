@@ -12,17 +12,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         alignItems: 'flex-start'
     },
-    containerCoupons: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center'
-    },
-    notFoundText: {
-        fontSize: 17,
-        lineHeight: 20,
-        textAlign: 'center',
-        color: '#8C8C8C'
-    },
     input: {
         backgroundColor: '#F0F0F0',
         borderRadius: 25,
@@ -32,6 +21,18 @@ const styles = StyleSheet.create({
         marginLeft: 15,
         marginRight: 15,
         paddingLeft: 26
+    },
+    header: {
+        fontSize: 22,
+        fontWeight: '600',
+        marginLeft: 16,
+        marginBottom: 16
+    },
+    containerSVG: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        paddingTop: 25
     }
 });
 
