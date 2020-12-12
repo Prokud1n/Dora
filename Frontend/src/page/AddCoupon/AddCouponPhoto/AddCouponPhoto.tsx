@@ -147,7 +147,7 @@ const AddCouponPhoto = () => {
             return data;
         };
 
-        const body = createFormData({
+        const coupon = createFormData({
             userId,
             couponName,
             shopName,
@@ -157,7 +157,7 @@ const AddCouponPhoto = () => {
             photoFiles
         });
 
-        AddCouponActions.addNewCoupon(body)
+        AddCouponActions.addNewCoupon(coupon)
             .then((_) => {
                 setRequestStatus(REQUEST.STILL);
                 setIsSubmitted(true);

@@ -34,10 +34,6 @@ const CouponsPage = () => {
         history.push('/category');
     };
 
-    if (requestStatusCoupons === REQUEST.LOADING) {
-        return <Loader />;
-    }
-
     return (
         <SafeAreaView>
             <View style={styles.containerPage}>
@@ -54,11 +50,13 @@ const CouponsPage = () => {
                 </View>
                 {coupons.non_archived.length === 0 && coupons.archived.length === 0 ? (
                     <NotFoundCoupons />
+                ) : requestStatusCoupons === REQUEST.LOADING ? (
+                    <Loader />
                 ) : (
                     <>
                         <Text style={styles.header}>Активная гарантия</Text>
                         <ScrollView>
-                            <CouponsList coupons={coupons.non_archived} />
+                            <CouponsList coupons={coupons.non_archived} userId={userId} />
                         </ScrollView>
                     </>
                 )}

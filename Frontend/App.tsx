@@ -1,5 +1,6 @@
 import React from 'react';
 import { NativeRouter, Route } from 'react-router-native';
+import { decode, encode } from 'base-64';
 import { StyleSheet, View } from 'react-native';
 import { Provider } from 'react-redux';
 import CreateAccountEmail from './src/page/CreateAccount/CreateAccountEmail/CreateAccountEmail';
@@ -56,23 +57,23 @@ const styles = StyleSheet.create({
 //         : global.FileReader;
 // }
 
-// global.XMLHttpRequest = global.originalXMLHttpRequest || global.XMLHttpRequest;
-// global.FormData = global.originalFormData || global.FormData;
-//
-// if (window.FETCH_SUPPORT) {
-//     window.FETCH_SUPPORT.blob = false;
-// } else {
-//     global.FileReader = global.originalFileReader || global.FileReader;
-//     GLOBAL.Blob = null;
-// }
+global.XMLHttpRequest = global.originalXMLHttpRequest || global.XMLHttpRequest;
+global.FormData = global.originalFormData || global.FormData;
 
-// if (!global.btoa) {
-//     global.btoa = encode;
-// }
-//
-// if (!global.atob) {
-//     global.atob = decode;
-// }
+if (window.FETCH_SUPPORT) {
+    window.FETCH_SUPPORT.blob = false;
+} else {
+    global.FileReader = global.originalFileReader || global.FileReader;
+    GLOBAL.Blob = null;
+}
+
+if (!global.btoa) {
+    global.btoa = encode;
+}
+
+if (!global.atob) {
+    global.atob = decode;
+}
 
 export default function App() {
     return (
