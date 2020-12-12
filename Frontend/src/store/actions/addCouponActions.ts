@@ -127,4 +127,27 @@ export default class AddCouponActions {
             responseType: 'arraybuffer'
         });
     };
+
+    static deleteCoupon(userId, warrantyId) {
+        return async (dispatch) => {
+            dispatch({ type: 'START_DELETE_COUPON' });
+            try {
+                const token = await AsyncStorage.getItem('token');
+
+                await axios.delete('/api/users/warranties', {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    },
+                    data: { user_id: userId, warranty_id: warrantyId }
+                });
+
+                console.log('success delete');
+                dispatch({ type: 'SUCCESS_DELETE_COUPON' });
+            } catch (err) {
+                console.log(err);
+                console.log('error delete');
+                dispatch({ type: 'ERROR_DELETE_COUPON' });
+            }
+        };
+    }
 }

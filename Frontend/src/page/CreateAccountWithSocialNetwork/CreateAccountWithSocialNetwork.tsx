@@ -1,4 +1,4 @@
-import { View, Button } from 'react-native';
+import { View, Button, AsyncStorage } from 'react-native';
 import React from 'react';
 import { useHistory } from 'react-router-native';
 import SocialNetwork from '../../components/SocialNetwork/SocialNetwork';
