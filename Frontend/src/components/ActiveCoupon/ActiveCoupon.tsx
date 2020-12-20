@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Dimensions, View, Text, TouchableOpacity } from 'react-native';
+import { Dimensions, View, Text, TouchableOpacity, TextInput } from 'react-native';
 import TouchableSVG from '../TouchableSVG/TouchableSVG';
 import CustomButton from '../CustomButton/CustomButton';
 import ActiveCouponPhoto from './ActiveCouponPhoto/ActiveCouponPhoto';
@@ -54,10 +54,18 @@ const ActiveCoupon = ({ name, status, category, shop, files }: Props) => {
                         <TouchableSVG svg={category} width="100%" height="100%" />
                     </View>
                 </TouchableOpacity>
-                {isOpenInfo &&
-                    files.map(({ file_url, file_id }) => (
-                        <ActiveCouponPhoto key={file_id} fileUrl={file_url} shop={shop} />
-                    ))}
+                {isOpenInfo && (
+                    <View style={styles.containerInfo}>
+                        <Text style={styles.name}>Документы</Text>
+                        <View style={styles.containerPhotos}>
+                            {files.map(({ file_url, file_id }) => (
+                                <ActiveCouponPhoto key={file_id} fileUrl={file_url} />
+                            ))}
+                        </View>
+                        <Text style={styles.name}>Магазин</Text>
+                        <TextInput style={styles.input} value={shop} editable={false} />
+                    </View>
+                )}
             </View>
             {isOpenInfo && (
                 <View style={[styles.containerWarrantyCase, isOpenWarrantyCase && styles.openWarrantyCase]}>

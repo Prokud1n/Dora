@@ -40,6 +40,11 @@ const styles = StyleSheet.create({
         paddingRight: 30,
         paddingLeft: 21
     },
+    containerPhotos: {
+        display: 'flex',
+        flexDirection: 'row',
+        height: 90
+    },
     input: {
         backgroundColor: '#F0F0F0',
         borderRadius: 25,

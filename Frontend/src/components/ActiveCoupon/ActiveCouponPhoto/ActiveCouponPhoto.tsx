@@ -1,49 +1,57 @@
-import { Image, Text, TextInput, View } from 'react-native';
+import { Image, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import styles from '../ActiveCoupon.style';
 import AddCouponActions from '../../../store/actions/addCouponActions';
 import ErrorIndicator from '../../ErrorBoundary/ErrorIndicator/ErrorIndicator';
+import getBase64FromArrayBuffer from '../../../utils/getBase64FromArrayBuffer';
+import REQUEST from '../../../constants/REQUEST';
+import Loader from '../../Loader/Loader';
 
 type Props = {
     fileUrl: string;
-    shop: string;
 };
 
-const ActiveCouponPhoto = ({ fileUrl, shop }: Props) => {
+const ActiveCouponPhoto = ({ fileUrl }: Props) => {
     const [photo, setPhoto] = useState('');
-    const [isError, setIsError] = useState(false);
+    const [requestStatus, setRequestStatus] = useState(REQUEST.STILL);
 
     useEffect(() => {
+        setRequestStatus(REQUEST.LOADING);
         AddCouponActions.fetchPhoto(fileUrl)
             .then((response) => {
-                const url = `data:${response?.headers['content-type']};base64,${btoa(
-                    String.fromCharCode(...new Uint8Array(response?.data))
+                const url = `data:${response.headers['content-type']};base64,${getBase64FromArrayBuffer(
+                    response.data
                 )}`;
 
                 setPhoto(url);
+                setRequestStatus(REQUEST.STILL);
             })
-            .catch((err) => {
-                console.log(err);
-                setIsError(true);
+            .catch(() => {
+                setRequestStatus(REQUEST.ERROR);
             });
     }, [fileUrl]);
 
+    if (requestStatus === REQUEST.LOADING) {
+        return (
+            <View style={styles.photo}>
+                <Loader />
+            </View>
+        );
+    }
+
+    if (requestStatus === REQUEST.ERROR) {
+        return <ErrorIndicator message="Не удалось загрузить фото" />;
+    }
+
     return (
-        <View style={styles.containerInfo}>
-            <Text style={styles.name}>Документы</Text>
-            {Boolean(photo) && (
-                <Image
-                    style={styles.photo}
-                    source={{
-                        // uri: 'https://dora.team/api/users/4/file/62'
-                        uri: photo
-                    }}
-                />
-            )}
-            {isError && <ErrorIndicator message="Не удалось загрузить фото" />}
-            <Text style={styles.name}>Магазин</Text>
-            <TextInput style={styles.input} value={shop} editable={false} />
-        </View>
+        Boolean(photo) && (
+            <Image
+                style={styles.photo}
+                source={{
+                    uri: photo
+                }}
+            />
+        )
     );
 };
 
