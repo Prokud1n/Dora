@@ -34,6 +34,31 @@ const CouponsPage = () => {
         history.push('/category');
     };
 
+    const renderCouponList = () => {
+        const isLoading = requestStatusCoupons === REQUEST.LOADING;
+        const isNotFoundCoupon = coupons.non_archived.length === 0 && coupons.archived.length;
+
+        if (isLoading) {
+            return (
+                <View style={styles.loader}>
+                    <Loader />
+                </View>
+            );
+        }
+
+        if (isNotFoundCoupon) {
+            return <NotFoundCoupons />;
+        }
+        return (
+            <>
+                <Text style={styles.header}>Активная гарантия</Text>
+                <ScrollView>
+                    <CouponsList coupons={coupons.non_archived} userId={userId} />
+                </ScrollView>
+            </>
+        );
+    };
+
     return (
         <SafeAreaView>
             <View style={styles.containerPage}>
@@ -48,18 +73,7 @@ const CouponsPage = () => {
                     />
                     <TouchableSVG svg="addCoupon" height="100%" width="100%" onPress={handleRedirectToInfoPurchase} />
                 </View>
-                {coupons.non_archived.length === 0 && coupons.archived.length === 0 ? (
-                    <NotFoundCoupons />
-                ) : requestStatusCoupons === REQUEST.LOADING ? (
-                    <Loader />
-                ) : (
-                    <>
-                        <Text style={styles.header}>Активная гарантия</Text>
-                        <ScrollView>
-                            <CouponsList coupons={coupons.non_archived} userId={userId} />
-                        </ScrollView>
-                    </>
-                )}
+                {renderCouponList()}
             </View>
         </SafeAreaView>
     );
