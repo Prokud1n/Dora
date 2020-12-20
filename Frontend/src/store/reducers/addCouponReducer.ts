@@ -42,6 +42,10 @@ export type AddCouponState = {
         archived: Coupon[];
         non_archived: Coupon[];
     };
+    filterCoupons: {
+        archived: Coupon[];
+        non_archived: Coupon[];
+    };
     warrantyPhoto: {
         files: {
             file_id: number;
@@ -67,6 +71,7 @@ export const selectors = {
     infoCategory: (state: RootState) => state.addCoupon.infoCategory,
     categories: (state: RootState) => state.addCoupon.categories,
     coupons: (state: RootState) => state.addCoupon.coupons,
+    filterCoupons: (state: RootState) => state.addCoupon.filterCoupons,
     photo: (state: RootState) => state.addCoupon.photo,
     requestStatusCoupons: (state: RootState) => state.addCoupon.requestStatusCoupons
 };
@@ -88,6 +93,7 @@ const initialState = {
         archived: [],
         non_archived: []
     },
+    filterCoupons: [],
     warrantyPhoto: {
         files: [],
         warranty_id: null
@@ -119,6 +125,8 @@ function addCouponReducer(state: AddCouponState = initialState, action: AddCoupo
         case 'FETCH_PHOTO_SUCCESS':
             return { ...state, ...action.payload };
         case 'SAVE_INFO_CATEGORY':
+            return { ...state, ...action.payload };
+        case 'FILTER_COUPONS':
             return { ...state, ...action.payload };
         default:
             return state;
