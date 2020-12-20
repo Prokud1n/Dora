@@ -9,6 +9,7 @@ import { Coupon } from '../../store/reducers/addCouponReducer';
 
 import styles from './CouponsList.style';
 import AddCouponActions from '../../store/actions/addCouponActions';
+import { DICTIONARY_CATEGORIES } from '../../page/AddCoupon/AddCouponCategory/AddCouponCategory';
 
 type Props = {
     coupons: Coupon[];
@@ -19,9 +20,7 @@ const CouponsList = ({ coupons, userId }: Props) => {
     const dispatch = useDispatch();
 
     return coupons.map(({ name, category_id, id, shop_name, days_end_warranty, files }) => {
-        // const categoryIcon = DICTIONARY_CATEGORIES.find(
-        //     ({ categoryId }) => categoryId === category_id
-        // )?.icon;
+        const categoryIcon = DICTIONARY_CATEGORIES.find(({ categoryId }) => categoryId === category_id)?.icon;
         const status = `Осталось ${days_end_warranty} ${getWordShape(days_end_warranty, 'день', 'дня', 'дней')}`;
 
         const handleDeleteCoupon = () => {
@@ -35,7 +34,13 @@ const CouponsList = ({ coupons, userId }: Props) => {
                     <TouchableSVG svg="delete" height="100%" width="100%" onPress={handleDeleteCoupon} />
                     <TouchableSVG svg="edit" height="100%" width="100%" />
                 </View>
-                <ActiveCoupon name={name} status={status} category="appliancesWhite" shop={shop_name} files={files} />
+                <ActiveCoupon
+                    name={name}
+                    status={status}
+                    category={`${categoryIcon}White`}
+                    shop={shop_name}
+                    files={files}
+                />
             </SwipeRow>
         );
     });
