@@ -19,12 +19,18 @@ const CouponsPage = () => {
     const dispatch = useDispatch();
     const userId = useSelector(selectorsAuthorization.userId);
     const coupons = useSelector(selectorsCoupon.coupons);
+    const filterCoupons = useSelector(selectorsCoupon.filterCoupons);
     const requestStatusCoupons = useSelector(selectorsCoupon.requestStatusCoupons);
     const [search, setSearch] = useState('');
 
     useEffect(() => {
         dispatch(AddCouponActions.fetchCoupons(userId));
     }, [userId]);
+
+    const handleSearch = (value) => {
+        setSearch(value);
+        dispatch(AddCouponActions.searchCoupons(search));
+    };
 
     const handleRedirectToSettings = () => {
         history.push('/settings');
@@ -53,7 +59,7 @@ const CouponsPage = () => {
             <>
                 <Text style={styles.header}>Активная гарантия</Text>
                 <ScrollView>
-                    <CouponsList coupons={coupons.non_archived} userId={userId} />
+                    <CouponsList coupons={search ? filterCoupons.non_archived : coupons.non_archived} userId={userId} />
                 </ScrollView>
             </>
         );
@@ -68,7 +74,7 @@ const CouponsPage = () => {
                     <TextInput
                         style={styles.input}
                         value={search}
-                        onChangeText={setSearch}
+                        onChangeText={handleSearch}
                         placeholder="Поиск по талонам"
                     />
                     <TouchableSVG svg="addCoupon" height="100%" width="100%" onPress={handleRedirectToInfoPurchase} />

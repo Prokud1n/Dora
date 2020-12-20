@@ -1,5 +1,6 @@
 import { AsyncStorage } from 'react-native';
 import axios from '../../axios/axiosDora';
+import { selectors as selectorsCoupon } from '../reducers/addCouponReducer';
 
 export default class AddCouponActions {
     static viewPhoto(uri) {
@@ -86,37 +87,6 @@ export default class AddCouponActions {
         };
     }
 
-    // static fetchPhoto(fileUrl) {
-    //     return async (dispatch) => {
-    //         dispatch({ type: 'FETCH_PHOTO_START' });
-    //         try {
-    //             console.log(fileUrl);
-    //             const token = await AsyncStorage.getItem('token');
-    //             const response = await axios.get(fileUrl, {
-    //                 headers: {
-    //                     Authorization: `Bearer ${token}`
-    //                 },
-    //                 responseType: 'arraybuffer'
-    //             });
-    //
-    //             const url = `data:${response?.headers['content-type']};base64,${btoa(
-    //                 String.fromCharCode(...new Uint8Array(response?.data))
-    //             )}`;
-    //
-    //             // console.log('url', url);
-    //
-    //             const payload = {
-    //                 photo: response?.data
-    //             };
-    //
-    //             dispatch({ type: 'FETCH_PHOTO_SUCCESS', payload });
-    //         } catch (err) {
-    //             console.log(err);
-    //             dispatch({ type: 'FETCH_PHOTO_ERROR' });
-    //         }
-    //     };
-    // }
-
     static fetchPhoto = async (fileUrl) => {
         const token = await AsyncStorage.getItem('token');
 
@@ -140,14 +110,30 @@ export default class AddCouponActions {
                     },
                     data: { user_id: userId, warranty_id: warrantyId }
                 });
-
-                console.log('success delete');
                 dispatch({ type: 'SUCCESS_DELETE_COUPON' });
-            } catch (err) {
-                console.log(err);
-                console.log('error delete');
+            } catch {
                 dispatch({ type: 'ERROR_DELETE_COUPON' });
             }
+        };
+    }
+
+    static searchCoupons(search) {
+        return (dispatch, getState) => {
+            const state = getState();
+            const coupons = selectorsCoupon.coupons(state);
+            const filterNonArchived = coupons.non_archived.filter((coupon) => coupon.name.includes(search));
+            const filterArchived = coupons.archived.filter((coupon) => coupon.name.includes(search));
+            const filterCoupons = {
+                non_archived: filterNonArchived,
+                archived: filterArchived
+            };
+
+            dispatch({
+                type: 'FILTER_COUPONS',
+                payload: {
+                    filterCoupons
+                }
+            });
         };
     }
 }
