@@ -10,40 +10,65 @@ import { Coupon } from '../../store/reducers/addCouponReducer';
 import styles from './CouponsList.style';
 import AddCouponActions from '../../store/actions/addCouponActions';
 import { DICTIONARY_CATEGORIES } from '../../page/AddCoupon/AddCouponCategory/AddCouponCategory';
+import getFormatDate from '../../utils/getFormatDate';
 
 type Props = {
     coupons: Coupon[];
     userId: string;
+    isArchived?: boolean;
 };
 
-const CouponsList = ({ coupons, userId }: Props) => {
+const CouponsList = ({ coupons, userId, isArchived = false }: Props) => {
     const dispatch = useDispatch();
 
-    return coupons.map(({ name, category_id, id, shop_name, days_end_warranty, files }) => {
-        const categoryIcon = DICTIONARY_CATEGORIES.find(({ categoryId }) => categoryId === category_id)?.icon;
-        const status = `Осталось ${days_end_warranty} ${getWordShape(days_end_warranty, 'день', 'дня', 'дней')}`;
+    return coupons.map(
+        ({
+            name,
+            category_id,
+            id,
+            shop_name,
+            days_end_warranty,
+            date_end_warranty,
+            files,
+            expertise,
+            item_replaced,
+            money_returned
+        }) => {
+            const categoryIcon = DICTIONARY_CATEGORIES.find(({ categoryId }) => categoryId === category_id)?.icon;
+            const status = isArchived
+                ? `Истек ${getFormatDate(new Date(date_end_warranty))}`
+                : `Осталось ${days_end_warranty} ${getWordShape(days_end_warranty, 'день', 'дня', 'дней')}`;
+            const isSoonEndWarranty = days_end_warranty <= 14;
 
-        const handleDeleteCoupon = () => {
-            dispatch(AddCouponActions.deleteCoupon(userId, id));
-            dispatch(AddCouponActions.fetchCoupons(userId));
-        };
+            const handleDeleteCoupon = () => {
+                dispatch(AddCouponActions.deleteCoupon(userId, id));
+                dispatch(AddCouponActions.fetchCoupons(userId));
+            };
 
-        return (
-            <SwipeRow rightOpenValue={-130} key={id}>
-                <View style={styles.containerSVG}>
-                    <TouchableSVG svg="delete" height="100%" width="100%" onPress={handleDeleteCoupon} />
-                    <TouchableSVG svg="edit" height="100%" width="100%" />
-                </View>
-                <ActiveCoupon
-                    name={name}
-                    status={status}
-                    category={`${categoryIcon}White`}
-                    shop={shop_name}
-                    files={files}
-                />
-            </SwipeRow>
-        );
-    });
+            return (
+                <SwipeRow rightOpenValue={-130} key={id}>
+                    <View style={styles.containerSVG}>
+                        <TouchableSVG svg="delete" height="100%" width="100%" onPress={handleDeleteCoupon} />
+                        <TouchableSVG svg="edit" height="100%" width="100%" />
+                    </View>
+                    <ActiveCoupon
+                        userId={userId}
+                        warrnatyId={id}
+                        name={name}
+                        status={status}
+                        category={`${categoryIcon}White`}
+                        shop={shop_name}
+                        files={files}
+                        expertise={expertise}
+                        item_replaced={item_replaced}
+                        money_returned={money_returned}
+                        isArchived={isArchived}
+                        isSoonEndWarranty={isSoonEndWarranty}
+                    />
+                </SwipeRow>
+            );
+        }
+    );
 };
 
 export default CouponsList;

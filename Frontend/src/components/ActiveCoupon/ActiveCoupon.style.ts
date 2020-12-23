@@ -28,11 +28,20 @@ const styles = StyleSheet.create({
         width: 65,
         paddingTop: 7
     },
+    categoryArchived: {
+        backgroundColor: '#8C8C8C'
+    },
+    categorySoonEndWarranty: {
+        backgroundColor: '#FF3826'
+    },
     name: {
         fontSize: 22
     },
     status: {
         fontSize: 12
+    },
+    archivedText: {
+        color: '#8C8C8C'
     },
     containerInfo: {
         backgroundColor: '#fff',

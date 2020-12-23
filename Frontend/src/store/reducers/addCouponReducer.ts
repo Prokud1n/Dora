@@ -6,6 +6,7 @@ export type Coupon = {
     date_end_expertise: string;
     date_of_purchase: string;
     days_end_warranty: number;
+    date_end_warranty: string;
     expertise: boolean;
     files: { file_id: number; file_url: string }[];
     id: number;

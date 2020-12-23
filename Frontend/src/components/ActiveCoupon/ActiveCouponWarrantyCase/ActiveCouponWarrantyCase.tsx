@@ -1,14 +1,65 @@
 import { Text, TextInput, View } from 'react-native';
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import styles from './ActiveCouponWarrantyCase.style';
-import SVG from '../../SVG/SVG';
+import TouchableSVG from '../../TouchableSVG/TouchableSVG';
+import AddCouponActions from '../../../store/actions/addCouponActions';
 
-const ActiveCouponWarrantyCase = () => {
+type Props = {
+    userId: string;
+    warrnatyId: number;
+    expertise: boolean;
+    money_returned: boolean;
+    item_replaced: boolean;
+};
+
+const ActiveCouponWarrantyCase = ({ expertise, money_returned, item_replaced, userId, warrnatyId }: Props) => {
+    const dispatch = useDispatch();
+    const initialState = {
+        expertise,
+        money_returned,
+        item_replaced
+    };
+    const [state, setState] = useState(initialState);
+    const mounted = useRef(true);
+
+    useEffect(() => {
+        mounted.current = true;
+        return () => {
+            mounted.current = false;
+        };
+    }, []);
+
+    useEffect(() => {
+        return () => {
+            if (!mounted.current) {
+                dispatch(AddCouponActions.changeCoupon(userId, warrnatyId, state));
+            }
+        };
+    }, [userId, warrnatyId, state]);
+    const handleCheck = (id: 'expertise' | 'money_returned' | 'item_replaced') => {
+        setState({ ...state, [id]: !state[id] });
+    };
+
+    const getIcon = (id: 'expertise' | 'money_returned' | 'item_replaced') => {
+        if (state[id]) {
+            return 'warrantyCaseCheckMarkActive';
+        }
+
+        return 'warrantyCaseCheckMark';
+    };
+
     return (
         <View>
             <View style={styles.containerWarrantyCaseInfo}>
                 <Text style={styles.warrantyCaseLabel}>Товар на экспертизе</Text>
-                <SVG svg="warrantyCaseCheckMark" width="75%" height="230%" />
+                <TouchableSVG
+                    id="expertise"
+                    svg={getIcon('expertise')}
+                    width="80%"
+                    height="100%"
+                    onPress={handleCheck}
+                />
             </View>
             <View style={styles.containerWarrantyCaseInfo}>
                 <Text style={styles.warrantyCaseLabel}>До</Text>
@@ -22,7 +73,13 @@ const ActiveCouponWarrantyCase = () => {
                     <Text style={styles.warrantyCaseLabel}>Деньги возвращены</Text>
                     <Text style={styles.warrantyCaseTitle}>Талон будет отправлен  в архив</Text>
                 </View>
-                <SVG svg="warrantyCaseCheckMark" width="80%" height="100%" />
+                <TouchableSVG
+                    id="money_returned"
+                    svg={getIcon('money_returned')}
+                    width="80%"
+                    height="100%"
+                    onPress={handleCheck}
+                />
             </View>
             <View style={styles.containerWarrantyCaseInfo}>
                 <View>
@@ -30,7 +87,13 @@ const ActiveCouponWarrantyCase = () => {
                     <Text style={styles.warrantyCaseTitle}>Талон улетит в архив,</Text>
                     <Text style={styles.warrantyCaseTitle}>а вы сможете добавить новый</Text>
                 </View>
-                <SVG svg="warrantyCaseCheckMark" width="68%" height="100%" />
+                <TouchableSVG
+                    id="item_replaced"
+                    svg={getIcon('item_replaced')}
+                    width="80%"
+                    height="100%"
+                    onPress={handleCheck}
+                />
             </View>
         </View>
     );

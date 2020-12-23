@@ -56,12 +56,12 @@ const CouponsPage = () => {
             return <NotFoundCoupons />;
         }
         return (
-            <>
+            <ScrollView>
                 <Text style={styles.header}>Активная гарантия</Text>
-                <ScrollView>
-                    <CouponsList coupons={search ? filterCoupons.non_archived : coupons.non_archived} userId={userId} />
-                </ScrollView>
-            </>
+                <CouponsList coupons={search ? filterCoupons.non_archived : coupons.non_archived} userId={userId} />
+                <Text style={styles.header}>Архив талонов</Text>
+                <CouponsList coupons={search ? filterCoupons.archived : coupons.archived} userId={userId} isArchived />
+            </ScrollView>
         );
     };
 
