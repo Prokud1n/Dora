@@ -6,6 +6,7 @@ import getXML from '../../utils/getXML';
 import styles from './TouchableSVG.style';
 
 type Props = {
+    id: string;
     svg:
         | 'Google'
         | 'FB'
@@ -33,14 +34,17 @@ type Props = {
         | 'photo';
     width: string;
     height: string;
-    onPress?: () => void;
+    onPress?: (id: string) => void;
 };
 
-const TouchableSVG = ({ svg, width, height, onPress }: Props) => {
+const TouchableSVG = ({ svg, width, height, onPress, id }: Props) => {
     const xml = getXML(svg);
+    const handlePress = () => {
+        onPress(id);
+    };
 
     return (
-        <TouchableOpacity style={styles.container} onPress={onPress}>
+        <TouchableOpacity style={styles.container} onPress={handlePress}>
             <SvgXml xml={xml} width={width} height={height} />
         </TouchableOpacity>
     );

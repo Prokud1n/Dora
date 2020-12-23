@@ -117,6 +117,31 @@ export default class AddCouponActions {
         };
     }
 
+    static changeCoupon(userId, warrantyId, changeParams) {
+        return async (dispatch) => {
+            dispatch({ type: 'START_CHANGE_COUPON' });
+            try {
+                const token = await AsyncStorage.getItem('token');
+
+                const response = await axios.patch(
+                    '/api/users/warranties',
+                    { user_id: userId, warranty_id: warrantyId, ...changeParams },
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+
+                console.log(response);
+                dispatch({ type: 'SUCCESS_CHANGE_COUPON' });
+            } catch (err) {
+                console.log(err.response.data);
+                dispatch({ type: 'ERROR_CHANGE_COUPON' });
+            }
+        };
+    }
+
     static searchCoupons(search) {
         return (dispatch, getState) => {
             const state = getState();

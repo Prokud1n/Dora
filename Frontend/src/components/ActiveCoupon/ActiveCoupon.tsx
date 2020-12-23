@@ -1,21 +1,41 @@
 import React, { useMemo, useState } from 'react';
 import { Dimensions, View, Text, TouchableOpacity, TextInput } from 'react-native';
-import TouchableSVG from '../TouchableSVG/TouchableSVG';
 import CustomButton from '../CustomButton/CustomButton';
 import ActiveCouponPhoto from './ActiveCouponPhoto/ActiveCouponPhoto';
 import ActiveCouponWarrantyCase from './ActiveCouponWarrantyCase/ActiveCouponWarrantyCase';
 
 import styles from './ActiveCoupon.style';
+import SVG from '../SVG/SVG';
 
 type Props = {
+    userId: string;
+    warrnatyId: number;
     name: string;
     status: string;
     shop: string;
     category: string;
     files: { file_id: number; file_url: string }[];
+    expertise: boolean;
+    money_returned: boolean;
+    item_replaced: boolean;
+    isArchived: boolean;
+    isSoonEndWarranty: boolean;
 };
 
-const ActiveCoupon = ({ name, status, category, shop, files }: Props) => {
+const ActiveCoupon = ({
+    userId,
+    warrnatyId,
+    name,
+    status,
+    category,
+    shop,
+    files,
+    expertise,
+    money_returned,
+    item_replaced,
+    isArchived,
+    isSoonEndWarranty
+}: Props) => {
     const [isOpenInfo, setIsOpenInfo] = useState(false);
     const [isOpenWarrantyCase, setIsOpenWarrantyCase] = useState(false);
     const windowWidth = Dimensions.get('window').width;
@@ -47,11 +67,16 @@ const ActiveCoupon = ({ name, status, category, shop, files }: Props) => {
                     onPress={handleOpenInfo}>
                     <View style={styles.containerCircle}>{circleElements.map((i) => i)}</View>
                     <View>
-                        <Text style={styles.name}>{name}</Text>
-                        <Text style={styles.status}>{status}</Text>
+                        <Text style={[styles.name, isArchived && styles.archivedText]}>{name}</Text>
+                        <Text style={[styles.status, isArchived && styles.archivedText]}>{status}</Text>
                     </View>
-                    <View style={styles.category}>
-                        <TouchableSVG svg={category} width="100%" height="100%" />
+                    <View
+                        style={[
+                            styles.category,
+                            isSoonEndWarranty && styles.categorySoonEndWarranty,
+                            isArchived && styles.categoryArchived
+                        ]}>
+                        <SVG svg={category} width="100%" height="70%" />
                     </View>
                 </TouchableOpacity>
                 {isOpenInfo && (
@@ -78,7 +103,15 @@ const ActiveCoupon = ({ name, status, category, shop, files }: Props) => {
                         circleElements={circleElements}
                         onPress={handleOpenWarrantyCase}
                     />
-                    {isOpenWarrantyCase && <ActiveCouponWarrantyCase />}
+                    {isOpenWarrantyCase && (
+                        <ActiveCouponWarrantyCase
+                            userId={userId}
+                            warrnatyId={warrnatyId}
+                            expertise={expertise}
+                            item_replaced={item_replaced}
+                            money_returned={money_returned}
+                        />
+                    )}
                 </View>
             )}
         </>
