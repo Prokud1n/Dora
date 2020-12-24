@@ -16,9 +16,6 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         marginBottom: 20
     },
-    containerCamera: {
-        borderRadius: 25
-    },
     containerCameraSVG: {
         marginTop: 25,
         marginLeft: 'auto',

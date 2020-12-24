@@ -40,10 +40,10 @@ const AddCouponInfoAboutPurchase = () => {
     }, [infoCategory]);
 
     const disabledNextButton =
-        couponName.length === 0 &&
-        shop.length === 0 &&
-        warrantyPeriod.length === 0 &&
-        date === null &&
+        couponName.length === 0 ||
+        shop.length === 0 ||
+        warrantyPeriod.length === 0 ||
+        date === null ||
         typeWarrantyPeriod.length === 0;
 
     const handleRedirectToPhoto = () => {
@@ -82,14 +82,7 @@ const AddCouponInfoAboutPurchase = () => {
         showMode('date');
     };
 
-    const getDateTitle = () => {
-        if (date === null) {
-            return 'Дата покупки';
-        }
-        return getFormatDate(date);
-    };
-
-    const dateTitle = useMemo(() => getDateTitle(), [date]);
+    const dateTitle = useMemo(() => getFormatDate(date), [date]);
 
     return (
         <SafeAreaView>

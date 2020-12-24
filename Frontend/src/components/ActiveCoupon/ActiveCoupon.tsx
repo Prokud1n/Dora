@@ -76,7 +76,7 @@ const ActiveCoupon = ({
                             isSoonEndWarranty && styles.categorySoonEndWarranty,
                             isArchived && styles.categoryArchived
                         ]}>
-                        <SVG svg={category} width="100%" height="70%" />
+                        <SVG svg={category} width="100%" height="90%" />
                     </View>
                 </TouchableOpacity>
                 {isOpenInfo && (

@@ -84,7 +84,7 @@ const initialState = {
     infoPurchase: {
         couponName: '',
         shopName: '',
-        dateOfPurchase: null,
+        dateOfPurchase: new Date(),
         warrantyPeriod: '100',
         typeWarrantyPeriod: 'месяцев'
     },

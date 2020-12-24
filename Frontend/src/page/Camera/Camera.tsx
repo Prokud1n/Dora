@@ -7,7 +7,13 @@ import Gallery from './Gallery';
 
 import styles from './Camera.style';
 
-export default class CameraPage extends React.Component {
+type Props = {
+    width: string | number;
+    height: string | number;
+    withToolbar: boolean;
+};
+
+export default class CameraPage extends React.Component<Props> {
     camera = null;
 
     state = {

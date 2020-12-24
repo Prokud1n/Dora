@@ -35,7 +35,6 @@ const AddCouponPhoto = () => {
     const userId = useSelector(selectorsAuthorization.userId);
     const [requestStatus, setRequestStatus] = useState(REQUEST.STILL);
     const [checkedPhoto, setCheckedPhoto] = useState(initialCheckedPhone);
-    const [isSubmitted, setIsSubmitted] = useState(false);
     const { couponName, shopName, dateOfPurchase, warrantyPeriod, typeWarrantyPeriod } = infoPurchase;
 
     useEffect(() => {
@@ -47,12 +46,6 @@ const AddCouponPhoto = () => {
             }
         })();
     }, []);
-
-    useEffect(() => {
-        if (isSubmitted) {
-            history.push('/coupons');
-        }
-    }, [isSubmitted]);
 
     const getPhoto = () => {
         (async () => {
@@ -160,7 +153,7 @@ const AddCouponPhoto = () => {
         AddCouponActions.addNewCoupon(coupon)
             .then((_) => {
                 setRequestStatus(REQUEST.STILL);
-                setIsSubmitted(true);
+                history.push('/coupons');
             })
             .catch((_) => {
                 alert('Попробуйте ещё раз!');
@@ -177,7 +170,7 @@ const AddCouponPhoto = () => {
             <View style={styles.containerPage}>
                 <HeaderAddCoupon />
                 <Text style={styles.label}>Добавьте фото документов</Text>
-                <View style={styles.containerCamera}>
+                <View>
                     <Camera width="100%" height={100} withToolbar={false} />
                 </View>
                 <View style={styles.containerCameraSVG}>
