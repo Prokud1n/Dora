@@ -21,6 +21,12 @@ const styles = StyleSheet.create({
         marginLeft: 'auto',
         marginRight: 'auto'
     },
+    buttons: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
     containerPhoto: {
         display: 'flex',
         flexDirection: 'row',

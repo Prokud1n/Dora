@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     containerPhotos: {
         display: 'flex',
         flexDirection: 'row',
-        height: 90
+        flexWrap: 'wrap'
     },
     input: {
         backgroundColor: '#F0F0F0',

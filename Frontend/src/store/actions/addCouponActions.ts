@@ -33,6 +33,10 @@ export default class AddCouponActions {
         };
     }
 
+    static cleanStore() {
+        return { type: 'CLEAN_STORE' };
+    }
+
     static fetchCategory() {
         return async (dispatch) => {
             dispatch({ type: 'FETCH_CATEGORY_START' });

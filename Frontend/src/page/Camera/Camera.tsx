@@ -1,16 +1,19 @@
 import React from 'react';
 import { Camera } from 'expo-camera';
 import { View, Text } from 'react-native';
-import * as Permissions from 'expo-permissions';
 import Toolbar from './Toolbar';
-import Gallery from './Gallery';
-
 import styles from './Camera.style';
+import PhotoGallery from '../../components/PhotoGallery/PhotoGallery';
+import REQUEST from '../../constants/REQUEST';
 
 type Props = {
-    width: string | number;
-    height: string | number;
-    withToolbar: boolean;
+    width?: string | number;
+    height?: string | number;
+    withToolbar?: boolean;
+    hasCameraPermission: boolean;
+    onPress: (photoUri: string) => void;
+    onSaveCaptures: (captures: (v: any) => any[]) => void;
+    checkedPhoto: any;
 };
 
 export default class CameraPage extends React.Component<Props> {
@@ -19,7 +22,6 @@ export default class CameraPage extends React.Component<Props> {
     state = {
         captures: [],
         capturing: null,
-        hasCameraPermission: null,
         cameraType: Camera.Constants.Type.back,
         flashMode: Camera.Constants.FlashMode.off
     };
@@ -37,9 +39,15 @@ export default class CameraPage extends React.Component<Props> {
     };
 
     handleShortCapture = async () => {
-        const photoData = await this.camera.takePictureAsync();
+        const photo = await this.camera.takePictureAsync();
+        const uri = photo.uri.split('/');
+        const filename = uri[uri.length - 1];
+        const captures = { ...photo, filename };
 
-        this.setState({ capturing: false, captures: [photoData, ...this.state.captures] });
+        this.setState({ capturing: false, captures: [captures, ...this.state.captures] });
+        this.props.onSaveCaptures((prevState) => {
+            return [...prevState, captures];
+        });
     };
 
     handleLongCapture = async () => {
@@ -48,36 +56,34 @@ export default class CameraPage extends React.Component<Props> {
         this.setState({ capturing: false, captures: [videoData, ...this.state.captures] });
     };
 
-    async componentDidMount() {
-        const camera = await Permissions.askAsync(Permissions.CAMERA);
-        const audio = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
-        const hasCameraPermission = camera.status === 'granted' && audio.status === 'granted';
-
-        this.setState({ hasCameraPermission });
-    }
-
     render() {
-        const { hasCameraPermission, flashMode, cameraType, capturing, captures } = this.state;
-        const { width, height, withToolbar = true } = this.props;
+        const { flashMode, cameraType, capturing, captures } = this.state;
+        const { width, height, withToolbar = true, hasCameraPermission, onPress, checkedPhoto } = this.props;
 
-        if (hasCameraPermission === null) {
-            return <View />;
-        }
         if (hasCameraPermission === false) {
             return <Text>Access to camera has been denied.</Text>;
         }
 
         return (
-            <React.Fragment>
+            <>
                 <View>
                     <Camera
                         type={cameraType}
                         flashMode={flashMode}
-                        style={[styles.preview, width && { width, height }]}
+                        style={[styles.preview, width && { width }, height && { height }]}
                         ref={(camera) => (this.camera = camera)}
                     />
                 </View>
-                {captures.length > 0 && <Gallery captures={captures} />}
+                {captures.length > 0 && (
+                    <View style={styles.containerPhoto}>
+                        <PhotoGallery
+                            photosGallery={captures}
+                            onPress={onPress}
+                            checkedPhoto={checkedPhoto}
+                            requestStatus={REQUEST.STILL}
+                        />
+                    </View>
+                )}
                 {withToolbar && (
                     <Toolbar
                         capturing={capturing}
@@ -91,7 +97,7 @@ export default class CameraPage extends React.Component<Props> {
                         onShortCapture={this.handleShortCapture}
                     />
                 )}
-            </React.Fragment>
+            </>
         );
     }
 }

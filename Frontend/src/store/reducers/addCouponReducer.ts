@@ -129,6 +129,8 @@ function addCouponReducer(state: AddCouponState = initialState, action: AddCoupo
             return { ...state, ...action.payload };
         case 'FILTER_COUPONS':
             return { ...state, ...action.payload };
+        case 'CLEAN_STORE':
+            return { ...initialState };
         default:
             return state;
     }

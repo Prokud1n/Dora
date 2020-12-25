@@ -47,7 +47,9 @@ const AddCouponInfoAboutPurchase = () => {
         typeWarrantyPeriod.length === 0;
 
     const handleRedirectToPhoto = () => {
-        const typePeriod = Object.keys(TYPE_WARRANTY_PERIOD).find((key) => TYPE_WARRANTY_PERIOD[key]);
+        const typePeriod = Object.keys(TYPE_WARRANTY_PERIOD).find(
+            (key) => TYPE_WARRANTY_PERIOD[key] === typeWarrantyPeriod
+        );
 
         dispatch(
             AddCouponActions.saveInfoAboutPurchase({
