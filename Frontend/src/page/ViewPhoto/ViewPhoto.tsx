@@ -2,17 +2,17 @@ import React from 'react';
 import { Button, Image, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-native';
-import { RootState } from '../../store/reducers/rootReducer';
 import BackStepButton from '../../components/BackStepButton/BackStepButton';
 import AddCouponActions from '../../store/actions/addCouponActions';
 
 import styles from './ViewPhoto.style';
+import { selectors } from '../../store/reducers/addCouponReducer';
 
 const ViewPhoto = () => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const uri = useSelector((state: RootState) => state.addCoupon.uri);
-    const checkedPhoto = useSelector((state: RootState) => state.addCoupon.checkedPhoto);
+    const uri = useSelector(selectors.uri);
+    const checkedPhoto = useSelector(selectors.checkedPhoto);
 
     const handleCheck = () => {
         const newCheckedPhoto = { ...checkedPhoto };

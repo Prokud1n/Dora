@@ -8,11 +8,11 @@ import CustomButton from '../../../components/CustomButton/CustomButton';
 import ValidError from '../../../components/ValidError/ValidError';
 import Loader from '../../../components/Loader/Loader';
 import AuthorizationActions from '../../../store/actions/authorizationActions';
-import { RootState } from '../../../store/reducers/rootReducer';
 import REQUEST from '../../../constants/REQUEST';
 
 import styles from './ActivateAccount.style';
 import BackStepButton from '../../../components/BackStepButton/BackStepButton';
+import { selectors } from '../../../store/reducers/authorizationReducer';
 
 const ActivateAccount = () => {
     const history = useHistory();
@@ -24,7 +24,7 @@ const ActivateAccount = () => {
         setValue
     });
 
-    const userId = useSelector((state: RootState) => state.authorization.auth.id);
+    const userId = useSelector(selectors.userId);
     const [requestStatus, setRequestStatus] = useState(REQUEST.STILL);
 
     const handleSendCodeToEmail = () => {

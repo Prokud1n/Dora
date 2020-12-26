@@ -7,12 +7,12 @@ import HeaderTitle from '../../../components/HeaderTitle/HeaderTitle';
 import ValidError from '../../../components/ValidError/ValidError';
 import CustomButton from '../../../components/CustomButton/CustomButton';
 import Loader from '../../../components/Loader/Loader';
-import { RootState } from '../../../store/reducers/rootReducer';
 import AuthorizationActions from '../../../store/actions/authorizationActions';
 import REQUEST from '../../../constants/REQUEST';
 
 import styles from './ForgotPasswordInputCode.style';
 import BackStepButton from '../../../components/BackStepButton/BackStepButton';
+import { selectors } from '../../../store/reducers/authorizationReducer';
 
 const ForgotPasswordInputCode = () => {
     const history = useHistory();
@@ -25,8 +25,8 @@ const ForgotPasswordInputCode = () => {
         setValue
     });
 
-    const email = useSelector((state: RootState) => state.authorization.email);
-    const userId = useSelector((state: RootState) => state.authorization.auth.id);
+    const email = useSelector(selectors.email);
+    const userId = useSelector(selectors.userId);
     const [requestStatus, setRequestStatus] = useState(REQUEST.STILL);
 
     const handleSendCodeToEmail = () => {

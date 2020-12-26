@@ -8,17 +8,17 @@ import HeaderTitle from '../../../components/HeaderTitle/HeaderTitle';
 import BackStepButton from '../../../components/BackStepButton/BackStepButton';
 import Loader from '../../../components/Loader/Loader';
 import CustomButton from '../../../components/CustomButton/CustomButton';
-import { RootState } from '../../../store/reducers/rootReducer';
 import AuthorizationActions from '../../../store/actions/authorizationActions';
 import REQUEST from '../../../constants/REQUEST';
 
 import styles from './CreateAccountPassword.style';
 import ValidError from '../../../components/ValidError/ValidError';
+import { selectors } from '../../../store/reducers/authorizationReducer';
 
 const CreateAccountPassword = () => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const email = useSelector((state: RootState) => state.authorization.email);
+    const email = useSelector(selectors.email);
     const [requestStatus, setRequestStatus] = useState(REQUEST.STILL);
     const [password, setPassword] = useState('');
     const [isValidPassword, setIsValidPassword] = useState(true);

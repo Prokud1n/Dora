@@ -54,7 +54,6 @@ export type AddCouponState = {
         }[];
         warrnaty_id: number;
     };
-    photo: string;
     requestStatusCoupons: REQUEST_TYPE;
 };
 
@@ -73,7 +72,7 @@ export const selectors = {
     categories: (state: RootState) => state.addCoupon.categories,
     coupons: (state: RootState) => state.addCoupon.coupons,
     filterCoupons: (state: RootState) => state.addCoupon.filterCoupons,
-    photo: (state: RootState) => state.addCoupon.photo,
+    uri: (state: RootState) => state.addCoupon.uri,
     requestStatusCoupons: (state: RootState) => state.addCoupon.requestStatusCoupons
 };
 
@@ -99,7 +98,6 @@ const initialState = {
         files: [],
         warranty_id: null
     },
-    photo: '',
     requestStatusCoupons: REQUEST.STILL
 };
 
