@@ -1,6 +1,6 @@
-import { SafeAreaView, TextInput, View, Text, Platform, Button, Keyboard } from 'react-native';
+import { SafeAreaView, TextInput, View, Text, Platform, Button, Keyboard, TouchableOpacity } from 'react-native';
 import React, { useEffect, useMemo, useState } from 'react';
-import RNPickerSelect from 'react-native-picker-select';
+import { Picker } from '@react-native-picker/picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useHistory } from 'react-router-native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,12 +12,7 @@ import HeaderAddCoupon from '../../../components/HeaderAddCoupon/HeaderAddCoupon
 import styles from './AddCouponInfoAboutPurchase.style';
 import AddCouponActions from '../../../store/actions/addCouponActions';
 import { selectors } from '../../../store/reducers/addCouponReducer';
-
-const TYPE_WARRANTY_PERIOD = {
-    M: 'месяцев',
-    Y: 'лет',
-    D: 'дней'
-};
+import getWordShape from '../../../utils/getWordShape';
 
 const AddCouponInfoAboutPurchase = () => {
     const history = useHistory();
@@ -27,9 +22,18 @@ const AddCouponInfoAboutPurchase = () => {
     const [couponName, setCouponName] = useState(infoPurchase.couponName);
     const [shop, setShop] = useState(infoPurchase.shopName);
     const [warrantyPeriod, setWarrantyPeriod] = useState(String(infoCategory?.warranty_period));
+    const monthWordShape = getWordShape(Number(warrantyPeriod), 'месяц', 'месяца', 'месяцев');
+    const dayWordShape = getWordShape(Number(warrantyPeriod), 'день', 'дня', 'дней');
+    const yearWordShape = getWordShape(Number(warrantyPeriod), 'год', 'года', 'лет');
+    const TYPE_WARRANTY_PERIOD = {
+        M: monthWordShape,
+        Y: yearWordShape,
+        D: dayWordShape
+    };
     const [date, setDate] = useState(infoPurchase.dateOfPurchase);
     const [mode, setMode] = useState('date');
-    const [show, setShow] = useState(false);
+    const [isOpenDatePicker, setIsOpenDatePicker] = useState(false);
+    const [isOpenPicker, setIsOpenPicker] = useState(false);
     const [typeWarrantyPeriod, setTypeWarrantyPeriod] = useState(
         TYPE_WARRANTY_PERIOD[infoCategory?.type_warranty_period]
     );
@@ -66,17 +70,17 @@ const AddCouponInfoAboutPurchase = () => {
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date;
 
-        setShow(Platform.OS === 'ios');
+        setIsOpenDatePicker(Platform.OS === 'ios');
         setDate(currentDate);
     };
 
     const showMode = (currentMode) => {
-        setShow(true);
+        setIsOpenDatePicker(true);
         setMode(currentMode);
     };
 
     const hideDatePicker = () => {
-        setShow(false);
+        setIsOpenDatePicker(false);
     };
 
     const showDatepicker = () => {
@@ -84,7 +88,16 @@ const AddCouponInfoAboutPurchase = () => {
         showMode('date');
     };
 
-    const dateTitle = useMemo(() => getFormatDate(date), [date]);
+    const handleShowPicker = () => {
+        Keyboard.dismiss();
+        setIsOpenPicker(true);
+    };
+
+    const hidePicker = () => {
+        setIsOpenPicker(false);
+    };
+
+    const dateTitle = useMemo(() => (date ? getFormatDate(date) : 'Выберите дату покупки'), [date]);
 
     return (
         <SafeAreaView>
@@ -114,37 +127,40 @@ const AddCouponInfoAboutPurchase = () => {
                             onChangeText={setWarrantyPeriod}
                             placeholder={`Кол-во ${typeWarrantyPeriod}`}
                         />
-                        <RNPickerSelect
-                            style={{
-                                inputIOSContainer: styles.dimension
-                            }}
-                            value={typeWarrantyPeriod}
-                            onValueChange={setTypeWarrantyPeriod}
-                            items={[
-                                { label: 'дней', value: TYPE_WARRANTY_PERIOD.D },
-                                { label: 'месяцев', value: TYPE_WARRANTY_PERIOD.M },
-                                { label: 'лет', value: TYPE_WARRANTY_PERIOD.Y }
-                            ]}
-                        />
+                        <TouchableOpacity onPress={handleShowPicker} style={styles.typePeriod}>
+                            <View style={styles.typePeriod}>
+                                <Text>{typeWarrantyPeriod}</Text>
+                            </View>
+                        </TouchableOpacity>
                     </View>
+                    {isOpenPicker && (
+                        <>
+                            <View style={styles.containerHidePicker}>
+                                <Button title="Done" onPress={hidePicker} />
+                            </View>
+                            <Picker
+                                selectedValue={typeWarrantyPeriod}
+                                style={{ width: '100%' }}
+                                onValueChange={setTypeWarrantyPeriod}>
+                                <Picker.Item label={dayWordShape} value={TYPE_WARRANTY_PERIOD.D} />
+                                <Picker.Item label={monthWordShape} value={TYPE_WARRANTY_PERIOD.M} />
+                                <Picker.Item label={yearWordShape} value={TYPE_WARRANTY_PERIOD.Y} />
+                            </Picker>
+                        </>
+                    )}
                 </View>
                 <View style={styles.footer}>
                     <CustomButton title="Далее" onPress={handleRedirectToPhoto} disabled={disabledNextButton} />
                 </View>
-                {show && (
-                    <>
-                        <View style={styles.containerHidePicker}>
-                            <Button title="Done" onPress={hideDatePicker} />
-                        </View>
-                        <DateTimePicker
-                            testID="dateTimePicker"
-                            value={date || Date.now()}
-                            mode={mode}
-                            is24Hour
-                            display="default"
-                            onChange={onChange}
-                        />
-                    </>
+                {isOpenDatePicker && (
+                    <DateTimePicker
+                        testID="dateTimePicker"
+                        value={date || new Date()}
+                        mode={mode}
+                        is24Hour
+                        display="default"
+                        onChange={onChange}
+                    />
                 )}
             </View>
         </SafeAreaView>
