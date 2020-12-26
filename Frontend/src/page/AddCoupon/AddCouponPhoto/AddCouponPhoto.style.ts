@@ -16,13 +16,16 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         marginBottom: 20
     },
-    containerCamera: {
-        borderRadius: 25
-    },
     containerCameraSVG: {
         marginTop: 25,
         marginLeft: 'auto',
         marginRight: 'auto'
+    },
+    buttons: {
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     },
     containerPhoto: {
         display: 'flex',

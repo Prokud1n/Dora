@@ -13,7 +13,8 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-around',
-        alignItems: 'flex-start'
+        alignItems: 'flex-start',
+        marginTop: 17
     },
     input: {
         backgroundColor: '#F0F0F0',

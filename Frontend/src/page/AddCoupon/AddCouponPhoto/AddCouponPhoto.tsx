@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, Text, View } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Button, SafeAreaView, ScrollView, Text, View } from 'react-native';
 import { useHistory } from 'react-router-native';
 import * as MediaLibrary from 'expo-media-library';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,10 +16,11 @@ import { selectors as selectorsAddCoupon } from '../../../store/reducers/addCoup
 
 import styles from './AddCouponPhoto.style';
 import Loader from '../../../components/Loader/Loader';
+import BackStepButton from '../../../components/BackStepButton/BackStepButton';
 
 const createDate = (date) => {
     const year = date.getFullYear();
-    const month = date.getMonth();
+    const month = date.getMonth() + 1;
     const day = date.getDate();
 
     return `${year}-${month < 10 ? `0${month}` : month}-${day < 10 ? `0${day}` : day}`;
@@ -34,25 +35,30 @@ const AddCouponPhoto = () => {
     const infoCategory = useSelector(selectorsAddCoupon.infoCategory);
     const userId = useSelector(selectorsAuthorization.userId);
     const [requestStatus, setRequestStatus] = useState(REQUEST.STILL);
+    const [captures, setCaptures] = useState(photosGallery);
     const [checkedPhoto, setCheckedPhoto] = useState(initialCheckedPhone);
-    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [hasCameraPermission, setHasCameraPermission] = useState(false);
+    const [isOpenCamera, setIsOpenCamera] = useState(false);
     const { couponName, shopName, dateOfPurchase, warrantyPeriod, typeWarrantyPeriod } = infoPurchase;
 
     useEffect(() => {
-        (async () => {
-            const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        setCaptures(photosGallery);
+    }, [photosGallery]);
 
-            if (status !== 'granted') {
+    const getPermission = () => {
+        (async () => {
+            const cameraRoll = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+            const camera = await Permissions.askAsync(Permissions.CAMERA);
+            const audio = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
+            const hasCameraPermission = camera.status === 'granted' && audio.status === 'granted';
+
+            setHasCameraPermission(hasCameraPermission);
+
+            if (cameraRoll.status !== 'granted') {
                 alert('Sorry, we need camera roll permissions to make this work!');
             }
         })();
-    }, []);
-
-    useEffect(() => {
-        if (isSubmitted) {
-            history.push('/coupons');
-        }
-    }, [isSubmitted]);
+    };
 
     const getPhoto = () => {
         (async () => {
@@ -73,36 +79,40 @@ const AddCouponPhoto = () => {
     };
 
     useEffect(() => {
-        if (photosGallery.length === 0) {
+        getPermission();
+
+        if (captures.length === 0) {
             getPhoto();
         }
-
         return () => {
             dispatch(AddCouponActions.updateCheckedPhoto(checkedPhoto));
         };
     }, []);
 
-    const handleCheckPhoto = (photoUri) => {
-        const newCheckedPhoto = { ...checkedPhoto };
+    const handleCheckPhoto = useCallback(
+        (photoUri) => {
+            const newCheckedPhoto = { ...checkedPhoto };
 
-        if (newCheckedPhoto[photoUri]) {
-            newCheckedPhoto[photoUri] = false;
-        } else {
-            newCheckedPhoto[photoUri] = true;
-        }
+            newCheckedPhoto[photoUri] = !newCheckedPhoto[photoUri];
 
-        setCheckedPhoto(newCheckedPhoto);
+            setCheckedPhoto(newCheckedPhoto);
+        },
+        [checkedPhoto]
+    );
+
+    const handleOpenCamera = () => {
+        setIsOpenCamera(true);
     };
 
-    const handleRedirectToCamera = () => {
-        history.push('/camera');
+    const handleCloseCamera = () => {
+        setIsOpenCamera(false);
     };
 
     const getPhotoFiles = () => {
         const uris = Object.keys(checkedPhoto);
 
         return uris.map((uri) => {
-            const photo = photosGallery.find((photo) => photo.uri === uri);
+            const photo = captures.find((photo) => photo.uri === uri);
             const type = photo.filename.split('.')[1];
 
             return {
@@ -113,7 +123,7 @@ const AddCouponPhoto = () => {
         });
     };
 
-    const handleRedirectToCouponsList = async () => {
+    const handleAddCoupon = async () => {
         setRequestStatus(REQUEST.LOADING);
         const photoFiles = getPhotoFiles();
 
@@ -128,11 +138,11 @@ const AddCouponPhoto = () => {
         }) => {
             const data = new FormData();
 
-            photoFiles.forEach((photo) => {
+            photoFiles.forEach(({ name, type, uri }) => {
                 data.append('files', {
-                    name: photo.name,
-                    type: photo.type,
-                    uri: photo.uri
+                    name,
+                    type,
+                    uri
                 });
             });
 
@@ -160,13 +170,31 @@ const AddCouponPhoto = () => {
         AddCouponActions.addNewCoupon(coupon)
             .then((_) => {
                 setRequestStatus(REQUEST.STILL);
-                setIsSubmitted(true);
+                dispatch(AddCouponActions.cleanStore());
+                history.push('/coupons');
             })
             .catch((_) => {
                 alert('Попробуйте ещё раз!');
                 setRequestStatus(REQUEST.STILL);
             });
     };
+
+    if (isOpenCamera) {
+        return (
+            <View>
+                <View style={styles.buttons}>
+                    <BackStepButton onPress={handleCloseCamera} />
+                    <Button title="Добавить" onPress={handleAddCoupon} disabled={checkedPhoto.length === 0} />
+                </View>
+                <Camera
+                    hasCameraPermission={hasCameraPermission}
+                    onPress={handleCheckPhoto}
+                    onSaveCaptures={setCaptures}
+                    checkedPhoto={checkedPhoto}
+                />
+            </View>
+        );
+    }
 
     if (requestStatus === REQUEST.LOADING) {
         return <Loader />;
@@ -177,26 +205,29 @@ const AddCouponPhoto = () => {
             <View style={styles.containerPage}>
                 <HeaderAddCoupon />
                 <Text style={styles.label}>Добавьте фото документов</Text>
-                <View style={styles.containerCamera}>
-                    <Camera width="100%" height={100} withToolbar={false} />
+                <View>
+                    <Camera
+                        width="100%"
+                        height={100}
+                        withToolbar={false}
+                        hasCameraPermission={hasCameraPermission}
+                        onPress={handleCheckPhoto}
+                        checkedPhoto={checkedPhoto}
+                    />
                 </View>
                 <View style={styles.containerCameraSVG}>
-                    <TouchableSVG svg="photo" width="100%" height="100%" onPress={handleRedirectToCamera} />
+                    <TouchableSVG svg="photo" width="100%" height="100%" onPress={handleOpenCamera} />
                 </View>
                 <ScrollView contentContainerStyle={styles.containerPhoto}>
                     <PhotoGallery
-                        photosGallery={photosGallery}
+                        photosGallery={captures}
                         onPress={handleCheckPhoto}
                         checkedPhoto={checkedPhoto}
                         requestStatus={requestStatus}
                     />
                 </ScrollView>
                 <View style={styles.footer}>
-                    <CustomButton
-                        title="Далее"
-                        onPress={handleRedirectToCouponsList}
-                        disabled={checkedPhoto.length === 0}
-                    />
+                    <CustomButton title="Добавить" onPress={handleAddCoupon} disabled={checkedPhoto.length === 0} />
                 </View>
             </View>
         </SafeAreaView>

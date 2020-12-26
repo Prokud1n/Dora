@@ -4,12 +4,23 @@ import { Button, View } from 'react-native';
 
 import styles from './BackStepButton.style';
 
-const BackStepButton = () => {
+type Props = {
+    onPress?: () => void;
+};
+
+const BackStepButton = ({ onPress }: Props) => {
     const history = useHistory();
+    const handlePress = () => {
+        if (onPress) {
+            onPress();
+        } else {
+            history.goBack();
+        }
+    };
 
     return (
         <View style={styles.containerButton}>
-            <Button title="Назад" onPress={() => history.goBack()} />
+            <Button title="Назад" onPress={handlePress} />
         </View>
     );
 };

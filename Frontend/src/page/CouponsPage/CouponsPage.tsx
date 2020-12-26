@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { SafeAreaView, TextInput, View, Text, ScrollView } from 'react-native';
 import { useHistory } from 'react-router-native';
 import { useDispatch, useSelector } from 'react-redux';
-import BackStepButton from '../../components/BackStepButton/BackStepButton';
 import TouchableSVG from '../../components/TouchableSVG/TouchableSVG';
 import AddCouponActions from '../../store/actions/addCouponActions';
 import { selectors as selectorsAuthorization } from '../../store/reducers/authorizationReducer';
@@ -68,7 +67,6 @@ const CouponsPage = () => {
     return (
         <SafeAreaView>
             <View style={styles.containerPage}>
-                <BackStepButton />
                 <View style={styles.containerHeader}>
                     <TouchableSVG svg="settings" height="100%" width="100%" onPress={handleRedirectToSettings} />
                     <TextInput
