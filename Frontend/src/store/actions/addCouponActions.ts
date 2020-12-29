@@ -41,7 +41,8 @@ export default class AddCouponActions {
         return async (dispatch) => {
             dispatch({ type: 'FETCH_CATEGORY_START' });
             try {
-                const token = await AsyncStorage.getItem('token');
+                const userInfo = await AsyncStorage.getItem('userInfo');
+                const { token } = JSON.parse(userInfo);
                 const response = await axios.get('/api/warranties/categories', {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -60,7 +61,8 @@ export default class AddCouponActions {
     }
 
     static addNewCoupon = async (formDataCoupon) => {
-        const token = await AsyncStorage.getItem('token');
+        const userInfo = await AsyncStorage.getItem('userInfo');
+        const { token } = JSON.parse(userInfo);
 
         return axios.post('/api/users/warranties', formDataCoupon, {
             headers: {
@@ -73,7 +75,8 @@ export default class AddCouponActions {
         return async (dispatch) => {
             dispatch({ type: 'FETCH_COUPONS_START' });
             try {
-                const token = await AsyncStorage.getItem('token');
+                const userInfo = await AsyncStorage.getItem('userInfo');
+                const { token } = JSON.parse(userInfo);
                 const response = await axios.get(`/api/users/${userId}/warranties`, {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -92,7 +95,8 @@ export default class AddCouponActions {
     }
 
     static fetchPhoto = async (fileUrl) => {
-        const token = await AsyncStorage.getItem('token');
+        const userInfo = await AsyncStorage.getItem('userInfo');
+        const { token } = JSON.parse(userInfo);
 
         return axios.get(fileUrl, {
             headers: {
@@ -106,7 +110,8 @@ export default class AddCouponActions {
         return async (dispatch) => {
             dispatch({ type: 'START_DELETE_COUPON' });
             try {
-                const token = await AsyncStorage.getItem('token');
+                const userInfo = await AsyncStorage.getItem('userInfo');
+                const { token } = JSON.parse(userInfo);
 
                 await axios.delete('/api/users/warranties', {
                     headers: {
@@ -125,7 +130,8 @@ export default class AddCouponActions {
         return async (dispatch) => {
             dispatch({ type: 'START_CHANGE_COUPON' });
             try {
-                const token = await AsyncStorage.getItem('token');
+                const userInfo = await AsyncStorage.getItem('userInfo');
+                const { token } = JSON.parse(userInfo);
 
                 const response = await axios.patch(
                     '/api/users/warranties',
