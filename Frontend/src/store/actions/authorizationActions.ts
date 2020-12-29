@@ -81,4 +81,19 @@ export default class AuthorizationActions {
             }
         });
     };
+
+    static logout = async () => {
+        const userInfo = await AsyncStorage.getItem('userInfo');
+        const { token, userId: user_id } = JSON.parse(userInfo);
+
+        return axios.post(
+            '/api/users/logout',
+            { user_id },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+    };
 }

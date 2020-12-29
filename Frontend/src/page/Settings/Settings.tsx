@@ -52,9 +52,15 @@ const Settings = () => {
         getValidPassword();
     };
 
-    const handleRedirectToAuthorization = async () => {
-        await AsyncStorage.clear();
-        history.push('/authorization');
+    const handleRedirectToAuthorization = () => {
+        AuthorizationActions.logout()
+            .then(() => {
+                AsyncStorage.clear();
+                history.push('/authorization');
+            })
+            .catch(() => {
+                alert('Не удалось выйти из аккаунта');
+            });
     };
 
     const handleChangePassword = () => {
