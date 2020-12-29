@@ -122,7 +122,7 @@ export default class AddCouponActions {
     }
 
     static changeCoupon(userId, warrantyId, changeParams) {
-        return async (dispatch) => {
+        return async (dispatch, getState) => {
             dispatch({ type: 'START_CHANGE_COUPON' });
             try {
                 const token = await AsyncStorage.getItem('token');
@@ -137,10 +137,19 @@ export default class AddCouponActions {
                     }
                 );
 
-                console.log(response);
-                dispatch({ type: 'SUCCESS_CHANGE_COUPON' });
-            } catch (err) {
-                console.log(err.response.data);
+                const state = getState();
+                const newCoupon = response.data.data;
+                const coupons = state.addCoupon.coupons.non_archived;
+                const indexPrevCoupon = coupons.findIndex(({ id }) => id === newCoupon.id);
+
+                coupons.splice(indexPrevCoupon, 1, newCoupon);
+                dispatch({
+                    type: 'SUCCESS_CHANGE_COUPON',
+                    payload: {
+                        non_archived: coupons
+                    }
+                });
+            } catch {
                 dispatch({ type: 'ERROR_CHANGE_COUPON' });
             }
         };

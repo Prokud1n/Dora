@@ -41,7 +41,7 @@ const CouponsPage = () => {
 
     const renderCouponList = () => {
         const isLoading = requestStatusCoupons === REQUEST.LOADING;
-        const isNotFoundCoupon = coupons.non_archived.length === 0 && coupons.archived.length;
+        const isNotFoundCoupon = coupons.non_archived.length === 0 && coupons.archived.length === 0;
 
         if (isLoading) {
             return (
@@ -56,10 +56,25 @@ const CouponsPage = () => {
         }
         return (
             <ScrollView>
-                <Text style={styles.header}>Активная гарантия</Text>
-                <CouponsList coupons={search ? filterCoupons.non_archived : coupons.non_archived} userId={userId} />
-                <Text style={styles.header}>Архив талонов</Text>
-                <CouponsList coupons={search ? filterCoupons.archived : coupons.archived} userId={userId} isArchived />
+                {coupons.non_archived.length ? (
+                    <>
+                        <Text style={styles.header}>Активная гарантия</Text>
+                        <CouponsList
+                            coupons={search ? filterCoupons.non_archived : coupons.non_archived}
+                            userId={userId}
+                        />
+                    </>
+                ) : null}
+                {coupons.archived.length ? (
+                    <>
+                        <Text style={styles.header}>Архив талонов</Text>
+                        <CouponsList
+                            coupons={search ? filterCoupons.archived : coupons.archived}
+                            userId={userId}
+                            isArchived
+                        />
+                    </>
+                ) : null}
             </ScrollView>
         );
     };

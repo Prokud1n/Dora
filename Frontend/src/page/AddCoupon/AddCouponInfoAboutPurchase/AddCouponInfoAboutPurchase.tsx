@@ -14,6 +14,24 @@ import AddCouponActions from '../../../store/actions/addCouponActions';
 import { selectors } from '../../../store/reducers/addCouponReducer';
 import getWordShape from '../../../utils/getWordShape';
 
+const MONTH_SHAPE = {
+    first: 'месяц',
+    second: 'месяца',
+    third: 'месяцев'
+};
+
+const DAY_SHAPE = {
+    first: 'день',
+    second: 'дня',
+    third: 'дней'
+};
+
+const YEAR_SHAPE = {
+    first: 'год',
+    second: 'года',
+    third: 'лет'
+};
+
 const AddCouponInfoAboutPurchase = () => {
     const history = useHistory();
     const dispatch = useDispatch();
@@ -22,9 +40,14 @@ const AddCouponInfoAboutPurchase = () => {
     const [couponName, setCouponName] = useState(infoPurchase.couponName);
     const [shop, setShop] = useState(infoPurchase.shopName);
     const [warrantyPeriod, setWarrantyPeriod] = useState(String(infoCategory?.warranty_period));
-    const monthWordShape = getWordShape(Number(warrantyPeriod), 'месяц', 'месяца', 'месяцев');
-    const dayWordShape = getWordShape(Number(warrantyPeriod), 'день', 'дня', 'дней');
-    const yearWordShape = getWordShape(Number(warrantyPeriod), 'год', 'года', 'лет');
+    const monthWordShape = getWordShape(
+        Number(warrantyPeriod),
+        MONTH_SHAPE.first,
+        MONTH_SHAPE.second,
+        MONTH_SHAPE.third
+    );
+    const dayWordShape = getWordShape(Number(warrantyPeriod), DAY_SHAPE.first, DAY_SHAPE.second, DAY_SHAPE.third);
+    const yearWordShape = getWordShape(Number(warrantyPeriod), YEAR_SHAPE.first, YEAR_SHAPE.second, YEAR_SHAPE.third);
     const TYPE_WARRANTY_PERIOD = {
         M: monthWordShape,
         Y: yearWordShape,
@@ -39,6 +62,18 @@ const AddCouponInfoAboutPurchase = () => {
     );
 
     useEffect(() => {
+        if (Object.values(MONTH_SHAPE).includes(typeWarrantyPeriod)) {
+            setTypeWarrantyPeriod(monthWordShape);
+        }
+        if (Object.values(DAY_SHAPE).includes(typeWarrantyPeriod)) {
+            setTypeWarrantyPeriod(dayWordShape);
+        }
+        if (Object.values(YEAR_SHAPE).includes(typeWarrantyPeriod)) {
+            setTypeWarrantyPeriod(yearWordShape);
+        }
+    }, [warrantyPeriod, monthWordShape, dayWordShape, yearWordShape]);
+
+    useEffect(() => {
         setWarrantyPeriod(String(infoCategory?.warranty_period));
         setTypeWarrantyPeriod(TYPE_WARRANTY_PERIOD[infoCategory?.type_warranty_period]);
     }, [infoCategory]);
@@ -51,6 +86,8 @@ const AddCouponInfoAboutPurchase = () => {
         typeWarrantyPeriod.length === 0;
 
     const handleRedirectToPhoto = () => {
+        console.log(typeWarrantyPeriod);
+        console.log(TYPE_WARRANTY_PERIOD);
         const typePeriod = Object.keys(TYPE_WARRANTY_PERIOD).find(
             (key) => TYPE_WARRANTY_PERIOD[key] === typeWarrantyPeriod
         );
@@ -67,7 +104,7 @@ const AddCouponInfoAboutPurchase = () => {
         history.push('/photo');
     };
 
-    const onChange = (event, selectedDate) => {
+    const handleChangeDate = (event, selectedDate) => {
         const currentDate = selectedDate || date;
 
         setIsOpenDatePicker(Platform.OS === 'ios');
@@ -159,7 +196,7 @@ const AddCouponInfoAboutPurchase = () => {
                         mode={mode}
                         is24Hour
                         display="default"
-                        onChange={onChange}
+                        onChange={handleChangeDate}
                     />
                 )}
             </View>
