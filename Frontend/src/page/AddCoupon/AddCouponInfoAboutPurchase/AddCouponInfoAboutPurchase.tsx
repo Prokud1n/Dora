@@ -54,7 +54,6 @@ const AddCouponInfoAboutPurchase = () => {
         D: dayWordShape
     };
     const [date, setDate] = useState(infoPurchase.dateOfPurchase);
-    const [mode, setMode] = useState('date');
     const [isOpenDatePicker, setIsOpenDatePicker] = useState(false);
     const [isOpenPicker, setIsOpenPicker] = useState(false);
     const [typeWarrantyPeriod, setTypeWarrantyPeriod] = useState(
@@ -86,8 +85,6 @@ const AddCouponInfoAboutPurchase = () => {
         typeWarrantyPeriod.length === 0;
 
     const handleRedirectToPhoto = () => {
-        console.log(typeWarrantyPeriod);
-        console.log(TYPE_WARRANTY_PERIOD);
         const typePeriod = Object.keys(TYPE_WARRANTY_PERIOD).find(
             (key) => TYPE_WARRANTY_PERIOD[key] === typeWarrantyPeriod
         );
@@ -111,18 +108,9 @@ const AddCouponInfoAboutPurchase = () => {
         setDate(currentDate);
     };
 
-    const showMode = (currentMode) => {
-        setIsOpenDatePicker(true);
-        setMode(currentMode);
-    };
-
-    const hideDatePicker = () => {
-        setIsOpenDatePicker(false);
-    };
-
-    const showDatepicker = () => {
+    const handleShowDatePicker = () => {
         Keyboard.dismiss();
-        showMode('date');
+        setIsOpenDatePicker(true);
     };
 
     const handleShowPicker = () => {
@@ -152,7 +140,7 @@ const AddCouponInfoAboutPurchase = () => {
                 </View>
                 <Text style={styles.label}>Срок гарантии</Text>
                 <View style={styles.term}>
-                    <DatePurchase onPress={showDatepicker} title={dateTitle} />
+                    <DatePurchase onPress={handleShowDatePicker} title={dateTitle} />
                     <View style={styles.quaranteePeriod}>
                         <TextInput
                             style={[
@@ -193,8 +181,7 @@ const AddCouponInfoAboutPurchase = () => {
                     <DateTimePicker
                         testID="dateTimePicker"
                         value={date || new Date()}
-                        mode={mode}
-                        is24Hour
+                        mode="date"
                         display="default"
                         onChange={handleChangeDate}
                     />
