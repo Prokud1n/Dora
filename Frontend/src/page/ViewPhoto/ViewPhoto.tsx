@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Image, View } from 'react-native';
+import { Button, Image, TouchableOpacity, View } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router-native';
 import BackStepButton from '../../components/BackStepButton/BackStepButton';
@@ -11,24 +11,35 @@ import { selectors } from '../../store/reducers/addCouponReducer';
 const ViewPhoto = () => {
     const dispatch = useDispatch();
     const history = useHistory();
-    const uri = useSelector(selectors.uri);
+    const photo = useSelector(selectors.photo);
     const checkedPhoto = useSelector(selectors.checkedPhoto);
+    const isCanChecked = useSelector(selectors.isCanChecked);
 
     const handleCheck = () => {
         const newCheckedPhoto = { ...checkedPhoto };
 
-        newCheckedPhoto[uri] = true;
+        newCheckedPhoto[photo] = !checkedPhoto[photo];
         dispatch(AddCouponActions.updateCheckedPhoto(newCheckedPhoto));
         history.push('./photo');
+    };
+
+    const handleRedirectToBackStep = () => {
+        history.goBack();
     };
 
     return (
         <>
             <View style={styles.containerButton}>
-                <BackStepButton />
-                <Button title="Выбрать" onPress={handleCheck} />
+                <TouchableOpacity style={styles.backStep} onPress={handleRedirectToBackStep}>
+                    <BackStepButton />
+                </TouchableOpacity>
+                {isCanChecked ? (
+                    <View style={styles.addPhoto}>
+                        <Button title={checkedPhoto[photo] ? 'Отменить' : 'Выбрать'} onPress={handleCheck} />
+                    </View>
+                ) : null}
             </View>
-            <Image style={styles.photo} source={{ uri }} />
+            <Image style={styles.photo} source={{ uri: photo }} />
         </>
     );
 };

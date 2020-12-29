@@ -3,8 +3,8 @@ import axios from '../../axios/axiosDora';
 import { selectors as selectorsCoupon } from '../reducers/addCouponReducer';
 
 export default class AddCouponActions {
-    static viewPhoto(uri) {
-        return { type: 'VIEW_PHOTO', payload: { uri } };
+    static viewPhoto(photo, isCanChecked = true) {
+        return { type: 'VIEW_PHOTO', payload: { viewPhoto: { photo, isCanChecked } } };
     }
 
     static updateCheckedPhoto(checkedPhoto) {

@@ -1,6 +1,8 @@
-import { Image, View } from 'react-native';
+import { Image, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import styles from '../ActiveCoupon.style';
+import { useDispatch } from 'react-redux';
+import { useHistory } from 'react-router-native';
+import styles from './ActiveCouponPhoto.style';
 import AddCouponActions from '../../../store/actions/addCouponActions';
 import ErrorIndicator from '../../ErrorBoundary/ErrorIndicator/ErrorIndicator';
 import getBase64FromArrayBuffer from '../../../utils/getBase64FromArrayBuffer';
@@ -12,6 +14,8 @@ type Props = {
 };
 
 const ActiveCouponPhoto = ({ fileUrl }: Props) => {
+    const dispatch = useDispatch();
+    const history = useHistory();
     const [photo, setPhoto] = useState('');
     const [requestStatus, setRequestStatus] = useState(REQUEST.STILL);
 
@@ -31,6 +35,11 @@ const ActiveCouponPhoto = ({ fileUrl }: Props) => {
             });
     }, [fileUrl]);
 
+    const handleOpenPhoto = (uri) => {
+        dispatch(AddCouponActions.viewPhoto(uri, false));
+        history.push('/viewPhoto');
+    };
+
     if (requestStatus === REQUEST.LOADING) {
         return (
             <View style={styles.photo}>
@@ -45,12 +54,14 @@ const ActiveCouponPhoto = ({ fileUrl }: Props) => {
 
     return (
         Boolean(photo) && (
-            <Image
-                style={styles.photo}
-                source={{
-                    uri: photo
-                }}
-            />
+            <TouchableOpacity onPress={() => handleOpenPhoto(photo)}>
+                <Image
+                    style={styles.photo}
+                    source={{
+                        uri: photo
+                    }}
+                />
+            </TouchableOpacity>
         )
     );
 };

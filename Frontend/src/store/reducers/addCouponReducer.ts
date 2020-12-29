@@ -17,7 +17,10 @@ export type Coupon = {
 };
 
 export type AddCouponState = {
-    uri: string;
+    viewPhoto: {
+        photo: string;
+        isCanChecked: boolean;
+    };
     checkedPhoto: any;
     photosGallery: any;
     infoPurchase: {
@@ -72,12 +75,16 @@ export const selectors = {
     categories: (state: RootState) => state.addCoupon.categories,
     coupons: (state: RootState) => state.addCoupon.coupons,
     filterCoupons: (state: RootState) => state.addCoupon.filterCoupons,
-    uri: (state: RootState) => state.addCoupon.uri,
+    photo: (state: RootState) => state.addCoupon.viewPhoto.photo,
+    isCanChecked: (state: RootState) => state.addCoupon.viewPhoto.isCanChecked,
     requestStatusCoupons: (state: RootState) => state.addCoupon.requestStatusCoupons
 };
 
 const initialState = {
-    uri: '',
+    viewPhoto: {
+        photo: '',
+        isCanChecked: true
+    },
     checkedPhoto: {},
     photosGallery: [],
     infoPurchase: {
