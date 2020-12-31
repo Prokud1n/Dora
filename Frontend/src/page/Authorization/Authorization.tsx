@@ -38,14 +38,20 @@ const Authorization = () => {
         AuthorizationActions.signIn(email, password)
             .then((response) => {
                 const { verified, id, token } = response.data.data;
+
+                const userInfo = JSON.stringify({ token, userId: id });
+
+                AsyncStorage.setItem('userInfo', userInfo);
+
+                return { verified, id };
+            })
+            .then(({ verified, id }) => {
                 const payload = {
                     auth: {
                         id,
                         verified
                     }
                 };
-
-                AsyncStorage.setItem('token', token);
 
                 dispatch({ type: 'SIGN_IN_SUCCESS', payload });
                 dispatch(AuthorizationActions.setEmailToStore(email));
@@ -82,6 +88,10 @@ const Authorization = () => {
         history.push('/forget-password-email');
     };
 
+    const handleRedirectToSocialNetwork = () => {
+        history.push('/create-account');
+    };
+
     const handleChangeEmail = (value) => {
         setEmail(value.trim());
     };
@@ -93,7 +103,7 @@ const Authorization = () => {
     return (
         <SafeAreaView>
             <View style={styles.containerPage}>
-                <BackStepButton />
+                <BackStepButton onPress={handleRedirectToSocialNetwork} />
                 <HeaderTitle title="Уже с нами?" subtitle="Тогда введите почту с паролем от аккаунта и начнем работу" />
                 <View style={styles.containerInput}>
                     <InputEmail email={email} onChangeText={handleChangeEmail} />

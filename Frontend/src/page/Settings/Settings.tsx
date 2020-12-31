@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SafeAreaView, View, Text } from 'react-native';
+import { SafeAreaView, View, Text, AsyncStorage } from 'react-native';
 import { useHistory } from 'react-router-native';
 import { useSelector } from 'react-redux';
 import BackStepButton from '../../components/BackStepButton/BackStepButton';
@@ -53,7 +53,14 @@ const Settings = () => {
     };
 
     const handleRedirectToAuthorization = () => {
-        history.push('/authorization');
+        AuthorizationActions.logout()
+            .then(() => {
+                AsyncStorage.clear();
+                history.push('/authorization');
+            })
+            .catch(() => {
+                alert('Не удалось выйти из аккаунта');
+            });
     };
 
     const handleChangePassword = () => {

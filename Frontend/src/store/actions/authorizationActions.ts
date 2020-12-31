@@ -15,7 +15,8 @@ export default class AuthorizationActions {
     }
 
     static activateAccount = async (userId, code) => {
-        const token = await AsyncStorage.getItem('token');
+        const userInfo = await AsyncStorage.getItem('userInfo');
+        const { token } = JSON.parse(userInfo);
 
         return axios.get(`/api/users/${userId}/verify/${code}`, {
             headers: {
@@ -41,7 +42,8 @@ export default class AuthorizationActions {
     }
 
     static sendCodeToEmailForActivateAccount = async (id) => {
-        const token = await AsyncStorage.getItem('token');
+        const userInfo = await AsyncStorage.getItem('userInfo');
+        const { token } = JSON.parse(userInfo);
 
         return axios.get(`/api/users/${id}/verify/resend`, {
             headers: {
@@ -51,7 +53,8 @@ export default class AuthorizationActions {
     };
 
     static changePassword = async (user_id, old_password, new_password) => {
-        const token = await AsyncStorage.getItem('token');
+        const userInfo = await AsyncStorage.getItem('userInfo');
+        const { token } = JSON.parse(userInfo);
 
         return axios.post(
             '/api/users/change/password/email',
@@ -60,6 +63,32 @@ export default class AuthorizationActions {
                 old_password,
                 new_password
             },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }
+        );
+    };
+
+    static checkToken = async () => {
+        const userInfo = await AsyncStorage.getItem('userInfo');
+        const { token, userId } = JSON.parse(userInfo);
+
+        return axios.get(`/api/users/${userId}/token/check`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+    };
+
+    static logout = async () => {
+        const userInfo = await AsyncStorage.getItem('userInfo');
+        const { token, userId: user_id } = JSON.parse(userInfo);
+
+        return axios.post(
+            '/api/users/logout',
+            { user_id },
             {
                 headers: {
                     Authorization: `Bearer ${token}`
