@@ -71,7 +71,8 @@ const CreateNewPassword = () => {
                 await AuthorizationActions.resetPassword(code, email, password);
                 setRequestStatus(REQUEST.STILL);
                 history.push('/authorization');
-            } catch {
+            } catch(err) {
+                console.log(err.response.data);
                 setRequestStatus(REQUEST.ERROR);
             }
         }

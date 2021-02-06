@@ -41,7 +41,8 @@ const ActivateAccount = () => {
                 setRequestStatus(REQUEST.STILL);
                 history.push('/coupons');
             })
-            .catch(() => {
+            .catch((err) => {
+                console.log(err.response.data);
                 setRequestStatus(REQUEST.ERROR);
             });
     };

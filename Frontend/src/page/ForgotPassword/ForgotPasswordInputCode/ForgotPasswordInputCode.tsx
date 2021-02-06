@@ -44,7 +44,10 @@ const ForgotPasswordInputCode = () => {
                 dispatch(AuthorizationActions.setCodeToStore(value));
                 history.push('/create-new-password');
             })
-            .catch(() => setRequestStatus(REQUEST.ERROR));
+            .catch((err) => {
+                console.log(err.response.data);
+                setRequestStatus(REQUEST.ERROR)
+            });
     };
 
     if (requestStatus === REQUEST.LOADING) {

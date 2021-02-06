@@ -18,11 +18,15 @@ export default class AuthorizationActions {
         const userInfo = await AsyncStorage.getItem('userInfo');
         const { token } = JSON.parse(userInfo);
 
-        return axios.get(`/api/users/${userId}/verify/${code}`, {
-            headers: {
-                Authorization: `Bearer ${token}`
+        return axios.post(
+            '/api/users/verify',
+            { user_id: userId, code },
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
             }
-        });
+        );
     };
 
     static resetPassword(code, email, password) {
