@@ -88,7 +88,8 @@ export default class AddCouponActions {
                 };
 
                 dispatch({ type: 'FETCH_COUPONS_SUCCESS', payload });
-            } catch {
+            } catch(err) {
+                console.log(err.response.data);
                 dispatch({ type: 'FETCH_COUPONS_ERROR' });
             }
         };
