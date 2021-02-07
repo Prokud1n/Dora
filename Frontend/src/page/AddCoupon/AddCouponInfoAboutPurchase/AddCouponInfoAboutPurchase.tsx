@@ -182,7 +182,7 @@ const AddCouponInfoAboutPurchase = () => {
                         testID="dateTimePicker"
                         value={date || new Date()}
                         mode="date"
-                        display="default"
+                        display="inline"
                         onChange={handleChangeDate}
                     />
                 )}
