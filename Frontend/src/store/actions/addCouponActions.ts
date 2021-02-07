@@ -89,7 +89,7 @@ export default class AddCouponActions {
 
                 dispatch({ type: 'FETCH_COUPONS_SUCCESS', payload });
             } catch(err) {
-                console.log(err.response.data);
+                console.log(err?.response?.data);
                 dispatch({ type: 'FETCH_COUPONS_ERROR' });
             }
         };

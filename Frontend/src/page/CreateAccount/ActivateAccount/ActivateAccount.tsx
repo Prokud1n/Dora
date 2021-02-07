@@ -42,7 +42,7 @@ const ActivateAccount = () => {
                 history.push('/coupons');
             })
             .catch((err) => {
-                console.log(err.response.data);
+                console.log(err?.response?.data);
                 setRequestStatus(REQUEST.ERROR);
             });
     };

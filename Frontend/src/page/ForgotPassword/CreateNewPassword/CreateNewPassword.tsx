@@ -72,7 +72,7 @@ const CreateNewPassword = () => {
                 setRequestStatus(REQUEST.STILL);
                 history.push('/authorization');
             } catch(err) {
-                console.log(err.response.data);
+                console.log(err?.response?.data);
                 setRequestStatus(REQUEST.ERROR);
             }
         }

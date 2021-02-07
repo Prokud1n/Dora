@@ -51,7 +51,7 @@ const ForgotPasswordInputEmail = () => {
                     history.push('/forget-password-code');
                 })
                 .catch((err) => {
-                    console.log(err.response.data);
+                    console.log(err?.response?.data);
                     setRequestStatus(REQUEST.ERROR);
                 });
         }
