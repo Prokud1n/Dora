@@ -51,7 +51,7 @@ const CreateAccountEmail = () => {
                     <BackStepButton />
                     <HeaderTitle
                         title="Впишите почту"
-                        subtitle="Это поможет нам связаться в случае непредвиденных обстоятельствах"
+                        subtitle="Это поможет нам связаться в случае непредвиденных обстоятельств"
                     />
                     <View style={styles.containerInput}>
                         <InputEmail email={email} onChangeText={handleChangeEmail} />

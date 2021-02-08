@@ -17,7 +17,7 @@ const CreateAccountWithSocialNetwork = () => {
             <View style={styles.containerButton}>
                 <Button title="Пропустить" />
             </View>
-            <HeaderTitle title="Создайте аккаунт" subtitle="Чтобы данные сохранялись  в облаке нужен аккаунт" />
+            <HeaderTitle title="Создайте аккаунт" subtitle="Чтобы данные сохранялись в облаке нужен аккаунт" />
             <View style={styles.containerSocialNetworks}>
                 <SocialNetwork text="Войти через FB" icon="FB" />
                 <SocialNetwork text="Войти через Google" icon="Google" />

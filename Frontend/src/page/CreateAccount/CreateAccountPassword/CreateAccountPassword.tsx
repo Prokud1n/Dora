@@ -89,7 +89,7 @@ const CreateAccountPassword = () => {
                 <BackStepButton />
                 <HeaderTitle
                     title="Впишите пароль"
-                    subtitle="В пароле нужно не меньше 8 символов и хотя бы одна цифра.  Так надежнее"
+                    subtitle="В пароле нужно не меньше 8 символов и хотя бы одна цифра. Так надежнее"
                 />
                 <View style={styles.containerInput}>
                     <InputPassword password={password} onChangeText={setPassword} onEndEditing={getValidPassword} />
