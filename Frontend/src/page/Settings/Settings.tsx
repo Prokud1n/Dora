@@ -69,12 +69,17 @@ const Settings = () => {
         if (isValid) {
             setRequestStatus(REQUEST.LOADING);
             AuthorizationActions.changePassword(userId, oldPassword, newPassword)
-                .then(() => {
+                .then((response) => {
+                    const { token } = response.data.data;
+
+                    AsyncStorage.mergeItem('userInfo', JSON.stringify({ token }));
+
                     setRequestStatus(REQUEST.STILL);
                     setOldPassword('');
                     setNewPassword('');
                 })
-                .catch(() => {
+                .catch((err) => {
+                    console.log(err?.response?.data);
                     setRequestStatus(REQUEST.ERROR);
                 });
         }

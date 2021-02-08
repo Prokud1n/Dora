@@ -54,14 +54,18 @@ const CreateAccountPassword = () => {
 
             try {
                 const response = await AuthorizationActions.registration(email, password);
+                const { id, verified, token } = response.data.data;
                 const payload = {
                     auth: {
-                        id: response.data.data.id,
-                        verified: response.data.data.verified
+                        id,
+                        verified
                     }
                 };
 
-                await AsyncStorage.setItem('token', response.data.data.token);
+                const userInfo = JSON.stringify({ token, userId: id, email });
+
+                await AsyncStorage.setItem('userInfo', userInfo);
+
                 setRequestStatus(REQUEST.STILL);
                 dispatch({ type: 'SEND_EMAIL_CODE_SUCCESS', payload });
                 history.push('/activate-account');
@@ -85,7 +89,7 @@ const CreateAccountPassword = () => {
                 <BackStepButton />
                 <HeaderTitle
                     title="Впишите пароль"
-                    subtitle="В пароле нужно не меньше 8 символов и хотя бы одна цифра.  Так надежнее"
+                    subtitle="В пароле нужно не меньше 8 символов и хотя бы одна цифра. Так надежнее"
                 />
                 <View style={styles.containerInput}>
                     <InputPassword password={password} onChangeText={setPassword} onEndEditing={getValidPassword} />

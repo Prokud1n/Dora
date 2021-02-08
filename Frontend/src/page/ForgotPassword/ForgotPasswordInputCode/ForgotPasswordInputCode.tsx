@@ -26,12 +26,11 @@ const ForgotPasswordInputCode = () => {
     });
 
     const email = useSelector(selectors.email);
-    const userId = useSelector(selectors.userId);
     const [requestStatus, setRequestStatus] = useState(REQUEST.STILL);
 
     const handleSendCodeToEmail = () => {
         setRequestStatus(REQUEST.LOADING);
-        AuthorizationActions.sendCodeToEmailForActivateAccount(userId)
+        AuthorizationActions.sendCodeToEmailForResetPassword(email)
             .then(() => setRequestStatus(REQUEST.STILL))
             .catch(() => setRequestStatus(REQUEST.ERROR));
     };
@@ -46,7 +45,7 @@ const ForgotPasswordInputCode = () => {
             })
             .catch((err) => {
                 console.log(err?.response?.data);
-                setRequestStatus(REQUEST.ERROR)
+                setRequestStatus(REQUEST.ERROR);
             });
     };
 
