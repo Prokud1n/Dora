@@ -17,7 +17,9 @@ export type AuthorizationState = {
 };
 
 export const selectors = {
-    userId: (state: RootState) => state.authorization.auth.id
+    userId: (state: RootState) => state.authorization.auth.id,
+    email: (state: RootState) => state.authorization.email,
+    code: (state: RootState) => state.authorization.code
 };
 
 const initialState = {

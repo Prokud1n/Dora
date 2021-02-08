@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
         marginRight: 'auto'
     },
     buttons: {
+        marginTop: 20,
         width: '100%',
         display: 'flex',
         flexDirection: 'row',

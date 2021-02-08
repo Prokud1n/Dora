@@ -3,7 +3,6 @@ import { SafeAreaView, View, Text, AsyncStorage } from 'react-native';
 import { useHistory } from 'react-router-native';
 import { useSelector } from 'react-redux';
 import BackStepButton from '../../components/BackStepButton/BackStepButton';
-import { RootState } from '../../store/reducers/rootReducer';
 import SVG from '../../components/SVG/SVG';
 import InputPassword from '../../components/InputPassword/InputPassword';
 import CustomButton from '../../components/CustomButton/CustomButton';
@@ -14,12 +13,13 @@ import REQUEST from '../../constants/REQUEST';
 import Loader from '../../components/Loader/Loader';
 
 import styles from './Settings.style';
+import { selectors } from '../../store/reducers/authorizationReducer';
 
 const Settings = () => {
     const history = useHistory();
 
-    const email = useSelector((state: RootState) => state.authorization.email);
-    const userId = useSelector((state: RootState) => state.authorization.auth.id);
+    const email = useSelector(selectors.email);
+    const userId = useSelector(selectors.userId);
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [isValidPassword, setIsValidPassword] = useState(true);

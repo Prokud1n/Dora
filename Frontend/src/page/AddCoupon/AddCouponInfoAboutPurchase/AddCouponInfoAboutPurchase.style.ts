@@ -42,6 +42,15 @@ const styles = StyleSheet.create({
         backgroundColor: '#F0F0F0',
         color: '#8C8C8C'
     },
+    typePeriod: {
+        borderRadius: 25,
+        backgroundColor: '#F0F0F0',
+        width: 100,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
     quaranteePeriod: {
         display: 'flex',
         flexDirection: 'row',
@@ -55,9 +64,11 @@ const styles = StyleSheet.create({
     },
     containerHidePicker: {
         paddingRight: 30,
+        marginTop: 30,
         display: 'flex',
         flexDirection: 'row',
-        justifyContent: 'flex-end'
+        justifyContent: 'flex-end',
+        alignItems: 'flex-end'
     },
     footer: {
         position: 'absolute',

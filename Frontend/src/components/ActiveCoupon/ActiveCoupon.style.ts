@@ -66,15 +66,6 @@ const styles = StyleSheet.create({
         fontSize: 17,
         color: '#8C8C8C'
     },
-    photo: {
-        position: 'relative',
-        width: 120,
-        height: 80,
-        borderRadius: 15,
-        marginRight: 6,
-        marginBottom: 24,
-        marginTop: 12
-    },
     containerCircle: {
         width: '100%',
         position: 'absolute',

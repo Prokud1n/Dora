@@ -71,7 +71,7 @@ const ActiveCouponWarrantyCase = ({ expertise, money_returned, item_replaced, us
             <View style={styles.containerWarrantyCaseInfo}>
                 <View>
                     <Text style={styles.warrantyCaseLabel}>Деньги возвращены</Text>
-                    <Text style={styles.warrantyCaseTitle}>Талон будет отправлен  в архив</Text>
+                    <Text style={styles.warrantyCaseTitle}>Талон будет отправлен в архив</Text>
                 </View>
                 <TouchableSVG
                     id="money_returned"

@@ -18,11 +18,12 @@ const AboutUs = () => {
     useEffect(() => {
         AuthorizationActions.checkToken()
             .then((response) => {
-                const { verified, user_id } = response.data.data;
+                const { verified, id, email } = response.data.data;
                 const payload = {
                     auth: {
-                        id: user_id,
-                        verified
+                        id,
+                        verified,
+                        email
                     }
                 };
 

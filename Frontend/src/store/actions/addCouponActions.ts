@@ -3,8 +3,8 @@ import axios from '../../axios/axiosDora';
 import { selectors as selectorsCoupon } from '../reducers/addCouponReducer';
 
 export default class AddCouponActions {
-    static viewPhoto(uri) {
-        return { type: 'VIEW_PHOTO', payload: { uri } };
+    static viewPhoto(photo, isCanChecked = true) {
+        return { type: 'VIEW_PHOTO', payload: { viewPhoto: { photo, isCanChecked } } };
     }
 
     static updateCheckedPhoto(checkedPhoto) {
@@ -88,7 +88,8 @@ export default class AddCouponActions {
                 };
 
                 dispatch({ type: 'FETCH_COUPONS_SUCCESS', payload });
-            } catch {
+            } catch(err) {
+                console.log(err?.response?.data);
                 dispatch({ type: 'FETCH_COUPONS_ERROR' });
             }
         };
@@ -127,7 +128,7 @@ export default class AddCouponActions {
     }
 
     static changeCoupon(userId, warrantyId, changeParams) {
-        return async (dispatch) => {
+        return async (dispatch, getState) => {
             dispatch({ type: 'START_CHANGE_COUPON' });
             try {
                 const userInfo = await AsyncStorage.getItem('userInfo');
@@ -143,10 +144,19 @@ export default class AddCouponActions {
                     }
                 );
 
-                console.log(response);
-                dispatch({ type: 'SUCCESS_CHANGE_COUPON' });
-            } catch (err) {
-                console.log(err.response.data);
+                const state = getState();
+                const newCoupon = response.data.data;
+                const coupons = state.addCoupon.coupons.non_archived;
+                const indexPrevCoupon = coupons.findIndex(({ id }) => id === newCoupon.id);
+
+                coupons.splice(indexPrevCoupon, 1, newCoupon);
+                dispatch({
+                    type: 'SUCCESS_CHANGE_COUPON',
+                    payload: {
+                        non_archived: coupons
+                    }
+                });
+            } catch {
                 dispatch({ type: 'ERROR_CHANGE_COUPON' });
             }
         };

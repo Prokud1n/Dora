@@ -40,9 +40,9 @@ const CouponsList = ({ coupons, userId, isArchived = false }: Props) => {
                 : `Осталось ${days_end_warranty} ${getWordShape(days_end_warranty, 'день', 'дня', 'дней')}`;
             const isSoonEndWarranty = days_end_warranty <= 14;
 
-            const handleDeleteCoupon = () => {
-                dispatch(AddCouponActions.deleteCoupon(userId, id));
-                dispatch(AddCouponActions.fetchCoupons(userId));
+            const handleDeleteCoupon = async () => {
+                await dispatch(AddCouponActions.deleteCoupon(userId, id));
+                await dispatch(AddCouponActions.fetchCoupons(userId));
             };
 
             return (

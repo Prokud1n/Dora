@@ -17,7 +17,10 @@ export type Coupon = {
 };
 
 export type AddCouponState = {
-    uri: string;
+    viewPhoto: {
+        photo: string;
+        isCanChecked: boolean;
+    };
     checkedPhoto: any;
     photosGallery: any;
     infoPurchase: {
@@ -54,7 +57,6 @@ export type AddCouponState = {
         }[];
         warrnaty_id: number;
     };
-    photo: string;
     requestStatusCoupons: REQUEST_TYPE;
 };
 
@@ -73,18 +75,22 @@ export const selectors = {
     categories: (state: RootState) => state.addCoupon.categories,
     coupons: (state: RootState) => state.addCoupon.coupons,
     filterCoupons: (state: RootState) => state.addCoupon.filterCoupons,
-    photo: (state: RootState) => state.addCoupon.photo,
+    photo: (state: RootState) => state.addCoupon.viewPhoto.photo,
+    isCanChecked: (state: RootState) => state.addCoupon.viewPhoto.isCanChecked,
     requestStatusCoupons: (state: RootState) => state.addCoupon.requestStatusCoupons
 };
 
 const initialState = {
-    uri: '',
+    viewPhoto: {
+        photo: '',
+        isCanChecked: true
+    },
     checkedPhoto: {},
     photosGallery: [],
     infoPurchase: {
         couponName: '',
         shopName: '',
-        dateOfPurchase: new Date(),
+        dateOfPurchase: null,
         warrantyPeriod: '100',
         typeWarrantyPeriod: 'месяцев'
     },
@@ -99,7 +105,6 @@ const initialState = {
         files: [],
         warranty_id: null
     },
-    photo: '',
     requestStatusCoupons: REQUEST.STILL
 };
 
@@ -129,6 +134,8 @@ function addCouponReducer(state: AddCouponState = initialState, action: AddCoupo
             return { ...state, ...action.payload };
         case 'FILTER_COUPONS':
             return { ...state, ...action.payload };
+        case 'SUCCESS_CHANGE_COUPON':
+            return { ...state, coupons: { ...state.coupons, ...action.payload } };
         case 'CLEAN_STORE':
             return { ...initialState };
         default:

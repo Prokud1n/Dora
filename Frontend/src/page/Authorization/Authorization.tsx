@@ -39,17 +39,18 @@ const Authorization = () => {
             .then((response) => {
                 const { verified, id, token } = response.data.data;
 
-                const userInfo = JSON.stringify({ token, userId: id });
+                const userInfo = JSON.stringify({ token, userId: id, email });
 
                 AsyncStorage.setItem('userInfo', userInfo);
 
-                return { verified, id };
+                return { verified, id, email };
             })
-            .then(({ verified, id }) => {
+            .then(({ verified, id, email }) => {
                 const payload = {
                     auth: {
                         id,
-                        verified
+                        verified,
+                        email,
                     }
                 };
 
