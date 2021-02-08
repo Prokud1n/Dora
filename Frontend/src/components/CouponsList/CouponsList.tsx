@@ -49,7 +49,6 @@ const CouponsList = ({ coupons, userId, isArchived = false }: Props) => {
                 <SwipeRow rightOpenValue={-130} key={id}>
                     <View style={styles.containerSVG}>
                         <TouchableSVG svg="delete" height="100%" width="100%" onPress={handleDeleteCoupon} />
-                        <TouchableSVG svg="edit" height="100%" width="100%" />
                     </View>
                     <ActiveCoupon
                         userId={userId}

@@ -54,14 +54,18 @@ const CreateAccountPassword = () => {
 
             try {
                 const response = await AuthorizationActions.registration(email, password);
+                const { id, verified } = response.data.data;
                 const payload = {
                     auth: {
-                        id: response.data.data.id,
-                        verified: response.data.data.verified
+                        id,
+                        verified
                     }
                 };
 
-                await AsyncStorage.setItem('token', response.data.data.token);
+                const userInfo = JSON.stringify({ token, userId: id, email });
+
+                AsyncStorage.setItem('userInfo', userInfo);
+
                 setRequestStatus(REQUEST.STILL);
                 dispatch({ type: 'SEND_EMAIL_CODE_SUCCESS', payload });
                 history.push('/activate-account');
