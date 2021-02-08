@@ -7,7 +7,9 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "lint:js": "eslint --fix src/**/*.{js,jsx,ts,tsx}"
+    "lint:js": "eslint --fix src/**/*.{js,jsx,ts,tsx}",
+    "local_url": "expo url",
+    "tunnel_url": "expo url --tunnel"
   },
   "dependencies": {
     "@react-native-community/datetimepicker": "^3.0.8",
