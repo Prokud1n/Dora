@@ -54,7 +54,7 @@ const CreateAccountPassword = () => {
 
             try {
                 const response = await AuthorizationActions.registration(email, password);
-                const { id, verified } = response.data.data;
+                const { id, verified, token } = response.data.data;
                 const payload = {
                     auth: {
                         id,
@@ -64,7 +64,7 @@ const CreateAccountPassword = () => {
 
                 const userInfo = JSON.stringify({ token, userId: id, email });
 
-                AsyncStorage.setItem('userInfo', userInfo);
+                await AsyncStorage.setItem('userInfo', userInfo);
 
                 setRequestStatus(REQUEST.STILL);
                 dispatch({ type: 'SEND_EMAIL_CODE_SUCCESS', payload });
