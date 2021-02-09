@@ -88,7 +88,7 @@ export default class AddCouponActions {
                 };
 
                 dispatch({ type: 'FETCH_COUPONS_SUCCESS', payload });
-            } catch(err) {
+            } catch (err) {
                 console.log(err?.response?.data);
                 dispatch({ type: 'FETCH_COUPONS_ERROR' });
             }
@@ -156,7 +156,8 @@ export default class AddCouponActions {
                         non_archived: coupons
                     }
                 });
-            } catch {
+            } catch (err) {
+                console.log(err?.response?.data);
                 dispatch({ type: 'ERROR_CHANGE_COUPON' });
             }
         };

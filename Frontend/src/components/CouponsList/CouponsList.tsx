@@ -32,7 +32,8 @@ const CouponsList = ({ coupons, userId, isArchived = false }: Props) => {
             files,
             expertise,
             item_replaced,
-            money_returned
+            money_returned,
+             date_end_expertise
         }) => {
             const categoryIcon = DICTIONARY_CATEGORIES.find(({ categoryId }) => categoryId === category_id)?.icon;
             const status = isArchived
@@ -46,7 +47,7 @@ const CouponsList = ({ coupons, userId, isArchived = false }: Props) => {
             };
 
             return (
-                <SwipeRow rightOpenValue={-130} key={id}>
+                <SwipeRow rightOpenValue={-70} key={id}>
                     <View style={styles.containerSVG}>
                         <TouchableSVG svg="delete" height="100%" width="100%" onPress={handleDeleteCoupon} />
                     </View>
@@ -63,6 +64,7 @@ const CouponsList = ({ coupons, userId, isArchived = false }: Props) => {
                         money_returned={money_returned}
                         isArchived={isArchived}
                         isSoonEndWarranty={isSoonEndWarranty}
+                        date_end_expertise={date_end_expertise}
                     />
                 </SwipeRow>
             );

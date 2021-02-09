@@ -12,7 +12,6 @@
     "tunnel_url": "expo url --tunnel"
   },
   "dependencies": {
-    "@react-native-community/datetimepicker": "^3.0.8",
     "@react-native-picker/picker": "^1.9.8",
     "axios": "^0.18.1",
     "expo": "~38.0.8",

@@ -1,4 +1,6 @@
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
+
+const windowWidth = Dimensions.get('window').width;
 
 const styles = StyleSheet.create({
     input: {
@@ -20,12 +22,28 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: '#8C8C8C'
     },
+    containerHidePicker: {
+        paddingRight: 30,
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-end',
+        alignItems: 'flex-end'
+    },
     containerWarrantyCaseInfo: {
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
         marginTop: 16
+    },
+    containerDatePicker: {
+        position: 'absolute',
+        bottom: 0,
+        right: 0,
+        backgroundColor: '#E5E5E5',
+        zIndex: 1,
+        width: windowWidth,
+        paddingLeft: 25
     }
 });
 

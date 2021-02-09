@@ -18,14 +18,6 @@ import styles from './AddCouponPhoto.style';
 import Loader from '../../../components/Loader/Loader';
 import BackStepButton from '../../../components/BackStepButton/BackStepButton';
 
-const createDate = (date) => {
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-
-    return `${year}-${month < 10 ? `0${month}` : month}-${day < 10 ? `0${day}` : day}`;
-};
-
 const AddCouponPhoto = () => {
     const history = useHistory();
     const dispatch = useDispatch();
@@ -149,7 +141,7 @@ const AddCouponPhoto = () => {
             data.append('user_id', userId);
             data.append('name', couponName);
             data.append('shop_name', shopName);
-            data.append('date_of_purchase', createDate(dateOfPurchase));
+            data.append('date_of_purchase', dateOfPurchase);
             data.append('warranty_period', warrantyPeriod);
             data.append('type_warranty_period', typeWarrantyPeriod);
             data.append('category_id', infoCategory.category_id);
@@ -173,7 +165,8 @@ const AddCouponPhoto = () => {
                 dispatch(AddCouponActions.cleanStore());
                 history.push('/coupons');
             })
-            .catch((_) => {
+            .catch((err) => {
+                console.log(err?.response?.data);
                 alert('Попробуйте ещё раз!');
                 setRequestStatus(REQUEST.STILL);
             });

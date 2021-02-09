@@ -1,18 +1,17 @@
-import { SafeAreaView, TextInput, View, Text, Platform, Button, Keyboard, TouchableOpacity } from 'react-native';
+import { SafeAreaView, TextInput, View, Text, Button, Keyboard, TouchableOpacity } from 'react-native';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Picker } from '@react-native-picker/picker';
-import DateTimePicker from '@react-native-community/datetimepicker';
 import { useHistory } from 'react-router-native';
 import { useDispatch, useSelector } from 'react-redux';
 import CustomButton from '../../../components/CustomButton/CustomButton';
 import DatePurchase from '../../../components/DatePurchase/DatePurchase';
-import getFormatDate from '../../../utils/getFormatDate';
 import HeaderAddCoupon from '../../../components/HeaderAddCoupon/HeaderAddCoupon';
 
 import styles from './AddCouponInfoAboutPurchase.style';
 import AddCouponActions from '../../../store/actions/addCouponActions';
 import { selectors } from '../../../store/reducers/addCouponReducer';
 import getWordShape from '../../../utils/getWordShape';
+import DatePicker from '../../../components/DatePicker/DatePicker';
 
 const MONTH_SHAPE = {
     first: 'месяц',
@@ -32,6 +31,10 @@ const YEAR_SHAPE = {
     third: 'лет'
 };
 
+const currentYear = new Date().getFullYear();
+const currentMonth = new Date().getMonth();
+const currentDay = new Date().getDate();
+
 const AddCouponInfoAboutPurchase = () => {
     const history = useHistory();
     const dispatch = useDispatch();
@@ -40,12 +43,16 @@ const AddCouponInfoAboutPurchase = () => {
     const [couponName, setCouponName] = useState(infoPurchase.couponName);
     const [shop, setShop] = useState(infoPurchase.shopName);
     const [warrantyPeriod, setWarrantyPeriod] = useState(String(infoCategory?.warranty_period));
+    const [date, setDate] = useState(null);
     const monthWordShape = getWordShape(
         Number(warrantyPeriod),
         MONTH_SHAPE.first,
         MONTH_SHAPE.second,
         MONTH_SHAPE.third
     );
+
+    const getFormatDate = ({ year, month, day }) =>
+        `${year}-${month < 10 ? `0${month + 1}` : month + 1}-${day < 10 ? `0${day}` : day}`;
     const dayWordShape = getWordShape(Number(warrantyPeriod), DAY_SHAPE.first, DAY_SHAPE.second, DAY_SHAPE.third);
     const yearWordShape = getWordShape(Number(warrantyPeriod), YEAR_SHAPE.first, YEAR_SHAPE.second, YEAR_SHAPE.third);
     const TYPE_WARRANTY_PERIOD = {
@@ -53,7 +60,6 @@ const AddCouponInfoAboutPurchase = () => {
         Y: yearWordShape,
         D: dayWordShape
     };
-    const [date, setDate] = useState(infoPurchase.dateOfPurchase);
     const [isOpenDatePicker, setIsOpenDatePicker] = useState(false);
     const [isOpenPicker, setIsOpenPicker] = useState(false);
     const [typeWarrantyPeriod, setTypeWarrantyPeriod] = useState(
@@ -93,7 +99,7 @@ const AddCouponInfoAboutPurchase = () => {
             AddCouponActions.saveInfoAboutPurchase({
                 couponName,
                 shopName: shop,
-                dateOfPurchase: date,
+                dateOfPurchase: dateTitle,
                 typeWarrantyPeriod: typePeriod,
                 warrantyPeriod
             })
@@ -101,16 +107,22 @@ const AddCouponInfoAboutPurchase = () => {
         history.push('/photo');
     };
 
-    const handleChangeDate = (event, selectedDate) => {
-        const currentDate = selectedDate || date;
+    const handleChangeDate = (value, id) => {
+        setDate({ ...date, [id]: value });
+    };
 
-        setIsOpenDatePicker(Platform.OS === 'ios');
-        setDate(currentDate);
+    const hideDatePicker = () => {
+        setIsOpenDatePicker(false);
     };
 
     const handleShowDatePicker = () => {
         Keyboard.dismiss();
         setIsOpenDatePicker(true);
+        setDate({
+            day: currentDay,
+            month: currentMonth,
+            year: currentYear
+        });
     };
 
     const handleShowPicker = () => {
@@ -178,13 +190,12 @@ const AddCouponInfoAboutPurchase = () => {
                     <CustomButton title="Далее" onPress={handleRedirectToPhoto} disabled={disabledNextButton} />
                 </View>
                 {isOpenDatePicker && (
-                    <DateTimePicker
-                        testID="dateTimePicker"
-                        value={date || new Date()}
-                        mode="date"
-                        display="inline"
-                        onChange={handleChangeDate}
-                    />
+                    <>
+                        <View style={styles.containerHidePicker}>
+                            <Button title="Done" onPress={hideDatePicker} />
+                        </View>
+                        <DatePicker onChange={handleChangeDate} value={date} />
+                    </>
                 )}
             </View>
         </SafeAreaView>

@@ -26,7 +26,7 @@ export type AddCouponState = {
     infoPurchase: {
         couponName: string;
         shopName: string;
-        dateOfPurchase: number;
+        dateOfPurchase: string;
         typeWarrantyPeriod: 'M' | 'Y' | 'D';
         warrantyPeriod: string;
     };
