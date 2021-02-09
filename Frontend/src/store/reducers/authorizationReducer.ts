@@ -3,6 +3,7 @@ import { RootState } from './rootReducer';
 export type Auth = {
     id: string;
     verified: boolean;
+    email: string;
 };
 
 export type AuthorizationAction = {
@@ -12,22 +13,21 @@ export type AuthorizationAction = {
 
 export type AuthorizationState = {
     auth: Auth;
-    email: string;
     code: string;
 };
 
 export const selectors = {
     userId: (state: RootState) => state.authorization.auth.id,
-    email: (state: RootState) => state.authorization.email,
+    email: (state: RootState) => state.authorization.auth.email,
     code: (state: RootState) => state.authorization.code
 };
 
 const initialState = {
     auth: {
         id: '',
-        verified: false
+        verified: false,
+        email: ''
     },
-    email: '',
     code: ''
 };
 
