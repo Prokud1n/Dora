@@ -1,4 +1,4 @@
-import { Button, Keyboard, Text, View } from 'react-native';
+import { Button, Keyboard, Modal, Text, View } from 'react-native';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import styles from './ActiveCouponWarrantyCase.style';
@@ -6,6 +6,7 @@ import TouchableSVG from '../../TouchableSVG/TouchableSVG';
 import AddCouponActions from '../../../store/actions/addCouponActions';
 import DatePurchase from '../../DatePurchase/DatePurchase';
 import DatePicker from '../../DatePicker/DatePicker';
+import { getCurrentDate, getDateWithSplit } from '../../../utils/getFormatDate';
 
 type Props = {
     userId: string;
@@ -16,9 +17,7 @@ type Props = {
     date_end_expertise: string;
 };
 
-const currentYear = new Date().getFullYear();
-const currentMonth = new Date().getMonth();
-const currentDay = new Date().getDate();
+const { currentYear, currentMonth, currentDay } = getCurrentDate();
 
 const ActiveCouponWarrantyCase = ({
     expertise,
@@ -80,21 +79,21 @@ const ActiveCouponWarrantyCase = ({
         return 'warrantyCaseCheckMark';
     };
 
-    const getFormatDate = ({ year, month, day }) =>
-        `${year}-${month < 10 ? `0${month + 1}` : month + 1}-${day < 10 ? `0${day}` : day}`;
-
-    const dateTitle = useMemo(() => (date ? getFormatDate(date) : 'Дата окончания'), [date]);
+    const dateTitle = useMemo(() => (date ? getDateWithSplit(date) : 'Дата окончания'), [date]);
 
     const handleShowDatePicker = () => {
         Keyboard.dismiss();
 
         if (state.expertise) {
             setIsOpenDatePicker(true);
-            setDate({
-                day: currentDay,
-                month: currentMonth,
-                year: currentYear
-            });
+
+            if (!date_end_expertise) {
+                setDate({
+                    day: currentDay,
+                    month: currentMonth,
+                    year: currentYear
+                });
+            }
         }
     };
 
@@ -157,12 +156,14 @@ const ActiveCouponWarrantyCase = ({
                 </View>
             </View>
             {isOpenDatePicker && (
-                <View style={styles.containerDatePicker}>
-                    <View style={styles.containerHidePicker}>
-                        <Button title="Done" onPress={hideDatePicker} />
+                <Modal animationType="slide" transparent visible={isOpenDatePicker}>
+                    <View style={styles.containerDatePicker}>
+                        <View style={styles.containerHidePicker}>
+                            <Button title="Done" onPress={hideDatePicker} />
+                        </View>
+                        <DatePicker onChange={handleChangeDate} value={date} />
                     </View>
-                    <DatePicker onChange={handleChangeDate} value={date} />
-                </View>
+                </Modal>
             )}
         </>
     );

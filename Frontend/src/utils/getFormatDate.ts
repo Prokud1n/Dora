@@ -13,12 +13,20 @@ const monthName = {
     11: 'декабря'
 };
 
-export const getMonthName = (val) => {
+const getMonthName = (val) => {
     return monthName[val];
 };
 
-const getFormatDate = (date) => {
+export const getCurrentDate = () => ({
+    currentYear: new Date().getFullYear(),
+    currentMonth: new Date().getMonth(),
+    currentDay: new Date().getDate()
+});
+// (date) => 'DD MonthName YYYY'
+export const getDateWithMonthName = (date) => {
     return `${date.getDate()} ${getMonthName(date.getMonth())} ${date.getFullYear()}`;
 };
 
-export default getFormatDate;
+// (date) => 'YYYY-MM-DD'
+export const getDateWithSplit = ({ year, month, day }) =>
+    `${year}-${month < 10 ? `0${month + 1}` : month + 1}-${day < 10 ? `0${day}` : day}`;

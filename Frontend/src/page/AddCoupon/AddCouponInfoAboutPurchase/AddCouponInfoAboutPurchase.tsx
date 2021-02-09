@@ -12,6 +12,7 @@ import AddCouponActions from '../../../store/actions/addCouponActions';
 import { selectors } from '../../../store/reducers/addCouponReducer';
 import getWordShape from '../../../utils/getWordShape';
 import DatePicker from '../../../components/DatePicker/DatePicker';
+import { getCurrentDate, getDateWithSplit } from '../../../utils/getFormatDate';
 
 const MONTH_SHAPE = {
     first: 'месяц',
@@ -31,10 +32,7 @@ const YEAR_SHAPE = {
     third: 'лет'
 };
 
-const currentYear = new Date().getFullYear();
-const currentMonth = new Date().getMonth();
-const currentDay = new Date().getDate();
-
+const { currentYear, currentMonth, currentDay } = getCurrentDate();
 const AddCouponInfoAboutPurchase = () => {
     const history = useHistory();
     const dispatch = useDispatch();
@@ -51,8 +49,6 @@ const AddCouponInfoAboutPurchase = () => {
         MONTH_SHAPE.third
     );
 
-    const getFormatDate = ({ year, month, day }) =>
-        `${year}-${month < 10 ? `0${month + 1}` : month + 1}-${day < 10 ? `0${day}` : day}`;
     const dayWordShape = getWordShape(Number(warrantyPeriod), DAY_SHAPE.first, DAY_SHAPE.second, DAY_SHAPE.third);
     const yearWordShape = getWordShape(Number(warrantyPeriod), YEAR_SHAPE.first, YEAR_SHAPE.second, YEAR_SHAPE.third);
     const TYPE_WARRANTY_PERIOD = {
@@ -134,7 +130,7 @@ const AddCouponInfoAboutPurchase = () => {
         setIsOpenPicker(false);
     };
 
-    const dateTitle = useMemo(() => (date ? getFormatDate(date) : 'Выберите дату покупки'), [date]);
+    const dateTitle = useMemo(() => (date ? getDateWithSplit(date) : 'Выберите дату покупки'), [date]);
 
     return (
         <SafeAreaView>

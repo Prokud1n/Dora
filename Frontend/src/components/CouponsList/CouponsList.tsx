@@ -10,7 +10,7 @@ import { Coupon } from '../../store/reducers/addCouponReducer';
 import styles from './CouponsList.style';
 import AddCouponActions from '../../store/actions/addCouponActions';
 import { DICTIONARY_CATEGORIES } from '../../page/AddCoupon/AddCouponCategory/AddCouponCategory';
-import getFormatDate from '../../utils/getFormatDate';
+import { getDateWithMonthName } from '../../utils/getFormatDate';
 
 type Props = {
     coupons: Coupon[];
@@ -33,11 +33,11 @@ const CouponsList = ({ coupons, userId, isArchived = false }: Props) => {
             expertise,
             item_replaced,
             money_returned,
-             date_end_expertise
+            date_end_expertise
         }) => {
             const categoryIcon = DICTIONARY_CATEGORIES.find(({ categoryId }) => categoryId === category_id)?.icon;
             const status = isArchived
-                ? `Истек ${getFormatDate(new Date(date_end_warranty))}`
+                ? `Истек ${getDateWithMonthName(new Date(date_end_warranty))}`
                 : `Осталось ${days_end_warranty} ${getWordShape(days_end_warranty, 'день', 'дня', 'дней')}`;
             const isSoonEndWarranty = days_end_warranty <= 14;
 

@@ -37,13 +37,9 @@ const styles = StyleSheet.create({
         marginTop: 16
     },
     containerDatePicker: {
-        position: 'absolute',
-        bottom: 0,
-        right: 0,
-        backgroundColor: '#E5E5E5',
-        zIndex: 1,
-        width: windowWidth,
-        paddingLeft: 25
+        height: '35%',
+        marginTop: 'auto',
+        backgroundColor: '#E5E5E5'
     }
 });
 
