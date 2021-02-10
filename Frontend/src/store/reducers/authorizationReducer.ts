@@ -38,7 +38,7 @@ function authorizationReducer(state: AuthorizationState = initialState, action: 
         case 'SIGN_IN_SUCCESS':
             return { ...state, ...action.payload };
         case 'SET_EMAIL_STORE':
-            return { ...state, ...action.payload };
+            return { ...state, auth: { ...state.auth, ...action.payload } };
         case 'SET_CODE_STORE':
             return { ...state, ...action.payload };
         default:
