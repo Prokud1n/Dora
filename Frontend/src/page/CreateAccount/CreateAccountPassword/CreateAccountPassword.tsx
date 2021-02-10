@@ -70,7 +70,8 @@ const CreateAccountPassword = () => {
                 setRequestStatus(REQUEST.STILL);
                 dispatch({ type: 'SEND_EMAIL_CODE_SUCCESS', payload });
                 history.push('/activate-account');
-            } catch {
+            } catch (err) {
+                console.log(err?.response?.data);
                 setRequestStatus(REQUEST.ERROR);
             }
         }
