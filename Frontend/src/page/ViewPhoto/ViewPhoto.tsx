@@ -8,7 +8,7 @@ import AddCouponActions from '../../store/actions/addCouponActions';
 import styles from './ViewPhoto.style';
 import { selectors } from '../../store/reducers/addCouponReducer';
 
-const ViewPhoto = () => {
+const ViewPhoto = ({ onClose }) => {
     const dispatch = useDispatch();
     const history = useHistory();
     const photo = useSelector(selectors.photo);
@@ -31,7 +31,7 @@ const ViewPhoto = () => {
         <>
             <View style={styles.containerButton}>
                 <TouchableOpacity style={styles.backStep} onPress={handleRedirectToBackStep}>
-                    <BackStepButton />
+                    <BackStepButton onPress={onClose} />
                 </TouchableOpacity>
                 {isCanChecked ? (
                     <View style={styles.addPhoto}>
