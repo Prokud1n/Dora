@@ -77,9 +77,14 @@ const Settings = () => {
                     setRequestStatus(REQUEST.STILL);
                     setOldPassword('');
                     setNewPassword('');
+
+                    alert('Пароль успешно изменен!');
                 })
                 .catch((err) => {
                     console.log(err?.response?.data);
+                    if (err?.response?.data?.message === 'OLD_PASSWORD') {
+                        alert('Вы ввели старый пароль!');
+                    }
                     setRequestStatus(REQUEST.ERROR);
                 });
         }

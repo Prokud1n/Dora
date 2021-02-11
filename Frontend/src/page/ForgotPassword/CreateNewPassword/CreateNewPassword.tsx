@@ -73,6 +73,11 @@ const CreateNewPassword = () => {
                 history.push('/authorization');
             } catch (err) {
                 console.log(err?.response?.data);
+                if (err?.response?.data?.message === 'OLD_PASSWORD') {
+                    alert('Вы ввели старый пароль!');
+                } else {
+                    alert('Не удалось сменить пароль!');
+                }
                 setRequestStatus(REQUEST.ERROR);
             }
         }
@@ -84,10 +89,6 @@ const CreateNewPassword = () => {
 
     if (requestStatus === REQUEST.LOADING) {
         return <Loader />;
-    }
-
-    if (requestStatus === REQUEST.ERROR) {
-        return <ErrorMessage errorMessage="Не удалось сменить пароль" />;
     }
 
     return (
