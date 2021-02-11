@@ -1,13 +1,13 @@
-import { Image, TouchableOpacity, View } from 'react-native';
+import { Image, Modal, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-native';
 import styles from './ActiveCouponPhoto.style';
 import AddCouponActions from '../../../store/actions/addCouponActions';
 import ErrorIndicator from '../../ErrorBoundary/ErrorIndicator/ErrorIndicator';
 import getBase64FromArrayBuffer from '../../../utils/getBase64FromArrayBuffer';
 import REQUEST from '../../../constants/REQUEST';
 import Loader from '../../Loader/Loader';
+import ViewPhoto from '../../../page/ViewPhoto/ViewPhoto';
 
 type Props = {
     fileUrl: string;
@@ -15,8 +15,8 @@ type Props = {
 
 const ActiveCouponPhoto = ({ fileUrl }: Props) => {
     const dispatch = useDispatch();
-    const history = useHistory();
     const [photo, setPhoto] = useState('');
+    const [isOpenPhoto, setIsOpenPhoto] = useState(false);
     const [requestStatus, setRequestStatus] = useState(REQUEST.STILL);
 
     useEffect(() => {
@@ -37,7 +37,7 @@ const ActiveCouponPhoto = ({ fileUrl }: Props) => {
 
     const handleOpenPhoto = (uri) => {
         dispatch(AddCouponActions.viewPhoto(uri, false));
-        history.push('/viewPhoto');
+        setIsOpenPhoto(true);
     };
 
     if (requestStatus === REQUEST.LOADING) {
@@ -54,14 +54,21 @@ const ActiveCouponPhoto = ({ fileUrl }: Props) => {
 
     return (
         Boolean(photo) && (
-            <TouchableOpacity onPress={() => handleOpenPhoto(photo)}>
-                <Image
-                    style={styles.photo}
-                    source={{
-                        uri: photo
-                    }}
-                />
-            </TouchableOpacity>
+            <>
+                <TouchableOpacity onPress={() => handleOpenPhoto(photo)}>
+                    <Image
+                        style={styles.photo}
+                        source={{
+                            uri: photo
+                        }}
+                    />
+                </TouchableOpacity>
+                {isOpenPhoto && (
+                    <Modal>
+                        <ViewPhoto onClose={() => setIsOpenPhoto(false)} />
+                    </Modal>
+                )}
+            </>
         )
     );
 };
