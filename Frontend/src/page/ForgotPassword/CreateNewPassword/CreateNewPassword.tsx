@@ -97,7 +97,7 @@ const CreateNewPassword = () => {
                 <BackStepButton />
                 <HeaderTitle
                     title="Впишите новый пароль"
-                    subtitle="В пароле нужно не меньше 8 символов и хотя бы одна цифра. Так надежнее"
+                    subtitle="В пароле нужно не меньше 8 символов и хотя бы одну цифру. Так надежнее"
                 />
                 <View style={styles.containerInput}>
                     <InputPassword

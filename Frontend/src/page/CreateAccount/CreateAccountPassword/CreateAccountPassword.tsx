@@ -3,7 +3,6 @@ import { AsyncStorage, SafeAreaView, View } from 'react-native';
 import { useHistory } from 'react-router-native';
 import { useDispatch, useSelector } from 'react-redux';
 import InputPassword from '../../../components/InputPassword/InputPassword';
-import ErrorMessage from '../../../components/ErrorMessage/ErrorMessage';
 import HeaderTitle from '../../../components/HeaderTitle/HeaderTitle';
 import BackStepButton from '../../../components/BackStepButton/BackStepButton';
 import Loader from '../../../components/Loader/Loader';
@@ -14,6 +13,7 @@ import REQUEST from '../../../constants/REQUEST';
 import styles from './CreateAccountPassword.style';
 import ValidError from '../../../components/ValidError/ValidError';
 import { selectors } from '../../../store/reducers/authorizationReducer';
+import ErrorIndicator from '../../../components/ErrorBoundary/ErrorIndicator/ErrorIndicator';
 
 const CreateAccountPassword = () => {
     const history = useHistory();
@@ -71,6 +71,15 @@ const CreateAccountPassword = () => {
                 dispatch({ type: 'SEND_EMAIL_CODE_SUCCESS', payload });
                 history.push('/activate-account');
             } catch (err) {
+                if (err?.response?.data?.message === 'ACCOUNT_ALREADY_EXISTS') {
+                    alert('Пользователь с таким email уже существует!');
+                }
+                if (err?.response?.data?.message === 'FORM_NOT_VALID') {
+                    alert('Форма заполнена некорректно!');
+                }
+                if (err?.response?.data?.message === 'WRONG_EMAIL_FORMAT') {
+                    alert('Неверный формат email адреса!');
+                }
                 console.log(err?.response?.data);
                 setRequestStatus(REQUEST.ERROR);
             }
@@ -81,22 +90,19 @@ const CreateAccountPassword = () => {
         return <Loader />;
     }
 
-    if (requestStatus === REQUEST.ERROR) {
-        return <ErrorMessage errorMessage="Не удалось зарегистрироваться" />;
-    }
-
     return (
         <SafeAreaView>
             <View style={styles.containerPage}>
                 <BackStepButton />
                 <HeaderTitle
                     title="Впишите пароль"
-                    subtitle="В пароле нужно не меньше 8 символов и хотя бы одна цифра. Так надежнее"
+                    subtitle="В пароле нужно не меньше 8 символов и хотя бы одну цифру. Так надежнее"
                 />
                 <View style={styles.containerInput}>
                     <InputPassword password={password} onChangeText={setPassword} onEndEditing={getValidPassword} />
                 </View>
                 {!isValidPassword && <ValidError>{validMessage}</ValidError>}
+                {requestStatus === REQUEST.ERROR && <ErrorIndicator message="Не удалось зарегистрироваться" />}
                 <CustomButton
                     width={228}
                     onPress={handleRegistration}
