@@ -6,7 +6,7 @@ type Props = {
     title: string;
     onPress: () => void;
     disabled: boolean;
-    circleElements: ReactNodeArray;
+    circleElements?: ReactNodeArray;
     width?: number | string;
     marginTop?: number;
     color?: string;
