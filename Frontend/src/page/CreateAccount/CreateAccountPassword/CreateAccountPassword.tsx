@@ -14,7 +14,7 @@ import styles from './CreateAccountPassword.style';
 import ValidError from '../../../components/ValidError/ValidError';
 import { selectors } from '../../../store/reducers/authorizationReducer';
 import ErrorIndicator from '../../../components/ErrorBoundary/ErrorIndicator/ErrorIndicator';
-import DismissKeyboard from "../../../components/DismissKeyboard/DismissKeyboard";
+import DismissKeyboard from '../../../components/DismissKeyboard/DismissKeyboard';
 
 const CreateAccountPassword = () => {
     const history = useHistory();
@@ -113,7 +113,7 @@ const CreateAccountPassword = () => {
                     />
                 </View>
             </SafeAreaView>
-        </TouchableWithoutFeedback>
+        </DismissKeyboard>
     );
 };
 
