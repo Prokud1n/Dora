@@ -167,8 +167,9 @@ export default class AddCouponActions {
         return (dispatch, getState) => {
             const state = getState();
             const coupons = selectorsCoupon.coupons(state);
-            const filterNonArchived = coupons.non_archived.filter((coupon) => coupon.name.includes(search));
-            const filterArchived = coupons.archived.filter((coupon) => coupon.name.includes(search));
+            const handleSearch = (coupon) => coupon.name.toLowerCase().includes(search.toLowerCase());
+            const filterNonArchived = coupons.non_archived.filter(handleSearch);
+            const filterArchived = coupons.archived.filter(handleSearch);
             const filterCoupons = {
                 non_archived: filterNonArchived,
                 archived: filterArchived

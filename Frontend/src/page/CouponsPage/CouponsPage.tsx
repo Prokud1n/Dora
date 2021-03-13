@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, TextInput, View, Text, ScrollView, AsyncStorage } from 'react-native';
+import { SafeAreaView, TextInput, View, Text, ScrollView } from 'react-native';
 import { useHistory } from 'react-router-native';
 import { useDispatch, useSelector } from 'react-redux';
 import TouchableSVG from '../../components/TouchableSVG/TouchableSVG';
