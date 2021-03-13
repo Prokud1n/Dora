@@ -14,6 +14,7 @@ import styles from './CreateAccountPassword.style';
 import ValidError from '../../../components/ValidError/ValidError';
 import { selectors } from '../../../store/reducers/authorizationReducer';
 import ErrorIndicator from '../../../components/ErrorBoundary/ErrorIndicator/ErrorIndicator';
+import DismissKeyboard from "../../../components/DismissKeyboard/DismissKeyboard";
 
 const CreateAccountPassword = () => {
     const history = useHistory();
@@ -91,26 +92,28 @@ const CreateAccountPassword = () => {
     }
 
     return (
-        <SafeAreaView>
-            <View style={styles.containerPage}>
-                <BackStepButton />
-                <HeaderTitle
-                    title="Впишите пароль"
-                    subtitle="В пароле нужно не меньше 8 символов и хотя бы одну цифру. Так надежнее"
-                />
-                <View style={styles.containerInput}>
-                    <InputPassword password={password} onChangeText={setPassword} onEndEditing={getValidPassword} />
+        <DismissKeyboard>
+            <SafeAreaView>
+                <View style={styles.containerPage}>
+                    <BackStepButton />
+                    <HeaderTitle
+                        title="Впишите пароль"
+                        subtitle="В пароле нужно не меньше 8 символов и хотя бы одну цифру. Так надежнее"
+                    />
+                    <View style={styles.containerInput}>
+                        <InputPassword password={password} onChangeText={setPassword} onEndEditing={getValidPassword} />
+                    </View>
+                    {!isValidPassword && <ValidError>{validMessage}</ValidError>}
+                    {requestStatus === REQUEST.ERROR && <ErrorIndicator message="Не удалось зарегистрироваться" />}
+                    <CustomButton
+                        width={228}
+                        onPress={handleRegistration}
+                        disabled={password.length === 0}
+                        title="Зарегистрироваться"
+                    />
                 </View>
-                {!isValidPassword && <ValidError>{validMessage}</ValidError>}
-                {requestStatus === REQUEST.ERROR && <ErrorIndicator message="Не удалось зарегистрироваться" />}
-                <CustomButton
-                    width={228}
-                    onPress={handleRegistration}
-                    disabled={password.length === 0}
-                    title="Зарегистрироваться"
-                />
-            </View>
-        </SafeAreaView>
+            </SafeAreaView>
+        </TouchableWithoutFeedback>
     );
 };
 

@@ -14,6 +14,7 @@ import Loader from '../../components/Loader/Loader';
 
 import styles from './Settings.style';
 import { selectors } from '../../store/reducers/authorizationReducer';
+import DismissKeyboard from '../../components/DismissKeyboard/DismissKeyboard';
 
 const Settings = () => {
     const history = useHistory();
@@ -95,58 +96,64 @@ const Settings = () => {
     }
 
     return (
-        <SafeAreaView>
-            <View style={styles.containerPage}>
-                <View style={styles.containerHeader}>
-                    <BackStepButton />
-                    <Text style={styles.textSettings}>Настройки</Text>
-                </View>
-                <View style={styles.containerEmail}>
-                    <SVG svg="Mail" height="30" width="10%" />
-                    <Text style={styles.email}>{email}</Text>
-                </View>
-                <View style={styles.containerInput}>
-                    <InputPassword password={oldPassword} onChangeText={setOldPassword} placeholder="Старый пароль" />
-                    <InputPassword
-                        password={newPassword}
-                        onChangeText={setNewPassword}
-                        onEndEditing={handleEndEditing}
-                        placeholder="Новый пароль"
+        <DismissKeyboard>
+            <SafeAreaView>
+                <View style={styles.containerPage}>
+                    <View style={styles.containerHeader}>
+                        <BackStepButton />
+                        <Text style={styles.textSettings}>Настройки</Text>
+                    </View>
+                    <View style={styles.containerEmail}>
+                        <SVG svg="Mail" height="30" width="10%" />
+                        <Text style={styles.email}>{email}</Text>
+                    </View>
+                    <View style={styles.containerInput}>
+                        <InputPassword
+                            password={oldPassword}
+                            onChangeText={setOldPassword}
+                            placeholder="Старый пароль"
+                        />
+                        <InputPassword
+                            password={newPassword}
+                            onChangeText={setNewPassword}
+                            onEndEditing={handleEndEditing}
+                            placeholder="Новый пароль"
+                        />
+                    </View>
+                    {!isValidPassword && <ValidError>{validMessage}</ValidError>}
+                    {requestStatus === REQUEST.ERROR && <ValidError>Не удалось сменить пароль</ValidError>}
+                    <CustomButton
+                        title="Сменить пароль"
+                        width={228}
+                        disabled={oldPassword.length === 0 || newPassword.length === 0}
+                        marginTop={30}
+                        color="#8C8C8C"
+                        onPress={handleChangePassword}
                     />
-                </View>
-                {!isValidPassword && <ValidError>{validMessage}</ValidError>}
-                {requestStatus === REQUEST.ERROR && <ValidError>Не удалось сменить пароль</ValidError>}
-                <CustomButton
-                    title="Сменить пароль"
-                    width={228}
-                    disabled={oldPassword.length === 0 || newPassword.length === 0}
-                    marginTop={30}
-                    color="#8C8C8C"
-                    onPress={handleChangePassword}
-                />
-                <CustomButton
-                    title="Выйти из аккаунта"
-                    width={228}
-                    marginTop={16}
-                    disabled={false}
-                    color="#FF3826"
-                    onPress={handleRedirectToAuthorization}
-                />
-                <View style={styles.containerSocialNetworks}>
-                    <View style={styles.socialNetworkItem}>
-                        <SVG svg="VK" height="70%" width="70%" />
+                    <CustomButton
+                        title="Выйти из аккаунта"
+                        width={228}
+                        marginTop={16}
+                        disabled={false}
+                        color="#FF3826"
+                        onPress={handleRedirectToAuthorization}
+                    />
+                    <View style={styles.containerSocialNetworks}>
+                        <View style={styles.socialNetworkItem}>
+                            <SVG svg="VK" height="70%" width="70%" />
+                        </View>
+                        <View style={[styles.socialNetworkItem, styles.marginLeft]}>
+                            <SVG svg="Telegram" height="70%" width="70%" />
+                        </View>
                     </View>
-                    <View style={[styles.socialNetworkItem, styles.marginLeft]}>
-                        <SVG svg="Telegram" height="70%" width="70%" />
+                    <View style={styles.footer}>
+                        <Text style={styles.footerText}>Возникли вопросы?</Text>
+                        <Text style={styles.footerText}>Свяжитесь с нами - поможем</Text>
                     </View>
+                    <HeaderTitle title="" subtitle="Dora - приложение для помощи с гарантийнми талонами" />
                 </View>
-                <View style={styles.footer}>
-                    <Text style={styles.footerText}>Возникли вопросы?</Text>
-                    <Text style={styles.footerText}>Свяжитесь с нами - поможем</Text>
-                </View>
-                <HeaderTitle title="" subtitle="Dora - приложение для помощи с гарантийнми талонами" />
-            </View>
-        </SafeAreaView>
+            </SafeAreaView>
+        </DismissKeyboard>
     );
 };
 
