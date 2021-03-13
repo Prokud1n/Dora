@@ -14,6 +14,7 @@ import REQUEST from '../../constants/REQUEST';
 import regexpEmail from '../../constants/regexpEmail';
 
 import styles from './Authorization.style';
+import DismissKeyboard from '../../components/DismissKeyboard/DismissKeyboard';
 
 const Authorization = () => {
     const dispatch = useDispatch();
@@ -50,7 +51,7 @@ const Authorization = () => {
                     auth: {
                         id,
                         verified,
-                        email,
+                        email
                     }
                 };
 
@@ -102,26 +103,31 @@ const Authorization = () => {
     }
 
     return (
-        <SafeAreaView>
-            <View style={styles.containerPage}>
-                <BackStepButton onPress={handleRedirectToSocialNetwork} />
-                <HeaderTitle title="Уже с нами?" subtitle="Тогда введите почту с паролем от аккаунта и начнем работу" />
-                <View style={styles.containerInput}>
-                    <InputEmail email={email} onChangeText={handleChangeEmail} />
-                    <InputPassword password={password} onChangeText={setPassword} />
+        <DismissKeyboard>
+            <SafeAreaView>
+                <View style={styles.containerPage}>
+                    <BackStepButton onPress={handleRedirectToSocialNetwork} />
+                    <HeaderTitle
+                        title="Уже с нами?"
+                        subtitle="Тогда введите почту с паролем от аккаунта и начнем работу"
+                    />
+                    <View style={styles.containerInput}>
+                        <InputEmail email={email} onChangeText={handleChangeEmail} />
+                        <InputPassword password={password} onChangeText={setPassword} />
+                    </View>
+                    {!isValidUser && <ValidError>Проверьте правильность введенных данных</ValidError>}
+                    <View style={styles.containerActionButton}>
+                        <Button title="Забыли пароль?" onPress={handleRedirectToForgetPasswordPage} />
+                        <Button title="Создать аккаунт?" onPress={handleRedirectToCreateAccount} />
+                    </View>
+                    <CustomButton
+                        title="Войти"
+                        onPress={handleAuthorization}
+                        disabled={password.length === 0 || email.length === 0}
+                    />
                 </View>
-                {!isValidUser && <ValidError>Проверьте правильность введенных данных</ValidError>}
-                <View style={styles.containerActionButton}>
-                    <Button title="Забыли пароль?" onPress={handleRedirectToForgetPasswordPage} />
-                    <Button title="Создать аккаунт?" onPress={handleRedirectToCreateAccount} />
-                </View>
-                <CustomButton
-                    title="Войти"
-                    onPress={handleAuthorization}
-                    disabled={password.length === 0 || email.length === 0}
-                />
-            </View>
-        </SafeAreaView>
+            </SafeAreaView>
+        </DismissKeyboard>
     );
 };
 

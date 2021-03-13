@@ -12,6 +12,7 @@ import NotFoundCoupons from '../../components/NotFoundCoupons/NotFoundCoupons';
 import CouponsList from '../../components/CouponsList/CouponsList';
 
 import styles from './CouponsPage.style';
+import DismissKeyboard from '../../components/DismissKeyboard/DismissKeyboard';
 
 const CouponsPage = () => {
     const history = useHistory();
@@ -80,21 +81,28 @@ const CouponsPage = () => {
     };
 
     return (
-        <SafeAreaView>
-            <View style={styles.containerPage}>
-                <View style={styles.containerHeader}>
-                    <TouchableSVG svg="settings" height="100%" width="100%" onPress={handleRedirectToSettings} />
-                    <TextInput
-                        style={styles.input}
-                        value={search}
-                        onChangeText={handleSearch}
-                        placeholder="Поиск по талонам"
-                    />
-                    <TouchableSVG svg="addCoupon" height="100%" width="100%" onPress={handleRedirectToInfoPurchase} />
+        <DismissKeyboard>
+            <SafeAreaView>
+                <View style={styles.containerPage}>
+                    <View style={styles.containerHeader}>
+                        <TouchableSVG svg="settings" height="100%" width="100%" onPress={handleRedirectToSettings} />
+                        <TextInput
+                            style={styles.input}
+                            value={search}
+                            onChangeText={handleSearch}
+                            placeholder="Поиск по талонам"
+                        />
+                        <TouchableSVG
+                            svg="addCoupon"
+                            height="100%"
+                            width="100%"
+                            onPress={handleRedirectToInfoPurchase}
+                        />
+                    </View>
+                    {renderCouponList()}
                 </View>
-                {renderCouponList()}
-            </View>
-        </SafeAreaView>
+            </SafeAreaView>
+        </DismissKeyboard>
     );
 };
 

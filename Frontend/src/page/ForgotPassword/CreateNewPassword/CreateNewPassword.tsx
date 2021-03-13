@@ -14,6 +14,7 @@ import AuthorizationActions from '../../../store/actions/authorizationActions';
 
 import styles from './CreateNewPassword.style';
 import { selectors } from '../../../store/reducers/authorizationReducer';
+import DismissKeyboard from '../../../components/DismissKeyboard/DismissKeyboard';
 
 const CreateNewPassword = () => {
     const history = useHistory();
@@ -92,37 +93,39 @@ const CreateNewPassword = () => {
     }
 
     return (
-        <SafeAreaView>
-            <View style={styles.containerPage}>
-                <BackStepButton />
-                <HeaderTitle
-                    title="Впишите новый пароль"
-                    subtitle="В пароле нужно не меньше 8 символов и хотя бы одну цифру. Так надежнее"
-                />
-                <View style={styles.containerInput}>
-                    <InputPassword
-                        password={password}
-                        onChangeText={setPassword}
-                        onEndEditing={handleEndEditing}
-                        placeholder="Новый пароль"
+        <DismissKeyboard>
+            <SafeAreaView>
+                <View style={styles.containerPage}>
+                    <BackStepButton />
+                    <HeaderTitle
+                        title="Впишите новый пароль"
+                        subtitle="В пароле нужно не меньше 8 символов и хотя бы одну цифру. Так надежнее"
                     />
-                    <InputPassword
-                        password={confirmPassword}
-                        onChangeText={setConfirmPassword}
-                        onEndEditing={handleEndEditing}
-                        placeholder="Подтвердите новый пароль"
+                    <View style={styles.containerInput}>
+                        <InputPassword
+                            password={password}
+                            onChangeText={setPassword}
+                            onEndEditing={handleEndEditing}
+                            placeholder="Новый пароль"
+                        />
+                        <InputPassword
+                            password={confirmPassword}
+                            onChangeText={setConfirmPassword}
+                            onEndEditing={handleEndEditing}
+                            placeholder="Подтвердите новый пароль"
+                        />
+                    </View>
+                    {!isValidPassword && <ValidError>{validMessage}</ValidError>}
+                    {!isPasswordsEqual && <ValidError>Пароли не совпадают</ValidError>}
+                    <CustomButton
+                        width={228}
+                        onPress={handleRegistration}
+                        disabled={password.length === 0 || confirmPassword.length === 0}
+                        title="Создать новый пароль"
                     />
                 </View>
-                {!isValidPassword && <ValidError>{validMessage}</ValidError>}
-                {!isPasswordsEqual && <ValidError>Пароли не совпадают</ValidError>}
-                <CustomButton
-                    width={228}
-                    onPress={handleRegistration}
-                    disabled={password.length === 0 || confirmPassword.length === 0}
-                    title="Создать новый пароль"
-                />
-            </View>
-        </SafeAreaView>
+            </SafeAreaView>
+        </DismissKeyboard>
     );
 };
 
