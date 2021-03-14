@@ -2,17 +2,16 @@ import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
     photo: {
-        marginTop: 40,
-        position: 'relative',
         width: '100%',
         height: '100%'
     },
     addPhoto: {
-        right: -100,
-        top: 0,
-        position: 'absolute',
-        height: 200,
-        width: 300
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 20,
+        height: 40,
+        width: 100
     },
     containerButton: {
         display: 'flex',
@@ -20,11 +19,13 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     backStep: {
-        left: 0,
-        top: 0,
-        position: 'absolute',
-        height: 200,
-        width: 300
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 20,
+        marginLeft: 7,
+        height: 40,
+        width: 100
     }
 });
 
