@@ -1,13 +1,4 @@
-import {
-    SafeAreaView,
-    TextInput,
-    View,
-    Text,
-    Button,
-    Keyboard,
-    TouchableOpacity,
-    TouchableWithoutFeedback
-} from 'react-native';
+import { SafeAreaView, TextInput, View, Text, Button, Keyboard, TouchableOpacity } from 'react-native';
 import React, { useEffect, useMemo, useState } from 'react';
 import { Picker } from '@react-native-picker/picker';
 import { useHistory } from 'react-router-native';
@@ -22,6 +13,7 @@ import { selectors } from '../../../store/reducers/addCouponReducer';
 import getWordShape from '../../../utils/getWordShape';
 import DatePicker from '../../../components/DatePicker/DatePicker';
 import { getCurrentDate, getDateWithSplit } from '../../../utils/getFormatDate';
+import DismissKeyboard from '../../../components/DismissKeyboard/DismissKeyboard';
 
 const MONTH_SHAPE = {
     first: 'месяц',
@@ -139,16 +131,10 @@ const AddCouponInfoAboutPurchase = () => {
         setIsOpenPicker(false);
     };
 
-    const handleHide = () => {
-        Keyboard.dismiss();
-        hideDatePicker();
-        hidePicker();
-    };
-
     const dateTitle = useMemo(() => (date ? getDateWithSplit(date) : 'Выберите дату покупки'), [date]);
 
     return (
-        <TouchableWithoutFeedback onPress={handleHide} accessible={false}>
+        <DismissKeyboard>
             <SafeAreaView>
                 <View style={styles.containerPage}>
                     <HeaderAddCoupon />
@@ -216,7 +202,7 @@ const AddCouponInfoAboutPurchase = () => {
                     )}
                 </View>
             </SafeAreaView>
-        </TouchableWithoutFeedback>
+        </DismissKeyboard>
     );
 };
 

@@ -17,10 +17,6 @@ export type Coupon = {
 };
 
 export type AddCouponState = {
-    viewPhoto: {
-        photo: string;
-        isCanChecked: boolean;
-    };
     checkedPhoto: any;
     photosGallery: any;
     infoPurchase: {
@@ -75,16 +71,11 @@ export const selectors = {
     categories: (state: RootState) => state.addCoupon.categories,
     coupons: (state: RootState) => state.addCoupon.coupons,
     filterCoupons: (state: RootState) => state.addCoupon.filterCoupons,
-    photo: (state: RootState) => state.addCoupon.viewPhoto.photo,
     isCanChecked: (state: RootState) => state.addCoupon.viewPhoto.isCanChecked,
     requestStatusCoupons: (state: RootState) => state.addCoupon.requestStatusCoupons
 };
 
 const initialState = {
-    viewPhoto: {
-        photo: '',
-        isCanChecked: true
-    },
     checkedPhoto: {},
     photosGallery: [],
     infoPurchase: {
@@ -110,8 +101,6 @@ const initialState = {
 
 function addCouponReducer(state: AddCouponState = initialState, action: AddCouponAction) {
     switch (action.type) {
-        case 'VIEW_PHOTO':
-            return { ...state, ...action.payload };
         case 'UPDATE_CHECKED_PHOTO':
             return { ...state, ...action.payload };
         case 'SAVE_PHOTOS_GALLERY':

@@ -35,8 +35,7 @@ const ActiveCouponPhoto = ({ fileUrl }: Props) => {
             });
     }, [fileUrl]);
 
-    const handleOpenPhoto = (uri) => {
-        dispatch(AddCouponActions.viewPhoto(uri, false));
+    const handleOpenPhoto = () => {
         setIsOpenPhoto(true);
     };
 
@@ -55,7 +54,7 @@ const ActiveCouponPhoto = ({ fileUrl }: Props) => {
     return (
         Boolean(photo) && (
             <>
-                <TouchableOpacity onPress={() => handleOpenPhoto(photo)}>
+                <TouchableOpacity onPress={handleOpenPhoto}>
                     <Image
                         style={styles.photo}
                         source={{
@@ -65,7 +64,7 @@ const ActiveCouponPhoto = ({ fileUrl }: Props) => {
                 </TouchableOpacity>
                 {isOpenPhoto && (
                     <Modal>
-                        <ViewPhoto onClose={() => setIsOpenPhoto(false)} />
+                        <ViewPhoto onClose={() => setIsOpenPhoto(false)} photo={photo} />
                     </Modal>
                 )}
             </>

@@ -1,39 +1,35 @@
 import React from 'react';
 import { Button, Image, TouchableOpacity, View } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router-native';
+import { useDispatch } from 'react-redux';
 import BackStepButton from '../../components/BackStepButton/BackStepButton';
 import AddCouponActions from '../../store/actions/addCouponActions';
 
 import styles from './ViewPhoto.style';
-import { selectors } from '../../store/reducers/addCouponReducer';
 
-const ViewPhoto = ({ onClose }) => {
+type IProps = {
+    onClose: () => void;
+    photo: string;
+    checkedPhoto?: any;
+};
+
+const ViewPhoto = ({ onClose, photo, checkedPhoto }: IProps) => {
     const dispatch = useDispatch();
-    const history = useHistory();
-    const photo = useSelector(selectors.photo);
-    const checkedPhoto = useSelector(selectors.checkedPhoto);
-    const isCanChecked = useSelector(selectors.isCanChecked);
 
     const handleCheck = () => {
         const newCheckedPhoto = { ...checkedPhoto };
 
         newCheckedPhoto[photo] = !checkedPhoto[photo];
         dispatch(AddCouponActions.updateCheckedPhoto(newCheckedPhoto));
-        history.push('./photo');
-    };
-
-    const handleRedirectToBackStep = () => {
-        history.goBack();
+        onClose();
     };
 
     return (
         <>
             <View style={styles.containerButton}>
-                <TouchableOpacity style={styles.backStep} onPress={handleRedirectToBackStep}>
+                <TouchableOpacity style={styles.backStep} onPress={onClose}>
                     <BackStepButton onPress={onClose} />
                 </TouchableOpacity>
-                {isCanChecked ? (
+                {checkedPhoto ? (
                     <View style={styles.addPhoto}>
                         <Button title={checkedPhoto[photo] ? 'Отменить' : 'Выбрать'} onPress={handleCheck} />
                     </View>

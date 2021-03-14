@@ -37,12 +37,15 @@ const AddCouponPhoto = () => {
         setCaptures(photosGallery);
     }, [photosGallery]);
 
+    useEffect(() => {
+        setCheckedPhoto(initialCheckedPhone);
+    }, [initialCheckedPhone]);
+
     const getPermission = () => {
         (async () => {
             const cameraRoll = await Permissions.askAsync(Permissions.CAMERA_ROLL);
             const camera = await Permissions.askAsync(Permissions.CAMERA);
-            const audio = await Permissions.askAsync(Permissions.AUDIO_RECORDING);
-            const hasCameraPermission = camera.status === 'granted' && audio.status === 'granted';
+            const hasCameraPermission = camera.status === 'granted';
 
             setHasCameraPermission(hasCameraPermission);
 

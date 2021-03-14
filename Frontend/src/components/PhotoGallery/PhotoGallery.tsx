@@ -1,14 +1,12 @@
-import { Image, TouchableOpacity, View } from 'react-native';
-import React from 'react';
-import { useHistory } from 'react-router-native';
-import { useDispatch } from 'react-redux';
+import { Image, Modal, TouchableOpacity, View } from 'react-native';
+import React, { useState } from 'react';
 import CheckMarkPhoto from '../CheckMarkPhoto/CheckMarkPhoto';
 import Loader from '../Loader/Loader';
 import REQUEST from '../../constants/REQUEST';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
-import AddCouponActions from '../../store/actions/addCouponActions';
 
 import styles from '../../page/AddCoupon/AddCouponPhoto/AddCouponPhoto.style';
+import ViewPhoto from '../../page/ViewPhoto/ViewPhoto';
 
 type Props = {
     photosGallery: any;
@@ -18,13 +16,8 @@ type Props = {
 };
 
 const PhotoGallery = ({ photosGallery, checkedPhoto, onPress, requestStatus }: Props) => {
-    const dispatch = useDispatch();
-    const history = useHistory();
-
-    const handleOpenPhoto = (uri) => {
-        dispatch(AddCouponActions.viewPhoto(uri));
-        history.push('/viewPhoto');
-    };
+    const [isOpenPhoto, setIsOpenPhoto] = useState(false);
+    const [photo, setPhoto] = useState('');
 
     if (requestStatus === REQUEST.LOADING) {
         return <Loader />;
@@ -34,16 +27,35 @@ const PhotoGallery = ({ photosGallery, checkedPhoto, onPress, requestStatus }: P
         return <ErrorMessage errorMessage="Не удалось загрузить фото из вашей галлереи" />;
     }
 
-    return photosGallery.map((p) => (
-        <View key={p.creationTime + p.uri}>
-            <View style={styles.containerCheckMark}>
-                <CheckMarkPhoto width="60%" height="60%" checked={checkedPhoto[p.uri]} onPress={onPress} uri={p.uri} />
-            </View>
-            <TouchableOpacity onPress={() => handleOpenPhoto(p.uri)}>
-                <Image style={styles.photo} source={{ uri: p.uri }} />
-            </TouchableOpacity>
-        </View>
-    ));
+    return (
+        <>
+            {photosGallery.map((p) => (
+                <View key={p.creationTime + p.uri}>
+                    <View style={styles.containerCheckMark}>
+                        <CheckMarkPhoto
+                            width="60%"
+                            height="60%"
+                            checked={checkedPhoto[p.uri]}
+                            onPress={onPress}
+                            uri={p.uri}
+                        />
+                    </View>
+                    <TouchableOpacity
+                        onPress={() => {
+                            setPhoto(p.uri);
+                            setIsOpenPhoto(true);
+                        }}>
+                        <Image style={styles.photo} source={{ uri: p.uri }} />
+                    </TouchableOpacity>
+                </View>
+            ))}
+            {isOpenPhoto && (
+                <Modal>
+                    <ViewPhoto onClose={() => setIsOpenPhoto(false)} photo={photo} checkedPhoto={checkedPhoto} />
+                </Modal>
+            )}
+        </>
+    );
 };
 
 export default React.memo(PhotoGallery);
