@@ -8,7 +8,7 @@ export default class AddCouponActions {
     }
 
     static savePhotosGallery(photosGallery) {
-        return { type: 'SAVE_PHOTOS_GALLERY', payload: { photosGallery } };
+        return { type: 'SAVE_PHOTOS_GALLERY', payload: photosGallery };
     }
 
     static saveInfoAboutPurchase({ couponName, shopName, dateOfPurchase, typeWarrantyPeriod, warrantyPeriod }) {

@@ -5,7 +5,7 @@ import Loader from '../Loader/Loader';
 import REQUEST from '../../constants/REQUEST';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
-import styles from '../../page/AddCoupon/AddCouponPhoto/AddCouponPhoto.style';
+import styles from './PhotoGallery.style';
 import ViewPhoto from '../../page/ViewPhoto/ViewPhoto';
 
 type Props = {
@@ -18,10 +18,7 @@ type Props = {
 const PhotoGallery = ({ photosGallery, checkedPhoto, onPress, requestStatus }: Props) => {
     const [isOpenPhoto, setIsOpenPhoto] = useState(false);
     const [photo, setPhoto] = useState('');
-
-    if (requestStatus === REQUEST.LOADING) {
-        return <Loader />;
-    }
+    const isLoading = requestStatus === REQUEST.LOADING;
 
     if (requestStatus === REQUEST.ERROR) {
         return <ErrorMessage errorMessage="Не удалось загрузить фото из вашей галлереи" />;
@@ -49,6 +46,11 @@ const PhotoGallery = ({ photosGallery, checkedPhoto, onPress, requestStatus }: P
                     </TouchableOpacity>
                 </View>
             ))}
+            {isLoading && (
+                <View style={styles.loader}>
+                    <Loader />
+                </View>
+            )}
             {isOpenPhoto && (
                 <Modal>
                     <ViewPhoto onClose={() => setIsOpenPhoto(false)} photo={photo} checkedPhoto={checkedPhoto} />
