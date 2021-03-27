@@ -1,6 +1,7 @@
 import React from 'react';
 import { Camera } from 'expo-camera';
 import { View, Text } from 'react-native';
+import * as ImageManipulator from 'expo-image-manipulator';
 import Toolbar from './Toolbar';
 import styles from './Camera.style';
 import PhotoGallery from '../../components/PhotoGallery/PhotoGallery';
@@ -39,7 +40,28 @@ export default class CameraPage extends React.Component<Props> {
     };
 
     handleShortCapture = async () => {
-        const photo = await this.camera.takePictureAsync();
+        let photo = await this.camera.takePictureAsync({
+            exif: true
+        });
+
+        photo = await ImageManipulator.manipulateAsync(
+            photo.uri,
+            [
+                {
+                    rotate: 360
+                },
+                {
+                    resize: {
+                        width: photo.width,
+                        height: photo.height
+                    }
+                }
+            ],
+            {
+                compress: 1
+            }
+        );
+
         const uri = photo.uri.split('/');
         const filename = uri[uri.length - 1];
         const captures = { ...photo, filename };
