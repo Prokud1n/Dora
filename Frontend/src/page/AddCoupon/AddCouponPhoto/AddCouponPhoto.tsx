@@ -27,10 +27,12 @@ const AddCouponPhoto = () => {
     const infoCategory = useSelector(selectorsAddCoupon.infoCategory);
     const userId = useSelector(selectorsAuthorization.userId);
     const [requestStatus, setRequestStatus] = useState(REQUEST.STILL);
+    const [requestStatusGallery, setRequestStatusGallery] = useState(REQUEST.STILL);
     const [captures, setCaptures] = useState(photosGallery);
     const [checkedPhoto, setCheckedPhoto] = useState(initialCheckedPhone);
     const [hasCameraPermission, setHasCameraPermission] = useState(false);
     const [isOpenCamera, setIsOpenCamera] = useState(false);
+    const [lastPhoto, setLastPhoto] = useState('');
     const { couponName, shopName, dateOfPurchase, warrantyPeriod, typeWarrantyPeriod } = infoPurchase;
 
     useEffect(() => {
@@ -55,20 +57,35 @@ const AddCouponPhoto = () => {
         })();
     };
 
-    const getPhoto = () => {
+    const getPhoto = (quantity: number) => {
         (async () => {
-            setRequestStatus(REQUEST.LOADING);
+            setRequestStatusGallery(REQUEST.LOADING);
 
             try {
-                const media = await MediaLibrary.getAssetsAsync({
-                    first: 50,
-                    mediaType: ['photo']
-                });
+                const getOptions = () => {
+                    if (lastPhoto) {
+                        return {
+                            first: quantity,
+                            after: lastPhoto,
+                            mediaType: ['photo']
+                        };
+                    }
+
+                    return {
+                        first: quantity,
+                        mediaType: ['photo']
+                    };
+                };
+
+                const options = getOptions();
+                const media = await MediaLibrary.getAssetsAsync(options);
+
+                setLastPhoto(media.assets[media.assets.length - 1].id);
 
                 dispatch(AddCouponActions.savePhotosGallery(media.assets));
-                setRequestStatus(REQUEST.STILL);
+                setRequestStatusGallery(REQUEST.STILL);
             } catch {
-                setRequestStatus(REQUEST.ERROR);
+                setRequestStatusGallery(REQUEST.ERROR);
             }
         })();
     };
@@ -77,7 +94,7 @@ const AddCouponPhoto = () => {
         getPermission();
 
         if (captures.length === 0) {
-            getPhoto();
+            getPhoto(50);
         }
         return () => {
             dispatch(AddCouponActions.updateCheckedPhoto(checkedPhoto));
@@ -175,6 +192,18 @@ const AddCouponPhoto = () => {
             });
     };
 
+    const isCloseToBottom = ({ layoutMeasurement, contentOffset, contentSize }) => {
+        const paddingToBottom = 20;
+
+        return layoutMeasurement.height + contentOffset.y >= contentSize.height - paddingToBottom;
+    };
+
+    const handleScroll = ({ nativeEvent }) => {
+        if (isCloseToBottom(nativeEvent)) {
+            getPhoto(50);
+        }
+    };
+
     if (isOpenCamera) {
         return (
             <View>
@@ -214,12 +243,12 @@ const AddCouponPhoto = () => {
                 <View style={styles.containerCameraSVG}>
                     <TouchableSVG svg="photo" width="100%" height="100%" onPress={handleOpenCamera} />
                 </View>
-                <ScrollView contentContainerStyle={styles.containerPhoto}>
+                <ScrollView contentContainerStyle={styles.containerPhoto} onScroll={handleScroll}>
                     <PhotoGallery
                         photosGallery={captures}
                         onPress={handleCheckPhoto}
                         checkedPhoto={checkedPhoto}
-                        requestStatus={requestStatus}
+                        requestStatus={requestStatusGallery}
                     />
                 </ScrollView>
                 <View style={styles.footer}>

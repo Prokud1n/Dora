@@ -35,20 +35,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginTop: 30
     },
-    photo: {
-        position: 'relative',
-        width: 92,
-        height: 92,
-        borderRadius: 15,
-        marginRight: 6,
-        marginBottom: 6
-    },
-    containerCheckMark: {
-        position: 'absolute',
-        top: -17,
-        right: -12,
-        zIndex: 1
-    },
     footer: {
         position: 'absolute',
         bottom: 0,

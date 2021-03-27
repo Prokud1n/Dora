@@ -58,9 +58,7 @@ export type AddCouponState = {
 
 type AddCouponAction = {
     type: string;
-    payload: {
-        uri: string;
-    };
+    payload: any;
 };
 
 export const selectors = {
@@ -71,7 +69,6 @@ export const selectors = {
     categories: (state: RootState) => state.addCoupon.categories,
     coupons: (state: RootState) => state.addCoupon.coupons,
     filterCoupons: (state: RootState) => state.addCoupon.filterCoupons,
-    isCanChecked: (state: RootState) => state.addCoupon.viewPhoto.isCanChecked,
     requestStatusCoupons: (state: RootState) => state.addCoupon.requestStatusCoupons
 };
 
@@ -104,7 +101,7 @@ function addCouponReducer(state: AddCouponState = initialState, action: AddCoupo
         case 'UPDATE_CHECKED_PHOTO':
             return { ...state, ...action.payload };
         case 'SAVE_PHOTOS_GALLERY':
-            return { ...state, ...action.payload };
+            return { ...state, photosGallery: [...state.photosGallery, ...action.payload] };
         case 'SAVE_INFO_PURCHASE':
             return { ...state, ...action.payload };
         case 'FETCH_CATEGORY_SUCCESS':
