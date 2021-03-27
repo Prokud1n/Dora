@@ -1,6 +1,5 @@
 import { Image, Modal, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
 import styles from './ActiveCouponPhoto.style';
 import AddCouponActions from '../../../store/actions/addCouponActions';
 import ErrorIndicator from '../../ErrorBoundary/ErrorIndicator/ErrorIndicator';
@@ -14,7 +13,6 @@ type Props = {
 };
 
 const ActiveCouponPhoto = ({ fileUrl }: Props) => {
-    const dispatch = useDispatch();
     const [photo, setPhoto] = useState('');
     const [isOpenPhoto, setIsOpenPhoto] = useState(false);
     const [requestStatus, setRequestStatus] = useState(REQUEST.STILL);

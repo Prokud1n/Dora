@@ -1,9 +1,11 @@
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
+
+const { width: winWidth, height: winHeight } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
     photo: {
-        width: '100%',
-        height: '100%'
+        width: winWidth,
+        height: winHeight
     },
     addPhoto: {
         display: 'flex',
