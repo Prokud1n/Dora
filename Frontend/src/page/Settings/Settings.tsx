@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { SafeAreaView, View, Text, AsyncStorage } from 'react-native';
 import { useHistory } from 'react-router-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import BackStepButton from '../../components/BackStepButton/BackStepButton';
 import SVG from '../../components/SVG/SVG';
 import InputPassword from '../../components/InputPassword/InputPassword';
@@ -18,6 +18,7 @@ import DismissKeyboard from '../../components/DismissKeyboard/DismissKeyboard';
 
 const Settings = () => {
     const history = useHistory();
+    const dispatch = useDispatch();
 
     const email = useSelector(selectors.email);
     const userId = useSelector(selectors.userId);
@@ -56,8 +57,8 @@ const Settings = () => {
     const handleRedirectToAuthorization = () => {
         AuthorizationActions.logout()
             .then(() => {
-                AsyncStorage.clear();
                 history.push('/authorization');
+                dispatch({ type: 'LOGOUT' });
             })
             .catch(() => {
                 alert('Не удалось выйти из аккаунта');
