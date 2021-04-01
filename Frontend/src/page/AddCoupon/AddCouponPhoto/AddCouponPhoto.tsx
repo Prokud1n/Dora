@@ -204,12 +204,14 @@ const AddCouponPhoto = () => {
         }
     };
 
+    const disabledAddPhoto = checkedPhoto.length === 0 || requestStatus === REQUEST.LOADING;
+
     if (isOpenCamera) {
         return (
             <View>
                 <View style={styles.buttons}>
                     <BackStepButton onPress={handleCloseCamera} />
-                    <Button title="Добавить" onPress={handleAddCoupon} disabled={checkedPhoto.length === 0} />
+                    <Button title="Добавить" onPress={handleAddCoupon} disabled={disabledAddPhoto} />
                 </View>
                 <Camera
                     hasCameraPermission={hasCameraPermission}
@@ -252,7 +254,7 @@ const AddCouponPhoto = () => {
                     />
                 </ScrollView>
                 <View style={styles.footer}>
-                    <CustomButton title="Добавить" onPress={handleAddCoupon} disabled={checkedPhoto.length === 0} />
+                    <CustomButton title="Добавить" onPress={handleAddCoupon} disabled={disabledAddPhoto} />
                 </View>
             </View>
         </SafeAreaView>

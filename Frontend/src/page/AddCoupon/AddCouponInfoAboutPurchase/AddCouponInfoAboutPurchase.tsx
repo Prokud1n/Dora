@@ -12,7 +12,7 @@ import AddCouponActions from '../../../store/actions/addCouponActions';
 import { selectors } from '../../../store/reducers/addCouponReducer';
 import getWordShape from '../../../utils/getWordShape';
 import DatePicker from '../../../components/DatePicker/DatePicker';
-import { getCurrentDate, getDateWithSplit } from '../../../utils/getFormatDate';
+import { getCurrentDate, getDateWithDot, getDateWithSplit } from '../../../utils/getFormatDate';
 import DismissKeyboard from '../../../components/DismissKeyboard/DismissKeyboard';
 
 const MONTH_SHAPE = {
@@ -96,7 +96,7 @@ const AddCouponInfoAboutPurchase = () => {
             AddCouponActions.saveInfoAboutPurchase({
                 couponName,
                 shopName: shop,
-                dateOfPurchase: dateTitle,
+                dateOfPurchase: getDateWithSplit(date),
                 typeWarrantyPeriod: typePeriod,
                 warrantyPeriod
             })
@@ -115,11 +115,13 @@ const AddCouponInfoAboutPurchase = () => {
     const handleShowDatePicker = () => {
         Keyboard.dismiss();
         setIsOpenDatePicker(true);
-        setDate({
-            day: currentDay,
-            month: currentMonth,
-            year: currentYear
-        });
+        if (date === null) {
+            setDate({
+                day: currentDay,
+                month: currentMonth,
+                year: currentYear
+            });
+        }
     };
 
     const handleShowPicker = () => {
@@ -131,7 +133,7 @@ const AddCouponInfoAboutPurchase = () => {
         setIsOpenPicker(false);
     };
 
-    const dateTitle = useMemo(() => (date ? getDateWithSplit(date) : 'Выберите дату покупки'), [date]);
+    const dateTitle = useMemo(() => (date ? getDateWithDot(date) : 'Выберите дату покупки'), [date]);
 
     return (
         <DismissKeyboard>
@@ -166,6 +168,7 @@ const AddCouponInfoAboutPurchase = () => {
                                 value={warrantyPeriod}
                                 onChangeText={setWarrantyPeriod}
                                 placeholder={`Кол-во ${typeWarrantyPeriod}`}
+                                keyboardType="numeric"
                             />
                             <TouchableOpacity onPress={handleShowPicker} style={styles.typePeriod}>
                                 <View style={styles.typePeriod}>
@@ -189,9 +192,12 @@ const AddCouponInfoAboutPurchase = () => {
                             </>
                         )}
                     </View>
-                    <View style={styles.footer}>
-                        <CustomButton title="Далее" onPress={handleRedirectToPhoto} disabled={disabledNextButton} />
-                    </View>
+                    {!isOpenPicker && !isOpenDatePicker && (
+                        <View style={styles.footer}>
+                            <CustomButton title="Далее" onPress={handleRedirectToPhoto} disabled={disabledNextButton} />
+                        </View>
+                    )}
+
                     {isOpenDatePicker && (
                         <>
                             <View style={styles.containerHidePicker}>

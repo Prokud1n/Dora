@@ -111,7 +111,7 @@ function addCouponReducer(state: AddCouponState = initialState, action: AddCoupo
         case 'FETCH_COUPONS_SUCCESS':
             return { ...state, ...action.payload, requestStatusCoupons: REQUEST.STILL };
         case 'FETCH_COUPONS_ERROR':
-            return { ...state, requestStatusCoupons: REQUEST.ERROR };
+            return { ...state, ...action.payload, requestStatusCoupons: REQUEST.ERROR };
         case 'FETCH_WARRANTY_PHOTO_SUCCESS':
             return { ...state, ...action.payload };
         case 'FETCH_PHOTO_SUCCESS':

@@ -72,6 +72,7 @@ const CreateNewPassword = () => {
                 await AuthorizationActions.resetPassword(code, email, password);
                 setRequestStatus(REQUEST.STILL);
                 history.push('/authorization');
+                alert('Пароль успешно изменен');
             } catch (err) {
                 console.log(err?.response?.data);
                 if (err?.response?.data?.message === 'OLD_PASSWORD') {

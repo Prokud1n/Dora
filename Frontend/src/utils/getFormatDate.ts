@@ -27,6 +27,10 @@ export const getDateWithMonthName = (date) => {
     return `${date.getDate()} ${getMonthName(date.getMonth())} ${date.getFullYear()}`;
 };
 
+// (date) => 'YYYY.MM.DD'
+export const getDateWithDot = ({ year, month, day }) =>
+    `${day < 10 ? `0${day}` : day}.${month < 9 ? `0${month + 1}` : month + 1}.${year}`;
 // (date) => 'YYYY-MM-DD'
 export const getDateWithSplit = ({ year, month, day }) =>
     `${year}-${month < 10 ? `0${month + 1}` : month + 1}-${day < 10 ? `0${day}` : day}`;
+
