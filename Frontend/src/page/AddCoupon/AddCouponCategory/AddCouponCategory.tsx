@@ -3,7 +3,6 @@ import { SafeAreaView, Text, View } from 'react-native';
 import { useHistory } from 'react-router-native';
 import { useDispatch, useSelector } from 'react-redux';
 import HeaderAddCoupon from '../../../components/HeaderAddCoupon/HeaderAddCoupon';
-import CustomButton from '../../../components/CustomButton/CustomButton';
 import CategoryIcon from '../../../components/CategoryIcon/CategoryIcon';
 
 import styles from './AddCouponCategory.style';
@@ -22,11 +21,7 @@ const AddCouponCategory = () => {
     const history = useHistory();
     const dispatch = useDispatch();
     const categories = useSelector(selectors.categories);
-    const infoCategory = useSelector(selectors.infoCategory);
-    const initialIconActiveCategory = DICTIONARY_CATEGORIES.find(
-        ({ categoryId }) => categoryId === infoCategory.category_id
-    )?.icon;
-    const [iconActiveCategory, setActiveCategory] = useState(initialIconActiveCategory || '');
+    const [iconActiveCategory, setActiveCategory] = useState('');
 
     useEffect(() => {
         if (!categories.length) {
@@ -35,6 +30,10 @@ const AddCouponCategory = () => {
     }, []);
 
     useEffect(() => {
+        if (iconActiveCategory) {
+            history.push('/info-purchase');
+        }
+
         return () => {
             const activeCategoryId = DICTIONARY_CATEGORIES.find(({ icon }) => icon === iconActiveCategory)?.categoryId;
             const infoCategory = categories.find(({ category_id }) => category_id === activeCategoryId);
@@ -44,10 +43,6 @@ const AddCouponCategory = () => {
             }
         };
     }, [categories, iconActiveCategory]);
-
-    const handleRedirectToInfoPurchase = () => {
-        history.push('/info-purchase');
-    };
 
     const handlePressCategory = (icon) => {
         setActiveCategory(icon);
@@ -98,13 +93,6 @@ const AddCouponCategory = () => {
                         title="Другие"
                         subTitle="товары"
                         onPress={handlePressCategory}
-                    />
-                </View>
-                <View style={styles.footer}>
-                    <CustomButton
-                        title="Далее"
-                        onPress={handleRedirectToInfoPurchase}
-                        disabled={iconActiveCategory.length === 0}
                     />
                 </View>
             </View>
