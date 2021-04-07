@@ -10,6 +10,7 @@ import AuthorizationActions from '../../../store/actions/authorizationActions';
 import DismissKeyboard from '../../../components/DismissKeyboard/DismissKeyboard';
 import InputEmail from '../../../components/InputEmail/InputEmail';
 import BackStepButton from '../../../components/BackStepButton/BackStepButton';
+import * as AuthService from '../../../services/AuthService';
 
 import styles from './CreateAccountEmail.style';
 
@@ -35,8 +36,19 @@ const CreateAccountEmail = () => {
         const isValidEmail = getValidateEmail();
 
         if (isValidEmail) {
-            dispatch(AuthorizationActions.setEmailToStore(email));
-            history.push('/create-account-password');
+            AuthService.checkEmail(email)
+                .then(() => {
+                    dispatch(AuthorizationActions.setEmailToStore(email));
+                    history.push('/create-account-password');
+                })
+                .catch((err) => {
+                    if (err.message === 'ACCOUNT_ALREADY_EXISTS') {
+                        alert('Пользователь с таким email уже существует!');
+                    }
+                    if (err.message === 'WRONG_EMAIL_FORMAT') {
+                        alert('Неверный формат email адреса!');
+                    }
+                });
         }
     };
 
