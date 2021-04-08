@@ -29,7 +29,7 @@ const CouponsPage = () => {
 
     const handleSearch = (value) => {
         setSearch(value);
-        dispatch(AddCouponActions.searchCoupons(search));
+        dispatch(AddCouponActions.searchCoupons(value));
     };
 
     const handleRedirectToSettings = () => {
