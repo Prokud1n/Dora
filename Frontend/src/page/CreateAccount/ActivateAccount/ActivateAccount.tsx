@@ -1,7 +1,7 @@
 import { SafeAreaView, Text, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { CodeField, Cursor, useBlurOnFulfill, useClearByFocusCell } from 'react-native-confirmation-code-field';
 import HeaderTitle from '../../../components/HeaderTitle/HeaderTitle';
 import CustomButton from '../../../components/CustomButton/CustomButton';
@@ -13,9 +13,15 @@ import REQUEST from '../../../constants/REQUEST';
 import styles from './ActivateAccount.style';
 import BackStepButton from '../../../components/BackStepButton/BackStepButton';
 import { selectors } from '../../../store/reducers/authorizationReducer';
+import { notificationActions } from '../../../ducks/notifications';
 
 const ActivateAccount = () => {
     const history = useHistory();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        dispatch(notificationActions.addNotifications('Регистрация прошла успешно!'));
+    }, []);
 
     const [value, setValue] = useState('');
     const ref = useBlurOnFulfill({ value, cellCount: 4 });
