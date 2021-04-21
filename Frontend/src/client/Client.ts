@@ -1,6 +1,6 @@
-import { AsyncStorage } from 'react-native';
 import BaseHttpClient, { TOptions, THeaders, BaseHttpError, TAfterRequestFn } from './BaseHttpClient';
 import { noop, once } from '../utils/lodash';
+import AuthUtils from '../utils/AuthUtils';
 
 export class ClientError extends Error {
     name = 'ClientError';
@@ -103,15 +103,9 @@ class Client extends BaseHttpClient {
 }
 
 const getAccessToken = async (): Promise<string> => {
-    const userInfo = await AsyncStorage.getItem('userInfo');
+    const { token } = await AuthUtils.getAuthMetadata();
 
-    if (userInfo) {
-        const { token } = JSON.parse(userInfo);
-
-        return token;
-    }
-
-    return '';
+    return token || '';
 };
 
 const getClient = async () => {

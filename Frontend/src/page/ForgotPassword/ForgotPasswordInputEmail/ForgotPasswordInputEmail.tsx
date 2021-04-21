@@ -13,6 +13,7 @@ import BackStepButton from '../../../components/BackStepButton/BackStepButton';
 import AuthorizationActions from '../../../store/actions/authorizationActions';
 import regexpEmail from '../../../constants/regexpEmail';
 import REQUEST from '../../../constants/REQUEST';
+import * as AuthService from '../../../services/AuthService';
 
 import styles from './ForgotPasswordInputEmail.style';
 
@@ -44,7 +45,7 @@ const ForgotPasswordInputEmail = () => {
 
         if (isValidEmail) {
             setRequestStatus(REQUEST.LOADING);
-            AuthorizationActions.sendCodeToEmailForResetPassword(email)
+            AuthService.sendCodeToEmailForResetPassword(email)
                 .then(() => {
                     setRequestStatus(REQUEST.STILL);
                     dispatch(AuthorizationActions.setEmailToStore(email));
