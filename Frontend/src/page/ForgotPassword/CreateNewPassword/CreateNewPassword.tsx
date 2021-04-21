@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-native';
 import { useSelector } from 'react-redux';
 import { SafeAreaView, View } from 'react-native';
-import ErrorMessage from '../../../components/ErrorMessage/ErrorMessage';
 import BackStepButton from '../../../components/BackStepButton/BackStepButton';
 import HeaderTitle from '../../../components/HeaderTitle/HeaderTitle';
 import InputPassword from '../../../components/InputPassword/InputPassword';
@@ -10,7 +9,7 @@ import CustomButton from '../../../components/CustomButton/CustomButton';
 import ValidError from '../../../components/ValidError/ValidError';
 import Loader from '../../../components/Loader/Loader';
 import REQUEST from '../../../constants/REQUEST';
-import AuthorizationActions from '../../../store/actions/authorizationActions';
+import * as AuthService from '../../../services/AuthService';
 
 import styles from './CreateNewPassword.style';
 import { selectors } from '../../../store/reducers/authorizationReducer';
@@ -69,7 +68,7 @@ const CreateNewPassword = () => {
             setRequestStatus(REQUEST.LOADING);
 
             try {
-                await AuthorizationActions.resetPassword(code, email, password);
+                await AuthService.resetPassword(code, email, password);
                 setRequestStatus(REQUEST.STILL);
                 history.push('/authorization');
                 alert('Пароль успешно изменен');

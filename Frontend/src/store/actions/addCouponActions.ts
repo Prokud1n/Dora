@@ -1,6 +1,6 @@
-import { AsyncStorage } from 'react-native';
 import axios from '../../axios/axiosDora';
 import { selectors as selectorsCoupon } from '../reducers/addCouponReducer';
+import AuthUtils from '../../utils/AuthUtils';
 
 export default class AddCouponActions {
     static updateCheckedPhoto(checkedPhoto) {
@@ -37,8 +37,7 @@ export default class AddCouponActions {
         return async (dispatch) => {
             dispatch({ type: 'FETCH_CATEGORY_START' });
             try {
-                const userInfo = await AsyncStorage.getItem('userInfo');
-                const { token } = JSON.parse(userInfo);
+                const { token } = await AuthUtils.getAuthMetadata();
                 const response = await axios.get('/api/warranties/categories', {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -57,8 +56,7 @@ export default class AddCouponActions {
     }
 
     static addNewCoupon = async (formDataCoupon) => {
-        const userInfo = await AsyncStorage.getItem('userInfo');
-        const { token } = JSON.parse(userInfo);
+        const { token } = await AuthUtils.getAuthMetadata();
 
         return axios.post('/api/users/warranties', formDataCoupon, {
             headers: {
@@ -71,8 +69,7 @@ export default class AddCouponActions {
         return async (dispatch) => {
             dispatch({ type: 'FETCH_COUPONS_START' });
             try {
-                const userInfo = await AsyncStorage.getItem('userInfo');
-                const { token } = JSON.parse(userInfo);
+                const { token } = await AuthUtils.getAuthMetadata();
                 const response = await axios.get(`/api/users/${userId}/warranties`, {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -99,8 +96,7 @@ export default class AddCouponActions {
     }
 
     static fetchPhoto = async (fileUrl) => {
-        const userInfo = await AsyncStorage.getItem('userInfo');
-        const { token } = JSON.parse(userInfo);
+        const { token } = await AuthUtils.getAuthMetadata();
 
         return axios.get(fileUrl, {
             headers: {
@@ -114,8 +110,7 @@ export default class AddCouponActions {
         return async (dispatch) => {
             dispatch({ type: 'START_DELETE_COUPON' });
             try {
-                const userInfo = await AsyncStorage.getItem('userInfo');
-                const { token } = JSON.parse(userInfo);
+                const { token } = await AuthUtils.getAuthMetadata();
 
                 await axios.delete('/api/users/warranties', {
                     headers: {
@@ -134,8 +129,7 @@ export default class AddCouponActions {
         return async (dispatch, getState) => {
             dispatch({ type: 'START_CHANGE_COUPON' });
             try {
-                const userInfo = await AsyncStorage.getItem('userInfo');
-                const { token } = JSON.parse(userInfo);
+                const { token } = await AuthUtils.getAuthMetadata();
 
                 const response = await axios.patch(
                     '/api/users/warranties',

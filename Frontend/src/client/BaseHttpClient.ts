@@ -209,7 +209,7 @@ export default class BaseHttpClient {
             .then((response) => {
                 this.afterRequest({ url, options, isOwn });
 
-                return response;
+                return response.data;
             })
             .catch((err: BaseHttpError) => {
                 if (err.name === 'AbortError') {

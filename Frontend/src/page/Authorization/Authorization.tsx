@@ -1,4 +1,4 @@
-import { AsyncStorage, Button, SafeAreaView, View } from 'react-native';
+import { Button, SafeAreaView, View } from 'react-native';
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-native';
 import { useDispatch } from 'react-redux';
@@ -12,9 +12,11 @@ import Loader from '../../components/Loader/Loader';
 import AuthorizationActions from '../../store/actions/authorizationActions';
 import REQUEST from '../../constants/REQUEST';
 import regexpEmail from '../../constants/regexpEmail';
+import * as AuthService from '../../services/AuthService';
 
 import styles from './Authorization.style';
 import DismissKeyboard from '../../components/DismissKeyboard/DismissKeyboard';
+import AuthUtils from '../../utils/AuthUtils';
 
 const Authorization = () => {
     const dispatch = useDispatch();
@@ -26,7 +28,7 @@ const Authorization = () => {
 
     const sendCodeToEmailForActivateAccount = (id) => {
         setRequestStatus(REQUEST.LOADING);
-        AuthorizationActions.sendCodeToEmailForActivateAccount(id)
+        AuthService.sendCodeToEmailForActivateAccount(id)
             .then(() => {
                 setRequestStatus(REQUEST.STILL);
                 history.push('/activate-account');
@@ -36,13 +38,12 @@ const Authorization = () => {
 
     const signIn = () => {
         setRequestStatus(REQUEST.LOADING);
-        AuthorizationActions.signIn(email, password)
-            .then((response) => {
-                const { verified, id, token } = response.data.data;
+        AuthService.signIn(email, password)
+            .then(async (response) => {
+                console.log(response);
+                const { verified, id, token } = response;
 
-                const userInfo = JSON.stringify({ token, userId: id, email });
-
-                AsyncStorage.setItem('userInfo', userInfo);
+                await AuthUtils.setAuthMetadata({ token, userId: id, email });
 
                 return { verified, id, email };
             })
@@ -66,7 +67,8 @@ const Authorization = () => {
                     sendCodeToEmailForActivateAccount(id);
                 }
             })
-            .catch(() => {
+            .catch((err) => {
+                console.log(err);
                 setIsValidUser(false);
                 setRequestStatus(REQUEST.ERROR);
             });

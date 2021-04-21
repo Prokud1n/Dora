@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AsyncStorage, SafeAreaView, View } from 'react-native';
+import { SafeAreaView, View } from 'react-native';
 import { useHistory } from 'react-router-native';
 import { useDispatch, useSelector } from 'react-redux';
 import InputPassword from '../../../components/InputPassword/InputPassword';
@@ -7,14 +7,15 @@ import HeaderTitle from '../../../components/HeaderTitle/HeaderTitle';
 import BackStepButton from '../../../components/BackStepButton/BackStepButton';
 import Loader from '../../../components/Loader/Loader';
 import CustomButton from '../../../components/CustomButton/CustomButton';
-import AuthorizationActions from '../../../store/actions/authorizationActions';
 import REQUEST from '../../../constants/REQUEST';
+import * as AuthService from '../../../services/AuthService';
 
 import styles from './CreateAccountPassword.style';
 import ValidError from '../../../components/ValidError/ValidError';
 import { selectors } from '../../../store/reducers/authorizationReducer';
 import ErrorIndicator from '../../../components/ErrorBoundary/ErrorIndicator/ErrorIndicator';
 import DismissKeyboard from '../../../components/DismissKeyboard/DismissKeyboard';
+import AuthUtils from '../../../utils/AuthUtils';
 
 const CreateAccountPassword = () => {
     const history = useHistory();
@@ -54,8 +55,8 @@ const CreateAccountPassword = () => {
             setRequestStatus(REQUEST.LOADING);
 
             try {
-                const response = await AuthorizationActions.registration(email, password);
-                const { id, verified, token } = response.data.data;
+                const response = await AuthService.registration(email, password);
+                const { id, verified, token } = response;
                 const payload = {
                     auth: {
                         id,
@@ -64,9 +65,7 @@ const CreateAccountPassword = () => {
                     }
                 };
 
-                const userInfo = JSON.stringify({ token, userId: id, email });
-
-                await AsyncStorage.setItem('userInfo', userInfo);
+                await AuthUtils.setAuthMetadata({ token, userId: id, email });
 
                 setRequestStatus(REQUEST.STILL);
                 dispatch({ type: 'SEND_EMAIL_CODE_SUCCESS', payload });

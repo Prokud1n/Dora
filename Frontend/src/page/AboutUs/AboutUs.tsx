@@ -4,9 +4,9 @@ import { useHistory } from 'react-router-native';
 import { useDispatch } from 'react-redux';
 import HeaderTitle from '../../components/HeaderTitle/HeaderTitle';
 import CustomButton from '../../components/CustomButton/CustomButton';
+import * as AuthService from '../../services/AuthService';
 
 import styles from './AboutUs.style';
-import AuthorizationActions from '../../store/actions/authorizationActions';
 
 const AboutUs = () => {
     const history = useHistory();
@@ -16,9 +16,9 @@ const AboutUs = () => {
     };
 
     useEffect(() => {
-        AuthorizationActions.checkToken()
+        AuthService.checkToken()
             .then((response) => {
-                const { verified, id, email } = response.data.data;
+                const { verified, id, email } = response;
                 const payload = {
                     auth: {
                         id,

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { SafeAreaView, View, Text, AsyncStorage } from 'react-native';
+import { SafeAreaView, View, Text } from 'react-native';
 import { useHistory } from 'react-router-native';
 import { useDispatch, useSelector } from 'react-redux';
 import BackStepButton from '../../components/BackStepButton/BackStepButton';
@@ -15,6 +15,8 @@ import Loader from '../../components/Loader/Loader';
 import styles from './Settings.style';
 import { selectors } from '../../store/reducers/authorizationReducer';
 import DismissKeyboard from '../../components/DismissKeyboard/DismissKeyboard';
+import AuthUtils from '../../utils/AuthUtils';
+import * as AuthService from '../../services/AuthService';
 
 const Settings = () => {
     const history = useHistory();
@@ -55,7 +57,7 @@ const Settings = () => {
     };
 
     const handleRedirectToAuthorization = () => {
-        AuthorizationActions.logout()
+        AuthService.logout()
             .then(() => {
                 history.push('/authorization');
                 dispatch({ type: 'LOGOUT' });
@@ -70,11 +72,11 @@ const Settings = () => {
 
         if (isValid) {
             setRequestStatus(REQUEST.LOADING);
-            AuthorizationActions.changePassword(userId, oldPassword, newPassword)
-                .then((response) => {
-                    const { token } = response.data.data;
+            AuthService.changePassword({ userId, oldPassword, newPassword })
+                .then(async (response) => {
+                    const { token } = response;
 
-                    AsyncStorage.mergeItem('userInfo', JSON.stringify({ token }));
+                    await AuthUtils.setAuthMetadata({ token });
 
                     setRequestStatus(REQUEST.STILL);
                     setOldPassword('');
