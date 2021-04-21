@@ -7,8 +7,8 @@ import HeaderTitle from '../../../components/HeaderTitle/HeaderTitle';
 import CustomButton from '../../../components/CustomButton/CustomButton';
 import ValidError from '../../../components/ValidError/ValidError';
 import Loader from '../../../components/Loader/Loader';
-import AuthorizationActions from '../../../store/actions/authorizationActions';
 import REQUEST from '../../../constants/REQUEST';
+import * as AuthService from '../../../services/AuthService';
 
 import styles from './ActivateAccount.style';
 import BackStepButton from '../../../components/BackStepButton/BackStepButton';
@@ -29,14 +29,14 @@ const ActivateAccount = () => {
 
     const handleSendCodeToEmail = () => {
         setRequestStatus(REQUEST.LOADING);
-        AuthorizationActions.sendCodeToEmailForActivateAccount(userId)
+        AuthService.sendCodeToEmailForActivateAccount(userId)
             .then(() => setRequestStatus(REQUEST.STILL))
             .catch(() => setRequestStatus(REQUEST.ERROR));
     };
 
     const handleActivateAccount = () => {
         setRequestStatus(REQUEST.LOADING);
-        AuthorizationActions.activateAccount(userId, value)
+        AuthService.activateAccount(userId, value)
             .then(() => {
                 setRequestStatus(REQUEST.STILL);
                 history.push('/coupons');

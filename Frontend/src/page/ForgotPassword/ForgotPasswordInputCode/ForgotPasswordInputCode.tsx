@@ -9,6 +9,7 @@ import CustomButton from '../../../components/CustomButton/CustomButton';
 import Loader from '../../../components/Loader/Loader';
 import AuthorizationActions from '../../../store/actions/authorizationActions';
 import REQUEST from '../../../constants/REQUEST';
+import * as AuthService from '../../../services/AuthService';
 
 import styles from './ForgotPasswordInputCode.style';
 import BackStepButton from '../../../components/BackStepButton/BackStepButton';
@@ -30,14 +31,14 @@ const ForgotPasswordInputCode = () => {
 
     const handleSendCodeToEmail = () => {
         setRequestStatus(REQUEST.LOADING);
-        AuthorizationActions.sendCodeToEmailForResetPassword(email)
+        AuthService.sendCodeToEmailForResetPassword(email)
             .then(() => setRequestStatus(REQUEST.STILL))
             .catch(() => setRequestStatus(REQUEST.ERROR));
     };
 
     const handleActivateAccount = () => {
         setRequestStatus(REQUEST.LOADING);
-        AuthorizationActions.checkCodeFromEmail(email, value)
+        AuthService.checkCodeFromEmail(email, value)
             .then(() => {
                 setRequestStatus(REQUEST.STILL);
                 dispatch(AuthorizationActions.setCodeToStore(value));
