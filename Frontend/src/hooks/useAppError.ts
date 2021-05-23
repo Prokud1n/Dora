@@ -1,14 +1,14 @@
 import { useEffect, useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router-native';
-import getClient, { ClientError } from '../client/Client';
+import client, { ClientError } from '../client/Client';
 import * as AuthService from '../services/AuthService';
 
-interface IState {
+type State = {
     err: ClientError | null;
-}
+};
 
-const initialState: IState = {
+const initialState: State = {
     err: null
 };
 
@@ -18,11 +18,10 @@ export default function useAppError() {
     const [{ err }, setState] = useState(initialState);
 
     const handleError = () => {
-        (async () => {
-            const client = await getClient();
+        client.then((Client) =>
+            Client.registerGlobalErrorHandler((err: ClientError, omitDefaultErrorHandling) => {
+                console.log('useAppErr', err);
 
-            client.registerGlobalErrorHandler((err: ClientError, omitDefaultErrorHandling) => {
-                console.log('registerGlobalErrorHandler', err);
                 if (err.status === 401) {
                     AuthService.logout().then(() => {
                         history.push('/authorization');
@@ -40,8 +39,8 @@ export default function useAppError() {
                 if (!omitError) {
                     setState({ err });
                 }
-            });
-        })();
+            })
+        );
     };
 
     useEffect(() => {

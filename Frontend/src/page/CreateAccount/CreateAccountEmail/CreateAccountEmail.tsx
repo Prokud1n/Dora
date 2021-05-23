@@ -42,12 +42,7 @@ const CreateAccountEmail = () => {
                     history.push('/create-account-password');
                 })
                 .catch((err) => {
-                    if (err.message === 'ACCOUNT_ALREADY_EXISTS') {
-                        alert('Пользователь с таким email уже существует!');
-                    }
-                    if (err.message === 'WRONG_EMAIL_FORMAT') {
-                        alert('Неверный формат email адреса!');
-                    }
+                    console.log('checkEmail', err);
                 });
         }
     };

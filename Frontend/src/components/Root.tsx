@@ -11,6 +11,14 @@ const Root = () => {
     const fadeAnim = useRef(new Animated.Value(0)).current;
     const notifications = useSelector(selectors.notifications);
 
+    const { err, clearError } = useAppError();
+
+    useEffect(() => {
+        if (err) {
+            dispatch(notificationActions.addNotifications(err.message));
+        }
+    }, [err]);
+
     useEffect(() => {
         if (notifications) {
             Animated.timing(fadeAnim, {
@@ -28,8 +36,6 @@ const Root = () => {
             }, 3000);
         }
     }, [notifications]);
-
-    const { err, clearError } = useAppError();
 
     return (
         <>
