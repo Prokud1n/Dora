@@ -6,7 +6,7 @@ import getBase64FromArrayBuffer from '../../../utils/getBase64FromArrayBuffer';
 import REQUEST from '../../../constants/REQUEST';
 import Loader from '../../Loader/Loader';
 import ViewPhoto from '../../../page/ViewPhoto/ViewPhoto';
-import * as CouponService from '../../../services/CouponService';
+import AddCouponActions from '../../../store/actions/addCouponActions';
 
 type Props = {
     fileUrl: string;
@@ -19,7 +19,7 @@ const ActiveCouponPhoto = ({ fileUrl }: Props) => {
 
     useEffect(() => {
         setRequestStatus(REQUEST.LOADING);
-        CouponService.fetchPhoto(fileUrl)
+        AddCouponActions.fetchPhoto(fileUrl)
             .then((response) => {
                 const url = `data:${response.headers['content-type']};base64,${getBase64FromArrayBuffer(
                     response.data

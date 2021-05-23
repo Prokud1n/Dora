@@ -1,5 +1,7 @@
+import axios from 'axios';
 import { selectors as selectorsCoupon } from '../reducers/addCouponReducer';
 import * as CouponService from '../../services/CouponService';
+import AuthUtils from '../../utils/AuthUtils';
 
 export default class AddCouponActions {
     static updateCheckedPhoto(checkedPhoto) {
@@ -73,6 +75,17 @@ export default class AddCouponActions {
             }
         };
     }
+
+    static fetchPhoto = async (fileUrl) => {
+        const { token } = await AuthUtils.getAuthMetadata();
+
+        return axios.get(fileUrl, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            },
+            responseType: 'arraybuffer'
+        });
+    };
 
     static deleteCoupon(userId, warrantyId) {
         return async (dispatch) => {
