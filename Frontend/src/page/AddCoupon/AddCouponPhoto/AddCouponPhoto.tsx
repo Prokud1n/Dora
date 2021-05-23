@@ -31,6 +31,7 @@ const AddCouponPhoto = () => {
     const [captures, setCaptures] = useState(photosGallery);
     const [checkedPhoto, setCheckedPhoto] = useState(initialCheckedPhone);
     const [hasCameraPermission, setHasCameraPermission] = useState(false);
+    const [hasCameraRollPermission, setHasCameraRollPermission] = useState(false);
     const [isOpenCamera, setIsOpenCamera] = useState(false);
     const [lastPhoto, setLastPhoto] = useState('');
     const { couponName, shopName, dateOfPurchase, warrantyPeriod, typeWarrantyPeriod } = infoPurchase;
@@ -48,8 +49,10 @@ const AddCouponPhoto = () => {
             const cameraRoll = await Permissions.askAsync(Permissions.CAMERA_ROLL);
             const camera = await Permissions.askAsync(Permissions.CAMERA);
             const hasCameraPermission = camera.status === 'granted';
+            const hasCameraRollPermission = cameraRoll.status === 'granted';
 
             setHasCameraPermission(hasCameraPermission);
+            setHasCameraRollPermission(hasCameraRollPermission);
 
             if (cameraRoll.status !== 'granted') {
                 alert('Sorry, we need camera roll permissions to make this work!');
@@ -93,13 +96,13 @@ const AddCouponPhoto = () => {
     useEffect(() => {
         getPermission();
 
-        if (captures.length === 0) {
+        if (captures.length === 0 && hasCameraRollPermission) {
             getPhoto(50);
         }
         return () => {
             dispatch(AddCouponActions.updateCheckedPhoto(checkedPhoto));
         };
-    }, []);
+    }, [hasCameraRollPermission]);
 
     const handleCheckPhoto = useCallback(
         (photoUri) => {
@@ -206,6 +209,10 @@ const AddCouponPhoto = () => {
 
     const disabledAddPhoto = checkedPhoto.length === 0 || requestStatus === REQUEST.LOADING;
 
+    if (requestStatus === REQUEST.LOADING) {
+        return <Loader />;
+    }
+
     if (isOpenCamera) {
         return (
             <View>
@@ -221,10 +228,6 @@ const AddCouponPhoto = () => {
                 />
             </View>
         );
-    }
-
-    if (requestStatus === REQUEST.LOADING) {
-        return <Loader />;
     }
 
     return (

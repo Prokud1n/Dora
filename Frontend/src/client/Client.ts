@@ -1,5 +1,6 @@
+import once from 'lodash.once';
 import BaseHttpClient, { TOptions, THeaders, BaseHttpError, TAfterRequestFn } from './BaseHttpClient';
-import { noop, once } from '../utils/lodash';
+import { noop } from '../utils/lodash';
 import AuthUtils from '../utils/AuthUtils';
 
 export class ClientError extends Error {
@@ -29,7 +30,9 @@ export class ClientError extends Error {
     }
 }
 
-type TGlobalErrorHander = (err: ClientError, omitDefaultErrorHandling: boolean) => void;
+export type TOmitDefaultErrorHandling = ((err: ClientError) => boolean) | boolean;
+
+type TGlobalErrorHandler = (err: ClientError, omitDefaultErrorHandling: TOmitDefaultErrorHandling) => void;
 type TGetAccessToken = () => string;
 type TTryToUpdateAccessToken = () => Promise<any>;
 
@@ -91,9 +94,9 @@ class Client extends BaseHttpClient {
         };
     }
 
-    protected globalErrorHandler: TGlobalErrorHander = noop;
+    protected globalErrorHandler: TGlobalErrorHandler = noop;
 
-    registerGlobalErrorHandler = once((handler: TGlobalErrorHander) => {
+    registerGlobalErrorHandler: (handler: TGlobalErrorHandler) => void = once((handler: TGlobalErrorHandler) => {
         this.globalErrorHandler = handler;
     });
 
@@ -114,4 +117,8 @@ const getClient = async () => {
     return new Client('https://dora.team/api/users/', () => token);
 };
 
-export default getClient;
+const client = (async () => {
+    return await getClient();
+})();
+
+export default client;
