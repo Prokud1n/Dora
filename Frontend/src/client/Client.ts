@@ -38,6 +38,8 @@ type TTryToUpdateAccessToken = () => Promise<any>;
 
 const { doRequest } = BaseHttpClient.prototype;
 
+const MAX_UPDATE_ACCESS_TOKEN_REQUESTS = 15;
+
 class Client extends BaseHttpClient {
     protected getAccessToken: TGetAccessToken;
 
@@ -53,6 +55,8 @@ class Client extends BaseHttpClient {
         return Boolean(this.getAccessToken());
     }
 
+    protected updateAccessTokenCount = 0;
+
     protected afterRequest: TAfterRequestFn = ({ url, options, err, isOwn, retryOriginRequest }) => {
         if (err && isOwn) {
             const newClientError = new ClientError(err);
@@ -63,6 +67,12 @@ class Client extends BaseHttpClient {
             };
 
             if (newClientError.status === 401 && this.hasAccessToken()) {
+                if (++this.updateAccessTokenCount > MAX_UPDATE_ACCESS_TOKEN_REQUESTS) {
+                    this.teardown();
+                    emitErrors();
+                    return;
+                }
+
                 return this.tryToUpdateAccessToken()
                     .catch((err) => {
                         this.teardown();
@@ -74,7 +84,11 @@ class Client extends BaseHttpClient {
                                 Authorization: `Bearer ${this.getAccessToken()}`
                             }
                         })
-                    );
+                    )
+                    .then((response) => {
+                        this.updateAccessTokenCount = 0;
+                        return response;
+                    });
             }
             emitErrors();
         }
