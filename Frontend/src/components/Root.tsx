@@ -5,6 +5,7 @@ import Router from './Router/Router';
 import styles from './Root.style';
 import { notificationActions, selectors } from '../ducks/notifications';
 import useAppError from '../hooks/useAppError';
+import errorDescription from '../constants/errorDescription';
 
 const Root = () => {
     const dispatch = useDispatch();
@@ -15,7 +16,7 @@ const Root = () => {
 
     useEffect(() => {
         if (err) {
-            dispatch(notificationActions.addNotifications(err.message));
+            dispatch(notificationActions.addNotifications(errorDescription[err.message]));
         }
     }, [err]);
 
@@ -32,8 +33,11 @@ const Root = () => {
                     duration: 2000,
                     useNativeDriver: false
                 }).start();
-                dispatch(notificationActions.removeNotifications());
             }, 3000);
+
+            setTimeout(() => {
+                dispatch(notificationActions.removeNotifications());
+            }, 10000);
         }
     }, [notifications]);
 
@@ -42,6 +46,7 @@ const Root = () => {
             <Animated.View
                 style={[
                     styles.fadingContainer,
+                    err ? styles.error : styles.notification,
                     {
                         opacity: fadeAnim, // Bind opacity to animated value
                         transform: [

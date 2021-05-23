@@ -92,6 +92,7 @@ const fetchTransport: TTransportFn = ({ url, opts, responseType }) => {
 export enum RequestMethod {
     GET = 'get',
     POST = 'post',
+    PATCH = 'patch',
     HEAD = 'head',
     PUT = 'put',
     DELETE = 'delete'
@@ -212,6 +213,7 @@ export default class BaseHttpClient {
                 return response.data;
             })
             .catch((err: BaseHttpError) => {
+                console.log(err);
                 if (err.name === 'AbortError') {
                     return;
                 } // do not handle aborted request
@@ -261,7 +263,7 @@ export default class BaseHttpClient {
 
         let ownHeaders = {};
 
-        if (isOwnApi && typeof this.getOwnHeaders === 'function') {
+        if (/* isOwnApi && */ typeof this.getOwnHeaders === 'function') {
             ownHeaders = this.getOwnHeaders();
         }
 

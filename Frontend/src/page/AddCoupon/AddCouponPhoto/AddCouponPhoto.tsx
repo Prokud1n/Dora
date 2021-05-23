@@ -13,6 +13,7 @@ import PhotoGallery from '../../../components/PhotoGallery/PhotoGallery';
 import AddCouponActions from '../../../store/actions/addCouponActions';
 import { selectors as selectorsAuthorization } from '../../../store/reducers/authorizationReducer';
 import { selectors as selectorsAddCoupon } from '../../../store/reducers/addCouponReducer';
+import * as CouponService from '../../../services/CouponService';
 
 import styles from './AddCouponPhoto.style';
 import Loader from '../../../components/Loader/Loader';
@@ -182,7 +183,7 @@ const AddCouponPhoto = () => {
             photoFiles
         });
 
-        AddCouponActions.addNewCoupon(coupon)
+        CouponService.addNewCoupon(coupon)
             .then((_) => {
                 setRequestStatus(REQUEST.STILL);
                 dispatch(AddCouponActions.cleanStore());

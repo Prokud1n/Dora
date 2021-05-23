@@ -1,12 +1,12 @@
 import { Image, Modal, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import styles from './ActiveCouponPhoto.style';
-import AddCouponActions from '../../../store/actions/addCouponActions';
 import ErrorIndicator from '../../ErrorBoundary/ErrorIndicator/ErrorIndicator';
 import getBase64FromArrayBuffer from '../../../utils/getBase64FromArrayBuffer';
 import REQUEST from '../../../constants/REQUEST';
 import Loader from '../../Loader/Loader';
 import ViewPhoto from '../../../page/ViewPhoto/ViewPhoto';
+import AddCouponActions from '../../../store/actions/addCouponActions';
 
 type Props = {
     fileUrl: string;

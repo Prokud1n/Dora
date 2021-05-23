@@ -20,13 +20,12 @@ export default function useAppError() {
     const handleError = () => {
         client.then((Client) =>
             Client.registerGlobalErrorHandler((err: ClientError, omitDefaultErrorHandling) => {
-                console.log('useAppErr', err);
-
                 if (err.status === 401) {
                     AuthService.logout().then(() => {
                         history.push('/authorization');
-                        dispatch({ type: 'LOGOUT' });
                     });
+
+                    dispatch({ type: 'LOGOUT' });
 
                     return;
                 }

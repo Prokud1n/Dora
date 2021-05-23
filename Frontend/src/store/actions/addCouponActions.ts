@@ -1,5 +1,6 @@
-import axios from '../../axios/axiosDora';
+import axios from 'axios';
 import { selectors as selectorsCoupon } from '../reducers/addCouponReducer';
+import * as CouponService from '../../services/CouponService';
 import AuthUtils from '../../utils/AuthUtils';
 
 export default class AddCouponActions {
@@ -37,15 +38,10 @@ export default class AddCouponActions {
         return async (dispatch) => {
             dispatch({ type: 'FETCH_CATEGORY_START' });
             try {
-                const { token } = await AuthUtils.getAuthMetadata();
-                const response = await axios.get('/api/warranties/categories', {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
+                const response = await CouponService.fetchCategory();
 
                 const payload = {
-                    categories: response.data.data
+                    categories: response
                 };
 
                 dispatch({ type: 'FETCH_CATEGORY_SUCCESS', payload });
@@ -55,29 +51,14 @@ export default class AddCouponActions {
         };
     }
 
-    static addNewCoupon = async (formDataCoupon) => {
-        const { token } = await AuthUtils.getAuthMetadata();
-
-        return axios.post('/api/users/warranties', formDataCoupon, {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        });
-    };
-
     static fetchCoupons(userId) {
         return async (dispatch) => {
             dispatch({ type: 'FETCH_COUPONS_START' });
             try {
-                const { token } = await AuthUtils.getAuthMetadata();
-                const response = await axios.get(`/api/users/${userId}/warranties`, {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
+                const response = await CouponService.fetchCoupons(userId);
 
                 const payload = {
-                    coupons: response.data.data
+                    coupons: response
                 };
 
                 dispatch({ type: 'FETCH_COUPONS_SUCCESS', payload });
@@ -110,14 +91,7 @@ export default class AddCouponActions {
         return async (dispatch) => {
             dispatch({ type: 'START_DELETE_COUPON' });
             try {
-                const { token } = await AuthUtils.getAuthMetadata();
-
-                await axios.delete('/api/users/warranties', {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    },
-                    data: { user_id: userId, warranty_id: warrantyId }
-                });
+                await CouponService.deleteCoupon(userId, warrantyId);
                 dispatch({ type: 'SUCCESS_DELETE_COUPON' });
             } catch {
                 dispatch({ type: 'ERROR_DELETE_COUPON' });
@@ -129,24 +103,13 @@ export default class AddCouponActions {
         return async (dispatch, getState) => {
             dispatch({ type: 'START_CHANGE_COUPON' });
             try {
-                const { token } = await AuthUtils.getAuthMetadata();
-
-                const response = await axios.patch(
-                    '/api/users/warranties',
-                    { user_id: userId, warranty_id: warrantyId, ...changeParams },
-                    {
-                        headers: {
-                            Authorization: `Bearer ${token}`
-                        }
-                    }
-                );
+                const response = await CouponService.changeCoupon(userId, warrantyId, changeParams);
 
                 const state = getState();
-                const newCoupon = response.data.data;
                 const coupons = state.addCoupon.coupons.non_archived;
-                const indexPrevCoupon = coupons.findIndex(({ id }) => id === newCoupon.id);
+                const indexPrevCoupon = coupons.findIndex(({ id }) => id === response.id);
 
-                coupons.splice(indexPrevCoupon, 1, newCoupon);
+                coupons.splice(indexPrevCoupon, 1, response);
                 dispatch({
                     type: 'SUCCESS_CHANGE_COUPON',
                     payload: {

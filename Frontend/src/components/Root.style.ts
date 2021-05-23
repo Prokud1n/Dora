@@ -8,8 +8,13 @@ const styles = StyleSheet.create({
         width: '90%',
         left: '5%',
         zIndex: 1,
-        backgroundColor: '#007AFF',
         borderRadius: 30
+    },
+    error: {
+        backgroundColor: 'red'
+    },
+    notification: {
+        backgroundColor: '#007AFF'
     },
     fadingText: {
         fontSize: 17,
