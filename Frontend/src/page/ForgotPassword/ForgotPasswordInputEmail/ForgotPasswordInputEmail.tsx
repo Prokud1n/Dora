@@ -27,11 +27,7 @@ const ForgotPasswordInputEmail = () => {
     const getValidateEmail = () => {
         const isValid = regexpEmail.test(email);
 
-        if (isValid) {
-            setIsValidEmail(true);
-        } else {
-            setIsValidEmail(false);
-        }
+        setIsValidEmail(isValid);
 
         return isValid;
     };

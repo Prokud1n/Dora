@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Router from './Router/Router';
 import styles from './Root.style';
 import { notificationActions, selectors } from '../ducks/notifications';
+import useAppError from '../hooks/useAppError';
 
 const Root = () => {
     const dispatch = useDispatch();
@@ -27,6 +28,8 @@ const Root = () => {
             }, 3000);
         }
     }, [notifications]);
+
+    const { err, clearError } = useAppError();
 
     return (
         <>
