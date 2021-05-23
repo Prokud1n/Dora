@@ -40,7 +40,6 @@ const Authorization = () => {
         setRequestStatus(REQUEST.LOADING);
         AuthService.signIn(email, password)
             .then(async (response) => {
-                console.log(response);
                 const { verified, id, token } = response;
 
                 await AuthUtils.setAuthMetadata({ token, userId: id, email });
@@ -67,9 +66,7 @@ const Authorization = () => {
                     sendCodeToEmailForActivateAccount(id);
                 }
             })
-            .catch((err) => {
-                console.log(err);
-                setIsValidUser(false);
+            .catch(() => {
                 setRequestStatus(REQUEST.ERROR);
             });
     };
@@ -79,9 +76,8 @@ const Authorization = () => {
 
         if (isValidEmail) {
             signIn();
-        } else {
-            setIsValidUser(false);
         }
+        setIsValidUser(isValidEmail);
     };
 
     const handleRedirectToCreateAccount = () => {
@@ -117,7 +113,7 @@ const Authorization = () => {
                         <InputEmail email={email} onChangeText={handleChangeEmail} />
                         <InputPassword password={password} onChangeText={setPassword} />
                     </View>
-                    {!isValidUser && <ValidError>Проверьте правильность введенных данных</ValidError>}
+                    {!isValidUser && <ValidError>Это точно потча?</ValidError>}
                     <View style={styles.containerActionButton}>
                         <Button title="Забыли пароль?" onPress={handleRedirectToForgetPasswordPage} />
                         <Button title="Создать аккаунт?" onPress={handleRedirectToCreateAccount} />

@@ -33,8 +33,11 @@ const Root = () => {
                     duration: 2000,
                     useNativeDriver: false
                 }).start();
-                dispatch(notificationActions.removeNotifications());
             }, 3000);
+
+            setTimeout(() => {
+                dispatch(notificationActions.removeNotifications());
+            }, 10000);
         }
     }, [notifications]);
 
