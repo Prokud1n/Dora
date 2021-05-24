@@ -17,12 +17,6 @@ export default function useAppError() {
     const handleError = () => {
         client.then((Client) =>
             Client.registerGlobalErrorHandler((err: ClientError, omitDefaultErrorHandling) => {
-                if (err.status === 401) {
-                    dispatch({ type: 'LOGOUT' });
-
-                    return;
-                }
-
                 const omitError =
                     typeof omitDefaultErrorHandling === 'function'
                         ? omitDefaultErrorHandling(err)
@@ -30,6 +24,12 @@ export default function useAppError() {
 
                 if (!omitError) {
                     setState({ err });
+                }
+
+                if (err.status === 401) {
+                    dispatch({ type: 'LOGOUT' });
+
+                    return;
                 }
             })
         );

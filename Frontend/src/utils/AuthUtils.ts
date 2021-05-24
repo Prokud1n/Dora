@@ -1,4 +1,4 @@
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, Platform } from 'react-native';
 
 type AuthStorage = {
     token: string;
@@ -54,6 +54,16 @@ class AuthUtils {
 
     clearAuthMetadata = async () => {
         await AsyncStorage.clear();
+        const asyncStorageKeys = await AsyncStorage.getAllKeys();
+
+        if (asyncStorageKeys.length > 0) {
+            if (Platform.OS === 'android') {
+                await AsyncStorage.clear();
+            }
+            if (Platform.OS === 'ios') {
+                await AsyncStorage.multiRemove(asyncStorageKeys);
+            }
+        }
     };
 }
 
