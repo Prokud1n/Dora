@@ -16,7 +16,7 @@ const Root = () => {
 
     useEffect(() => {
         if (err) {
-            dispatch(notificationActions.addNotifications(errorDescription[err.message]));
+            dispatch(notificationActions.addNotifications(errorDescription[err.message] || 'Непредвиденная ошибка'));
         }
     }, [err]);
 

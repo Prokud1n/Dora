@@ -1,8 +1,6 @@
 import { useEffect, useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-native';
 import client, { ClientError } from '../client/Client';
-import * as AuthService from '../services/AuthService';
 
 type State = {
     err: ClientError | null;
@@ -14,22 +12,11 @@ const initialState: State = {
 
 export default function useAppError() {
     const dispatch = useDispatch();
-    const history = useHistory();
     const [{ err }, setState] = useState(initialState);
 
     const handleError = () => {
         client.then((Client) =>
             Client.registerGlobalErrorHandler((err: ClientError, omitDefaultErrorHandling) => {
-                if (err.status === 401) {
-                    AuthService.logout().then(() => {
-                        history.push('/authorization');
-                    });
-
-                    dispatch({ type: 'LOGOUT' });
-
-                    return;
-                }
-
                 const omitError =
                     typeof omitDefaultErrorHandling === 'function'
                         ? omitDefaultErrorHandling(err)
@@ -37,6 +24,12 @@ export default function useAppError() {
 
                 if (!omitError) {
                     setState({ err });
+                }
+
+                if (err.status === 401) {
+                    dispatch({ type: 'LOGOUT' });
+
+                    return;
                 }
             })
         );
