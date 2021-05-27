@@ -58,10 +58,6 @@ const ForgotPasswordInputEmail = () => {
         return <Loader />;
     }
 
-    if (requestStatus === REQUEST.ERROR) {
-        return <ErrorMessage errorMessage="Не удалось отправить код на почту" />;
-    }
-
     return (
         <DismissKeyboard>
             <SafeAreaView>

@@ -14,6 +14,8 @@ import * as AuthService from '../../../services/AuthService';
 import styles from './CreateNewPassword.style';
 import { selectors } from '../../../store/reducers/authorizationReducer';
 import DismissKeyboard from '../../../components/DismissKeyboard/DismissKeyboard';
+import {ERROR_FORMAT_PASSWORD, ERROR_LENGTH_PASSWORD, HAS_NUMBER_PASSWORD} from "../../../constants/errorDescription";
+import notifications, {notificationActions} from "../../../ducks/notifications";
 
 const CreateNewPassword = () => {
     const history = useHistory();
@@ -39,18 +41,14 @@ const CreateNewPassword = () => {
         const isValidPassword = isValidLenght && hasNumber;
 
         if (!hasNumber) {
-            setValidMessage('Добавьте хотя бы одну цифру');
+            setValidMessage(HAS_NUMBER_PASSWORD);
         }
 
         if (!isValidLenght) {
-            setValidMessage('Пароль должен содержать не меньше 8 символов');
+            setValidMessage(ERROR_LENGTH_PASSWORD);
         }
 
-        if (isValidPassword) {
-            setIsValidPassword(true);
-        } else {
-            setIsValidPassword(false);
-        }
+        setIsValidPassword(isValidPassword);
 
         return isValidPassword;
     };
@@ -71,14 +69,9 @@ const CreateNewPassword = () => {
                 await AuthService.resetPassword(code, email, password);
                 setRequestStatus(REQUEST.STILL);
                 history.push('/authorization');
-                alert('Пароль успешно изменен');
+                notificationActions.addNotifications('Пароль успешно изменен');
             } catch (err) {
                 console.log(err?.response?.data);
-                if (err?.response?.data?.message === 'OLD_PASSWORD') {
-                    alert('Вы ввели старый пароль!');
-                } else {
-                    alert('Не удалось сменить пароль!');
-                }
                 setRequestStatus(REQUEST.ERROR);
             }
         }

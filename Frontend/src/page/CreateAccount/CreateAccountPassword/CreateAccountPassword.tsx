@@ -16,6 +16,7 @@ import { selectors } from '../../../store/reducers/authorizationReducer';
 import ErrorIndicator from '../../../components/ErrorBoundary/ErrorIndicator/ErrorIndicator';
 import DismissKeyboard from '../../../components/DismissKeyboard/DismissKeyboard';
 import AuthUtils from '../../../utils/AuthUtils';
+import { ERROR_FORMAT_PASSWORD, ERROR_LENGTH_PASSWORD, HAS_NUMBER_PASSWORD } from '../../../constants/errorDescription';
 
 const CreateAccountPassword = () => {
     const history = useHistory();
@@ -32,18 +33,14 @@ const CreateAccountPassword = () => {
         const isValidPassword = isValidLenght && hasNumber;
 
         if (!hasNumber) {
-            setValidMessage('Добавьте хотя бы одну цифру');
+            setValidMessage(HAS_NUMBER_PASSWORD);
         }
 
         if (!isValidLenght) {
-            setValidMessage('Пароль должен содержать не меньше 8 символов');
+            setValidMessage(ERROR_LENGTH_PASSWORD);
         }
 
-        if (isValidPassword) {
-            setIsValidPassword(true);
-        } else {
-            setIsValidPassword(false);
-        }
+        setIsValidPassword(isValidPassword);
 
         return isValidPassword;
     };
@@ -71,15 +68,6 @@ const CreateAccountPassword = () => {
                 dispatch({ type: 'SEND_EMAIL_CODE_SUCCESS', payload });
                 history.push('/activate-account');
             } catch (err) {
-                if (err?.response?.data?.message === 'ACCOUNT_ALREADY_EXISTS') {
-                    alert('Пользователь с таким email уже существует!');
-                }
-                if (err?.response?.data?.message === 'FORM_NOT_VALID') {
-                    alert('Форма заполнена некорректно!');
-                }
-                if (err?.response?.data?.message === 'WRONG_EMAIL_FORMAT') {
-                    alert('Неверный формат email адреса!');
-                }
                 console.log(err?.response?.data);
                 setRequestStatus(REQUEST.ERROR);
             }

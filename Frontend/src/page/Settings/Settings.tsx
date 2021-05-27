@@ -17,6 +17,8 @@ import { selectors } from '../../store/reducers/authorizationReducer';
 import DismissKeyboard from '../../components/DismissKeyboard/DismissKeyboard';
 import AuthUtils from '../../utils/AuthUtils';
 import * as AuthService from '../../services/AuthService';
+import { ERROR_FORMAT_PASSWORD, ERROR_LENGTH_PASSWORD, HAS_NUMBER_PASSWORD } from '../../constants/errorDescription';
+import { notificationActions } from '../../ducks/notifications';
 
 const Settings = () => {
     const history = useHistory();
@@ -36,18 +38,14 @@ const Settings = () => {
         const isValidPassword = isValidLenght && hasNumber;
 
         if (!hasNumber) {
-            setValidMessage('Добавьте хотя бы одну цифру');
+            setValidMessage(HAS_NUMBER_PASSWORD);
         }
 
         if (!isValidLenght) {
-            setValidMessage('Пароль должен содержать не меньше 8 символов');
+            setValidMessage(ERROR_LENGTH_PASSWORD);
         }
 
-        if (isValidPassword) {
-            setIsValidPassword(true);
-        } else {
-            setIsValidPassword(false);
-        }
+        setIsValidPassword(isValidPassword);
 
         return isValidPassword;
     };
@@ -57,14 +55,10 @@ const Settings = () => {
     };
 
     const handleRedirectToAuthorization = () => {
-        AuthService.logout()
-            .then(() => {
-                history.push('/authorization');
-                dispatch({ type: 'LOGOUT' });
-            })
-            .catch(() => {
-                alert('Не удалось выйти из аккаунта');
-            });
+        AuthService.logout().then(() => {
+            history.push('/authorization');
+            dispatch({ type: 'LOGOUT' });
+        });
     };
 
     const handleChangePassword = () => {
@@ -81,14 +75,10 @@ const Settings = () => {
                     setRequestStatus(REQUEST.STILL);
                     setOldPassword('');
                     setNewPassword('');
-
-                    alert('Пароль успешно изменен!');
+                    notificationActions.addNotifications('Пароль успешно изменен!');
                 })
                 .catch((err) => {
                     console.log(err?.response?.data);
-                    if (err?.response?.data?.message === 'OLD_PASSWORD') {
-                        alert('Вы ввели старый пароль!');
-                    }
                     setRequestStatus(REQUEST.ERROR);
                 });
         }

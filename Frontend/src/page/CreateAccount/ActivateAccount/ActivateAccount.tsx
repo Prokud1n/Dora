@@ -46,11 +46,16 @@ const ActivateAccount = () => {
             .then(() => {
                 setRequestStatus(REQUEST.STILL);
                 history.push('/coupons');
+                notificationActions.addNotifications('Аккаунт успешно активирован", вход в новый аккаунт');
             })
             .catch((err) => {
                 console.log(err?.response?.data);
                 setRequestStatus(REQUEST.ERROR);
             });
+    };
+
+    const handleBackStep = () => {
+        history.push('/authorization');
     };
 
     if (requestStatus === REQUEST.LOADING) {
@@ -60,7 +65,7 @@ const ActivateAccount = () => {
     return (
         <SafeAreaView>
             <View style={styles.containerPage}>
-                <BackStepButton />
+                <BackStepButton onPress={handleBackStep} />
                 <HeaderTitle title="Введите код для активации аккаунта" subtitle="Мы выслали его вам на почту" />
                 <CodeField
                     ref={ref}
@@ -80,7 +85,7 @@ const ActivateAccount = () => {
                         </Text>
                     )}
                 />
-                {requestStatus === REQUEST.ERROR && <ValidError>Неверный код</ValidError>}
+                {requestStatus === REQUEST.ERROR && <ValidError>Неверный код, повторите попытку</ValidError>}
                 <CustomButton
                     width={228}
                     onPress={handleSendCodeToEmail}
