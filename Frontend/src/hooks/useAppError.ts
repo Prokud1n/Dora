@@ -1,6 +1,6 @@
 import { useEffect, useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import client, { ClientError } from '../client/Client';
+import Client, { ClientError } from '../client/Client';
 
 type State = {
     err: ClientError | null;
@@ -15,24 +15,20 @@ export default function useAppError() {
     const [{ err }, setState] = useState(initialState);
 
     const handleError = () => {
-        client.then((Client) =>
-            Client.registerGlobalErrorHandler((err: ClientError, omitDefaultErrorHandling) => {
-                const omitError =
-                    typeof omitDefaultErrorHandling === 'function'
-                        ? omitDefaultErrorHandling(err)
-                        : omitDefaultErrorHandling;
+        Client.registerGlobalErrorHandler((err: ClientError, omitDefaultErrorHandling) => {
+            const omitError =
+                typeof omitDefaultErrorHandling === 'function'
+                    ? omitDefaultErrorHandling(err)
+                    : omitDefaultErrorHandling;
 
-                if (!omitError) {
-                    setState({ err });
-                }
+            if (!omitError) {
+                setState({ err });
+            }
 
-                if (err.status === 401) {
-                    dispatch({ type: 'LOGOUT' });
-
-                    return;
-                }
-            })
-        );
+            if (err.status === 401) {
+                dispatch({ type: 'LOGOUT' });
+            }
+        });
     };
 
     useEffect(() => {

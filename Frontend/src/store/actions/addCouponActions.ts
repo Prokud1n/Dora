@@ -63,11 +63,12 @@ export default class AddCouponActions {
 
                 dispatch({ type: 'FETCH_COUPONS_SUCCESS', payload });
             } catch (err) {
-                console.log(err?.response?.data);
+                console.log('err', err);
+                console.log('err', err.message);
                 const payload = {
                     coupons: {
-                        archived: err.response.data.data,
-                        non_archived: err.response.data.data
+                        archived: [],
+                        non_archived: []
                     }
                 };
 
