@@ -61,13 +61,15 @@ const getYears = () => {
     return arr;
 };
 
+type TDatePicker = {
+    day: number;
+    month: number;
+    year: number;
+};
+
 type Props = {
-    value: {
-        day: number;
-        month: number;
-        year: number;
-    };
-    onChange: (value: number, id: string) => void;
+    value: TDatePicker;
+    onChange: (value: number, id: 'year' | 'month' | 'day') => void;
 };
 
 const DatePicker = ({ value, onChange }: Props) => {

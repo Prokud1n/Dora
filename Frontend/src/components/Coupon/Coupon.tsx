@@ -14,7 +14,8 @@ type Props = {
     status: string;
     shop: string;
     category: string;
-    date_end_expertise: string;
+    dateEndExpertise: string;
+    dateOfPurchase: string;
     files: { file_id: number; file_url: string }[];
     expertise: boolean;
     money_returned: boolean;
@@ -29,7 +30,8 @@ const Coupon = ({
     name,
     status,
     category,
-    date_end_expertise,
+    dateEndExpertise,
+    dateOfPurchase,
     shop,
     files,
     expertise,
@@ -112,7 +114,8 @@ const Coupon = ({
                             expertise={expertise}
                             item_replaced={item_replaced}
                             money_returned={money_returned}
-                            date_end_expertise={date_end_expertise}
+                            dateEndExpertise={dateEndExpertise}
+                            dateOfPurchase={dateOfPurchase}
                         />
                     )}
                 </View>

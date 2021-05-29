@@ -29,6 +29,7 @@ const CouponsList = ({ coupons, userId, isArchived = false }: Props) => {
             shop_name,
             days_end_warranty,
             date_end_warranty,
+            date_of_purchase,
             files,
             expertise,
             item_replaced,
@@ -64,7 +65,8 @@ const CouponsList = ({ coupons, userId, isArchived = false }: Props) => {
                         money_returned={money_returned}
                         isArchived={isArchived}
                         isSoonEndWarranty={isSoonEndWarranty}
-                        date_end_expertise={date_end_expertise}
+                        dateEndExpertise={date_end_expertise}
+                        dateOfPurchase={date_of_purchase}
                     />
                 </SwipeRow>
             );

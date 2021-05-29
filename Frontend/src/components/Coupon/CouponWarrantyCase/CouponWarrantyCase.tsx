@@ -7,6 +7,7 @@ import AddCouponActions from '../../../store/actions/addCouponActions';
 import DatePurchase from '../../DatePurchase/DatePurchase';
 import DatePicker from '../../DatePicker/DatePicker';
 import { getCurrentDate, getDateWithSplit } from '../../../utils/getFormatDate';
+import { notificationActions } from '../../../ducks/notifications';
 
 type Props = {
     userId: string;
@@ -14,7 +15,8 @@ type Props = {
     expertise: boolean;
     money_returned: boolean;
     item_replaced: boolean;
-    date_end_expertise: string;
+    dateEndExpertise: string;
+    dateOfPurchase: string;
 };
 
 const { currentYear, currentMonth, currentDay } = getCurrentDate();
@@ -25,13 +27,14 @@ const CouponWarrantyCase = ({
     item_replaced,
     userId,
     warrnatyId,
-    date_end_expertise
+    dateEndExpertise,
+    dateOfPurchase
 }: Props) => {
-    const getInitialDate = () => {
-        if (!date_end_expertise) {
+    const getDateForPicker = (value) => {
+        if (!value) {
             return null;
         }
-        const date = new Date(date_end_expertise);
+        const date = new Date(value);
 
         return {
             day: date.getDate(),
@@ -39,7 +42,7 @@ const CouponWarrantyCase = ({
             year: date.getFullYear()
         };
     };
-    const initialDate = useMemo(getInitialDate, [date_end_expertise]);
+    const initialDate = useMemo(() => getDateForPicker(dateEndExpertise), [dateEndExpertise]);
     const dispatch = useDispatch();
     const initialState = {
         expertise,
@@ -62,7 +65,10 @@ const CouponWarrantyCase = ({
         return () => {
             if (!mounted.current) {
                 dispatch(
-                    AddCouponActions.changeCoupon(userId, warrnatyId, { ...state, date_end_expertise: dateTitle })
+                    AddCouponActions.changeCoupon(userId, warrnatyId, {
+                        ...state,
+                        dateEndExpertise: date ? getDateWithSplit(date) : null
+                    })
                 );
             }
         };
@@ -87,7 +93,7 @@ const CouponWarrantyCase = ({
         if (state.expertise) {
             setIsOpenDatePicker(true);
 
-            if (!date_end_expertise) {
+            if (!dateEndExpertise) {
                 setDate({
                     day: currentDay,
                     month: currentMonth,
@@ -97,12 +103,17 @@ const CouponWarrantyCase = ({
         }
     };
 
-    const handleChangeDate = (value, id) => {
+    const handleChangeDate = (value, id: 'year' | 'month' | 'day') => {
         setDate({ ...date, [id]: value });
     };
 
     const hideDatePicker = () => {
         setIsOpenDatePicker(false);
+        const newDate = new Date(date.year, date.month, date.day);
+
+        if (newDate.getTime() < new Date(dateOfPurchase).getTime()) {
+            dispatch(notificationActions.addNotifications('Выберите дату позже, чем дата покупки'));
+        }
     };
 
     return (
