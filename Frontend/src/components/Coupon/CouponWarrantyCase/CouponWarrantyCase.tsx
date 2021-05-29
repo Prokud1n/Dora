@@ -47,7 +47,8 @@ const CouponWarrantyCase = ({
     const initialState = {
         expertise,
         money_returned,
-        item_replaced
+        item_replaced,
+        dirty: false
     };
     const [state, setState] = useState(initialState);
     const [date, setDate] = useState(initialDate);
@@ -61,20 +62,30 @@ const CouponWarrantyCase = ({
         };
     }, []);
 
+    const changeCoupon = async () => {
+        await dispatch(
+            AddCouponActions.changeCoupon(userId, warrnatyId, {
+                expertise: state.expertise,
+                money_returned: state.money_returned,
+                item_replaced: state.item_replaced,
+                date_end_expertise: date ? getDateWithSplit(date) : null
+            })
+        );
+
+        if (state.money_returned || state.item_replaced) {
+            dispatch(AddCouponActions.fetchCoupons(userId));
+        }
+    };
+
     useEffect(() => {
         return () => {
-            if (!mounted.current) {
-                dispatch(
-                    AddCouponActions.changeCoupon(userId, warrnatyId, {
-                        ...state,
-                        dateEndExpertise: date ? getDateWithSplit(date) : null
-                    })
-                );
+            if (!mounted.current && state.dirty) {
+                changeCoupon();
             }
         };
     }, [userId, warrnatyId, state, date]);
     const handleCheck = (id: 'expertise' | 'money_returned' | 'item_replaced') => {
-        setState({ ...state, [id]: !state[id] });
+        setState({ ...state, [id]: !state[id], dirty: true });
     };
 
     const getIcon = (id: 'expertise' | 'money_returned' | 'item_replaced') => {
