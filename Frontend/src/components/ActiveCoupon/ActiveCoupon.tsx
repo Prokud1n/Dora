@@ -68,7 +68,7 @@ const ActiveCoupon = ({
                     style={[styles.container, isOpenInfo && { marginLeft: 0, marginRight: 0 }]}
                     onPress={handleOpenInfo}>
                     <View style={styles.containerCircle}>{circleElements.map((i) => i)}</View>
-                    <View>
+                    <View style={styles.text}>
                         <Text style={[styles.name, isArchived && styles.archivedText]}>{name}</Text>
                         <Text style={[styles.status, isArchived && styles.archivedText]}>{status}</Text>
                     </View>

@@ -1,5 +1,5 @@
 import Client from '../client/Client';
-import { RequestMethod } from '../client/BaseHttpClient';
+import {RequestMethod} from '../client/BaseHttpClient';
 import AuthUtils from '../utils/AuthUtils';
 
 type Auth = { email: string; id: number; token: string; verified: boolean };
