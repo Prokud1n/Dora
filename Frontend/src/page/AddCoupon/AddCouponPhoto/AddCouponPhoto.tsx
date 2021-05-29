@@ -18,6 +18,7 @@ import * as CouponService from '../../../services/CouponService';
 import styles from './AddCouponPhoto.style';
 import Loader from '../../../components/Loader/Loader';
 import BackStepButton from '../../../components/BackStepButton/BackStepButton';
+import { notificationActions } from '../../../ducks/notifications';
 
 const AddCouponPhoto = () => {
     const history = useHistory();
@@ -56,7 +57,7 @@ const AddCouponPhoto = () => {
             setHasCameraRollPermission(hasCameraRollPermission);
 
             if (cameraRoll.status !== 'granted') {
-                alert('Sorry, we need camera roll permissions to make this work!');
+                notificationActions.addNotifications('Sorry, we need camera roll permissions to make this work!');
             }
         })();
     };
@@ -187,11 +188,11 @@ const AddCouponPhoto = () => {
             .then((_) => {
                 setRequestStatus(REQUEST.STILL);
                 dispatch(AddCouponActions.cleanStore());
+                notificationActions.addNotifications('Талон был успешно создан');
                 history.push('/coupons');
             })
             .catch((err) => {
-                console.log(err?.response?.data);
-                alert('Попробуйте ещё раз!');
+                console.log(err.message);
                 setRequestStatus(REQUEST.STILL);
             });
     };
@@ -208,7 +209,7 @@ const AddCouponPhoto = () => {
         }
     };
 
-    const disabledAddPhoto = checkedPhoto.length === 0 || requestStatus === REQUEST.LOADING;
+    const disabledAddPhoto = Object.keys(checkedPhoto).length === 0 || requestStatus === REQUEST.LOADING;
 
     if (requestStatus === REQUEST.LOADING) {
         return <Loader />;

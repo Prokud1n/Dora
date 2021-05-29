@@ -34,3 +34,13 @@ export const getDateWithDot = ({ year, month, day }) =>
 export const getDateWithSplit = ({ year, month, day }) =>
     `${year}-${month < 10 ? `0${month + 1}` : month + 1}-${day < 10 ? `0${day}` : day}`;
 
+export const getDateForPicker = (date: string) => {
+    // (date) = 'YYYY-MM-DD'
+    const arr = date.split('-').map((item) => Number(item));
+
+    return {
+        year: arr[0],
+        month: arr[1] - 1,
+        day: arr[2]
+    };
+};
