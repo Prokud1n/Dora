@@ -1,10 +1,10 @@
 import React, { useMemo, useState } from 'react';
 import { Dimensions, View, Text, TouchableOpacity, TextInput } from 'react-native';
 import CustomButton from '../CustomButton/CustomButton';
-import ActiveCouponPhoto from './ActiveCouponPhoto/ActiveCouponPhoto';
-import ActiveCouponWarrantyCase from './ActiveCouponWarrantyCase/ActiveCouponWarrantyCase';
+import CouponPhoto from './CouponPhoto/CouponPhoto';
+import CouponWarrantyCase from './CouponWarrantyCase/CouponWarrantyCase';
 
-import styles from './ActiveCoupon.style';
+import styles from './Coupon.style';
 import SVG from '../SVG/SVG';
 
 type Props = {
@@ -14,7 +14,8 @@ type Props = {
     status: string;
     shop: string;
     category: string;
-    date_end_expertise: string;
+    dateEndExpertise: string;
+    dateOfPurchase: string;
     files: { file_id: number; file_url: string }[];
     expertise: boolean;
     money_returned: boolean;
@@ -23,13 +24,14 @@ type Props = {
     isSoonEndWarranty: boolean;
 };
 
-const ActiveCoupon = ({
+const Coupon = ({
     userId,
     warrnatyId,
     name,
     status,
     category,
-    date_end_expertise,
+    dateEndExpertise,
+    dateOfPurchase,
     shop,
     files,
     expertise,
@@ -68,7 +70,7 @@ const ActiveCoupon = ({
                     style={[styles.container, isOpenInfo && { marginLeft: 0, marginRight: 0 }]}
                     onPress={handleOpenInfo}>
                     <View style={styles.containerCircle}>{circleElements.map((i) => i)}</View>
-                    <View>
+                    <View style={styles.text}>
                         <Text style={[styles.name, isArchived && styles.archivedText]}>{name}</Text>
                         <Text style={[styles.status, isArchived && styles.archivedText]}>{status}</Text>
                     </View>
@@ -86,7 +88,7 @@ const ActiveCoupon = ({
                         <Text style={styles.name}>Документы</Text>
                         <View style={styles.containerPhotos}>
                             {files.map(({ file_url, file_id }) => (
-                                <ActiveCouponPhoto key={file_id} fileUrl={file_url} />
+                                <CouponPhoto key={file_id} fileUrl={file_url} />
                             ))}
                         </View>
                         <Text style={styles.name}>Магазин</Text>
@@ -106,13 +108,14 @@ const ActiveCoupon = ({
                         onPress={handleOpenWarrantyCase}
                     />
                     {isOpenWarrantyCase && (
-                        <ActiveCouponWarrantyCase
+                        <CouponWarrantyCase
                             userId={userId}
                             warrnatyId={warrnatyId}
                             expertise={expertise}
                             item_replaced={item_replaced}
                             money_returned={money_returned}
-                            date_end_expertise={date_end_expertise}
+                            dateEndExpertise={dateEndExpertise}
+                            dateOfPurchase={dateOfPurchase}
                         />
                     )}
                 </View>
@@ -121,4 +124,4 @@ const ActiveCoupon = ({
     );
 };
 
-export default ActiveCoupon;
+export default Coupon;

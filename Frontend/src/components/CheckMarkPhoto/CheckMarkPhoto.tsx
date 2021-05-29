@@ -6,10 +6,11 @@ type Props = {
     height: string;
     uri: string;
     checked: boolean;
+    disabled: boolean;
     onPress: (url: string) => void;
 };
 
-const CheckMarkPhoto = ({ width, height, onPress, uri, checked }: Props) => {
+const CheckMarkPhoto = ({ width, height, onPress, uri, checked, disabled }: Props) => {
     const handlePress = () => {
         onPress(uri);
     };
@@ -20,6 +21,7 @@ const CheckMarkPhoto = ({ width, height, onPress, uri, checked }: Props) => {
             width={width}
             height={height}
             onPress={handlePress}
+            disabled={disabled}
         />
     );
 };

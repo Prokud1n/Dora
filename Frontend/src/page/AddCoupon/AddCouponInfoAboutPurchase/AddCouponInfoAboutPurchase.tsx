@@ -1,5 +1,5 @@
 import { SafeAreaView, TextInput, View, Text, Button, Keyboard, TouchableOpacity } from 'react-native';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Picker } from '@react-native-picker/picker';
 import { useHistory } from 'react-router-native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -12,7 +12,7 @@ import AddCouponActions from '../../../store/actions/addCouponActions';
 import { selectors } from '../../../store/reducers/addCouponReducer';
 import getWordShape from '../../../utils/getWordShape';
 import DatePicker from '../../../components/DatePicker/DatePicker';
-import { getCurrentDate, getDateWithDot, getDateWithSplit } from '../../../utils/getFormatDate';
+import { getCurrentDate, getDateForPicker, getDateWithDot, getDateWithSplit } from '../../../utils/getFormatDate';
 import DismissKeyboard from '../../../components/DismissKeyboard/DismissKeyboard';
 
 const MONTH_SHAPE = {
@@ -42,7 +42,9 @@ const AddCouponInfoAboutPurchase = () => {
     const [couponName, setCouponName] = useState(infoPurchase.couponName);
     const [shop, setShop] = useState(infoPurchase.shopName);
     const [warrantyPeriod, setWarrantyPeriod] = useState(String(infoCategory?.warranty_period));
-    const [date, setDate] = useState(null);
+    const [date, setDate] = useState(
+        infoPurchase.dateOfPurchase ? getDateForPicker(infoPurchase.dateOfPurchase) : null
+    );
     const monthWordShape = getWordShape(
         Number(warrantyPeriod),
         MONTH_SHAPE.first,
@@ -57,11 +59,14 @@ const AddCouponInfoAboutPurchase = () => {
         Y: yearWordShape,
         D: dayWordShape
     };
+
     const [isOpenDatePicker, setIsOpenDatePicker] = useState(false);
     const [isOpenPicker, setIsOpenPicker] = useState(false);
     const [typeWarrantyPeriod, setTypeWarrantyPeriod] = useState(
         TYPE_WARRANTY_PERIOD[infoCategory?.type_warranty_period]
     );
+
+    const valuesRef = useRef({ typeWarrantyPeriod, couponName, shop, date, warrantyPeriod });
 
     useEffect(() => {
         if (Object.values(MONTH_SHAPE).includes(typeWarrantyPeriod)) {
@@ -80,6 +85,29 @@ const AddCouponInfoAboutPurchase = () => {
         setTypeWarrantyPeriod(TYPE_WARRANTY_PERIOD[infoCategory?.type_warranty_period]);
     }, [infoCategory]);
 
+    useEffect(() => {
+        valuesRef.current = { typeWarrantyPeriod, couponName, shop, date, warrantyPeriod };
+    }, [typeWarrantyPeriod, couponName, shop, date, warrantyPeriod]);
+
+    useEffect(() => {
+        return () => {
+            const { typeWarrantyPeriod, couponName, shop, date, warrantyPeriod } = valuesRef.current;
+            const typePeriod = Object.keys(TYPE_WARRANTY_PERIOD).find(
+                (key) => TYPE_WARRANTY_PERIOD[key] === typeWarrantyPeriod
+            );
+
+            dispatch(
+                AddCouponActions.saveInfoAboutPurchase({
+                    couponName,
+                    shopName: shop,
+                    dateOfPurchase: date ? getDateWithSplit(date) : null,
+                    typeWarrantyPeriod: typePeriod,
+                    warrantyPeriod
+                })
+            );
+        };
+    }, []);
+
     const disabledNextButton =
         couponName.length === 0 ||
         shop.length === 0 ||
@@ -88,19 +116,6 @@ const AddCouponInfoAboutPurchase = () => {
         typeWarrantyPeriod.length === 0;
 
     const handleRedirectToPhoto = () => {
-        const typePeriod = Object.keys(TYPE_WARRANTY_PERIOD).find(
-            (key) => TYPE_WARRANTY_PERIOD[key] === typeWarrantyPeriod
-        );
-
-        dispatch(
-            AddCouponActions.saveInfoAboutPurchase({
-                couponName,
-                shopName: shop,
-                dateOfPurchase: getDateWithSplit(date),
-                typeWarrantyPeriod: typePeriod,
-                warrantyPeriod
-            })
-        );
         history.push('/photo');
     };
 
@@ -114,6 +129,7 @@ const AddCouponInfoAboutPurchase = () => {
 
     const handleShowDatePicker = () => {
         Keyboard.dismiss();
+        setIsOpenPicker(false);
         setIsOpenDatePicker(true);
         if (date === null) {
             setDate({
@@ -126,10 +142,16 @@ const AddCouponInfoAboutPurchase = () => {
 
     const handleShowPicker = () => {
         Keyboard.dismiss();
+        setIsOpenDatePicker(false);
         setIsOpenPicker(true);
     };
 
     const hidePicker = () => {
+        setIsOpenPicker(false);
+    };
+
+    const handleDismissPickers = () => {
+        setIsOpenDatePicker(false);
         setIsOpenPicker(false);
     };
 
@@ -139,65 +161,66 @@ const AddCouponInfoAboutPurchase = () => {
         <DismissKeyboard>
             <SafeAreaView>
                 <View style={styles.containerPage}>
-                    <HeaderAddCoupon />
-                    <Text style={styles.label}>Добавьте данные о покупке</Text>
-                    <View style={styles.containerInput}>
-                        <TextInput
-                            style={styles.input}
-                            value={couponName}
-                            onChangeText={setCouponName}
-                            placeholder="Название товара"
-                        />
-                        <TextInput
-                            style={styles.input}
-                            value={shop}
-                            onChangeText={setShop}
-                            placeholder="Магазин покупки"
-                        />
-                    </View>
-                    <Text style={styles.label}>Срок гарантии</Text>
-                    <View style={styles.term}>
-                        <DatePurchase onPress={handleShowDatePicker} title={dateTitle} />
-                        <View style={styles.quaranteePeriod}>
+                    <TouchableOpacity onPress={handleDismissPickers} activeOpacity={1}>
+                        <HeaderAddCoupon />
+                        <Text style={styles.label}>Добавьте данные о покупке</Text>
+                        <View style={styles.containerInput}>
                             <TextInput
-                                style={[
-                                    styles.dimension,
-                                    styles.colorInputDays,
-                                    warrantyPeriod.length !== 0 && styles.inputDays
-                                ]}
-                                value={warrantyPeriod}
-                                onChangeText={setWarrantyPeriod}
-                                placeholder={`Кол-во ${typeWarrantyPeriod}`}
-                                keyboardType="numeric"
+                                style={styles.input}
+                                value={couponName}
+                                onChangeText={setCouponName}
+                                placeholder="Название товара"
                             />
-                            <TouchableOpacity onPress={handleShowPicker} style={styles.typePeriod}>
-                                <View style={styles.typePeriod}>
-                                    <Text>{typeWarrantyPeriod}</Text>
-                                </View>
-                            </TouchableOpacity>
+                            <TextInput
+                                style={styles.input}
+                                value={shop}
+                                onChangeText={setShop}
+                                placeholder="Магазин покупки"
+                            />
                         </View>
-                        {isOpenPicker && (
-                            <>
-                                <View style={styles.containerHidePicker}>
-                                    <Button title="Done" onPress={hidePicker} />
-                                </View>
-                                <Picker
-                                    selectedValue={typeWarrantyPeriod}
-                                    style={{ width: '100%' }}
-                                    onValueChange={setTypeWarrantyPeriod}>
-                                    <Picker.Item label={dayWordShape} value={TYPE_WARRANTY_PERIOD.D} />
-                                    <Picker.Item label={monthWordShape} value={TYPE_WARRANTY_PERIOD.M} />
-                                    <Picker.Item label={yearWordShape} value={TYPE_WARRANTY_PERIOD.Y} />
-                                </Picker>
-                            </>
-                        )}
-                    </View>
+                        <Text style={styles.label}>Срок гарантии</Text>
+                        <View style={styles.term}>
+                            <DatePurchase onPress={handleShowDatePicker} title={dateTitle} />
+                            <View style={styles.quaranteePeriod}>
+                                <TextInput
+                                    style={[
+                                        styles.dimension,
+                                        styles.colorInputDays,
+                                        warrantyPeriod.length !== 0 && styles.inputDays
+                                    ]}
+                                    value={warrantyPeriod}
+                                    onChangeText={setWarrantyPeriod}
+                                    placeholder={`Кол-во ${typeWarrantyPeriod}`}
+                                    keyboardType="numeric"
+                                />
+                                <TouchableOpacity onPress={handleShowPicker} style={styles.typePeriod}>
+                                    <View style={styles.typePeriod}>
+                                        <Text>{typeWarrantyPeriod}</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </TouchableOpacity>
                     {!isOpenPicker && !isOpenDatePicker && (
                         <View style={styles.footer}>
                             <CustomButton title="Далее" onPress={handleRedirectToPhoto} disabled={disabledNextButton} />
                         </View>
                     )}
-
+                    {isOpenPicker && (
+                        <>
+                            <View style={styles.containerHidePicker}>
+                                <Button title="Done" onPress={hidePicker} />
+                            </View>
+                            <Picker
+                                selectedValue={typeWarrantyPeriod}
+                                style={{ width: '100%' }}
+                                onValueChange={setTypeWarrantyPeriod}>
+                                <Picker.Item label={dayWordShape} value={TYPE_WARRANTY_PERIOD.D} />
+                                <Picker.Item label={monthWordShape} value={TYPE_WARRANTY_PERIOD.M} />
+                                <Picker.Item label={yearWordShape} value={TYPE_WARRANTY_PERIOD.Y} />
+                            </Picker>
+                        </>
+                    )}
                     {isOpenDatePicker && (
                         <>
                             <View style={styles.containerHidePicker}>

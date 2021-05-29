@@ -33,7 +33,7 @@ export class ClientError extends Error {
 export type TOmitDefaultErrorHandling = ((err: ClientError) => boolean) | boolean;
 
 type TGlobalErrorHandler = (err: ClientError, omitDefaultErrorHandling: TOmitDefaultErrorHandling) => void;
-type TGetAccessToken = () => string;
+type TGetAccessToken = () => Promise<string>;
 type TTryToUpdateAccessToken = () => Promise<any>;
 
 const { doRequest } = BaseHttpClient.prototype;
@@ -100,9 +100,11 @@ class Client extends BaseHttpClient {
         this.tryToUpdateAccessToken = tryToUpdateAccessToken;
     }
 
-    protected getOwnHeaders(): THeaders {
+    protected async getOwnHeaders() {
+        const token = await this.getAccessToken();
+
         return {
-            Authorization: `Bearer ${this.getAccessToken()}`,
+            Authorization: `Bearer ${token}`,
             pragma: 'no-cache',
             'Cache-Control': 'no-cache'
         };
@@ -125,14 +127,4 @@ const getAccessToken = async (): Promise<string> => {
     return token || '';
 };
 
-const getClient = async () => {
-    const token = await getAccessToken();
-
-    return new Client('https://dora.team/api/users/', () => token);
-};
-
-const client = (async () => {
-    return await getClient();
-})();
-
-export default client;
+export default new Client('https://dora.team/api/users/', getAccessToken);

@@ -63,11 +63,12 @@ export default class AddCouponActions {
 
                 dispatch({ type: 'FETCH_COUPONS_SUCCESS', payload });
             } catch (err) {
-                console.log(err?.response?.data);
+                console.log('err', err);
+                console.log('err', err.message);
                 const payload = {
                     coupons: {
-                        archived: err.response.data.data,
-                        non_archived: err.response.data.data
+                        archived: [],
+                        non_archived: []
                     }
                 };
 
@@ -99,11 +100,28 @@ export default class AddCouponActions {
         };
     }
 
-    static changeCoupon(userId, warrantyId, changeParams) {
+    static changeCoupon(
+        userId,
+        warrantyId,
+        changeParams: {
+            expertise: boolean;
+            money_returned: boolean;
+            item_replaced: boolean;
+            date_end_expertise: string;
+        }
+    ) {
         return async (dispatch, getState) => {
             dispatch({ type: 'START_CHANGE_COUPON' });
             try {
                 const response = await CouponService.changeCoupon(userId, warrantyId, changeParams);
+
+                if (changeParams.money_returned || changeParams.item_replaced) {
+                    dispatch({
+                        type: 'SUCCESS_CHANGE_COUPON'
+                    });
+
+                    return;
+                }
 
                 const state = getState();
                 const coupons = state.addCoupon.coupons.non_archived;
@@ -117,7 +135,7 @@ export default class AddCouponActions {
                     }
                 });
             } catch (err) {
-                console.log(err?.response?.data);
+                console.log(Object.values(err));
                 dispatch({ type: 'ERROR_CHANGE_COUPON' });
             }
         };

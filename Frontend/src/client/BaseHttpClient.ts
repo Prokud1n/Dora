@@ -177,7 +177,7 @@ export default class BaseHttpClient {
 
     isApiUrlBelongsToUs = (url: string): boolean => false;
 
-    doRequest(segmentUrl: string, options: TOptions = {}) {
+    async doRequest(segmentUrl: string, options: TOptions = {}) {
         const { params, requestId, omitDefaultErrorHandling, ...rest } = options;
         const isSegmentUrlRelativeToBaseUrl = !segmentUrl.startsWith('http');
 
@@ -193,9 +193,11 @@ export default class BaseHttpClient {
             this.registerUrl(segmentUrl);
         }
 
+        const requestOptions = await this.getRequestOptions(isOwn, rest);
+
         const opts: TRequestOptions = {
             signal: requestId && this.abortControllers[requestId].signal,
-            ...this.getRequestOptions(isOwn, rest)
+            ...requestOptions
         };
 
         const request = (overridenOpts: Partial<TRequestOptions> = {}) =>
@@ -242,8 +244,8 @@ export default class BaseHttpClient {
         return out;
     }
 
-    protected getOwnHeaders(): THeaders {
-        return {};
+    protected async getOwnHeaders() {
+        return {} as THeaders;
     }
 
     private getUrlEncodedFormBody(data: TData): string {
@@ -258,13 +260,13 @@ export default class BaseHttpClient {
         return formBody.join('&');
     }
 
-    getRequestOptions(isOwnApi: boolean, options: TOptions): TRequestOptions {
+    async getRequestOptions(isOwnApi: boolean, options: TOptions) {
         const { method = RequestMethod.GET, headers = {}, data, responseType, ...rest } = options;
 
         let ownHeaders = {};
 
         if (/* isOwnApi && */ typeof this.getOwnHeaders === 'function') {
-            ownHeaders = this.getOwnHeaders();
+            ownHeaders = await this.getOwnHeaders();
         }
 
         const resultHeaders = {

@@ -4,8 +4,8 @@ import { View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import getWordShape from '../../utils/getWordShape';
 import TouchableSVG from '../TouchableSVG/TouchableSVG';
-import ActiveCoupon from '../ActiveCoupon/ActiveCoupon';
-import { Coupon } from '../../store/reducers/addCouponReducer';
+import Coupon from '../Coupon/Coupon';
+import { TCoupon } from '../../store/reducers/addCouponReducer';
 
 import styles from './CouponsList.style';
 import AddCouponActions from '../../store/actions/addCouponActions';
@@ -13,7 +13,7 @@ import { DICTIONARY_CATEGORIES } from '../../page/AddCoupon/AddCouponCategory/Ad
 import { getDateWithMonthName } from '../../utils/getFormatDate';
 
 type Props = {
-    coupons: Coupon[];
+    coupons: TCoupon[];
     userId: string;
     isArchived?: boolean;
 };
@@ -29,6 +29,7 @@ const CouponsList = ({ coupons, userId, isArchived = false }: Props) => {
             shop_name,
             days_end_warranty,
             date_end_warranty,
+            date_of_purchase,
             files,
             expertise,
             item_replaced,
@@ -43,7 +44,7 @@ const CouponsList = ({ coupons, userId, isArchived = false }: Props) => {
 
             const handleDeleteCoupon = async () => {
                 await dispatch(AddCouponActions.deleteCoupon(userId, id));
-                await dispatch(AddCouponActions.fetchCoupons(userId));
+                dispatch(AddCouponActions.fetchCoupons(userId));
             };
 
             return (
@@ -51,7 +52,7 @@ const CouponsList = ({ coupons, userId, isArchived = false }: Props) => {
                     <View style={styles.containerSVG}>
                         <TouchableSVG svg="delete" height="100%" width="100%" onPress={handleDeleteCoupon} />
                     </View>
-                    <ActiveCoupon
+                    <Coupon
                         userId={userId}
                         warrnatyId={id}
                         name={name}
@@ -64,7 +65,8 @@ const CouponsList = ({ coupons, userId, isArchived = false }: Props) => {
                         money_returned={money_returned}
                         isArchived={isArchived}
                         isSoonEndWarranty={isSoonEndWarranty}
-                        date_end_expertise={date_end_expertise}
+                        dateEndExpertise={date_end_expertise}
+                        dateOfPurchase={date_of_purchase}
                     />
                 </SwipeRow>
             );

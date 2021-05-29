@@ -1,12 +1,13 @@
 import { Button, Keyboard, Modal, Text, View } from 'react-native';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import styles from './ActiveCouponWarrantyCase.style';
+import styles from './CouponWarrantyCase.style';
 import TouchableSVG from '../../TouchableSVG/TouchableSVG';
 import AddCouponActions from '../../../store/actions/addCouponActions';
 import DatePurchase from '../../DatePurchase/DatePurchase';
 import DatePicker from '../../DatePicker/DatePicker';
 import { getCurrentDate, getDateWithSplit } from '../../../utils/getFormatDate';
+import { notificationActions } from '../../../ducks/notifications';
 
 type Props = {
     userId: string;
@@ -14,24 +15,26 @@ type Props = {
     expertise: boolean;
     money_returned: boolean;
     item_replaced: boolean;
-    date_end_expertise: string;
+    dateEndExpertise: string;
+    dateOfPurchase: string;
 };
 
 const { currentYear, currentMonth, currentDay } = getCurrentDate();
 
-const ActiveCouponWarrantyCase = ({
+const CouponWarrantyCase = ({
     expertise,
     money_returned,
     item_replaced,
     userId,
     warrnatyId,
-    date_end_expertise
+    dateEndExpertise,
+    dateOfPurchase
 }: Props) => {
-    const getInitialDate = () => {
-        if (!date_end_expertise) {
+    const getDateForPicker = (value) => {
+        if (!value) {
             return null;
         }
-        const date = new Date(date_end_expertise);
+        const date = new Date(value);
 
         return {
             day: date.getDate(),
@@ -39,12 +42,13 @@ const ActiveCouponWarrantyCase = ({
             year: date.getFullYear()
         };
     };
-    const initialDate = useMemo(getInitialDate, [date_end_expertise]);
+    const initialDate = useMemo(() => getDateForPicker(dateEndExpertise), [dateEndExpertise]);
     const dispatch = useDispatch();
     const initialState = {
         expertise,
         money_returned,
-        item_replaced
+        item_replaced,
+        dirty: false
     };
     const [state, setState] = useState(initialState);
     const [date, setDate] = useState(initialDate);
@@ -58,17 +62,30 @@ const ActiveCouponWarrantyCase = ({
         };
     }, []);
 
+    const changeCoupon = async () => {
+        await dispatch(
+            AddCouponActions.changeCoupon(userId, warrnatyId, {
+                expertise: state.expertise,
+                money_returned: state.money_returned,
+                item_replaced: state.item_replaced,
+                date_end_expertise: date ? getDateWithSplit(date) : null
+            })
+        );
+
+        if (state.money_returned || state.item_replaced) {
+            dispatch(AddCouponActions.fetchCoupons(userId));
+        }
+    };
+
     useEffect(() => {
         return () => {
-            if (!mounted.current) {
-                dispatch(
-                    AddCouponActions.changeCoupon(userId, warrnatyId, { ...state, date_end_expertise: dateTitle })
-                );
+            if (!mounted.current && state.dirty) {
+                changeCoupon();
             }
         };
     }, [userId, warrnatyId, state, date]);
     const handleCheck = (id: 'expertise' | 'money_returned' | 'item_replaced') => {
-        setState({ ...state, [id]: !state[id] });
+        setState({ ...state, [id]: !state[id], dirty: true });
     };
 
     const getIcon = (id: 'expertise' | 'money_returned' | 'item_replaced') => {
@@ -87,7 +104,7 @@ const ActiveCouponWarrantyCase = ({
         if (state.expertise) {
             setIsOpenDatePicker(true);
 
-            if (!date_end_expertise) {
+            if (!dateEndExpertise) {
                 setDate({
                     day: currentDay,
                     month: currentMonth,
@@ -97,12 +114,17 @@ const ActiveCouponWarrantyCase = ({
         }
     };
 
-    const handleChangeDate = (value, id) => {
+    const handleChangeDate = (value, id: 'year' | 'month' | 'day') => {
         setDate({ ...date, [id]: value });
     };
 
     const hideDatePicker = () => {
         setIsOpenDatePicker(false);
+        const newDate = new Date(date.year, date.month, date.day);
+
+        if (newDate.getTime() < new Date(dateOfPurchase).getTime()) {
+            dispatch(notificationActions.addNotifications('Выберите дату позже, чем дата покупки'));
+        }
     };
 
     return (
@@ -169,4 +191,4 @@ const ActiveCouponWarrantyCase = ({
     );
 };
 
-export default ActiveCouponWarrantyCase;
+export default CouponWarrantyCase;

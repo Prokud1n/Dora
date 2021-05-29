@@ -77,7 +77,7 @@ const ForgotPasswordInputCode = () => {
                         </Text>
                     )}
                 />
-                {requestStatus === REQUEST.ERROR && <ValidError>Неверный код</ValidError>}
+                {requestStatus === REQUEST.ERROR && <ValidError>Неверный код, повторите попытку</ValidError>}
                 <CustomButton
                     width={228}
                     onPress={handleSendCodeToEmail}

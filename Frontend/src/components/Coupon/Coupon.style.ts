@@ -34,6 +34,9 @@ const styles = StyleSheet.create({
     categorySoonEndWarranty: {
         backgroundColor: '#FF3826'
     },
+    text: {
+        width: '85%'
+    },
     name: {
         fontSize: 22
     },

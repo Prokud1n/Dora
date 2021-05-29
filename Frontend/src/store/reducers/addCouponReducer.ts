@@ -1,7 +1,7 @@
 import { RootState } from './rootReducer';
 import REQUEST, { REQUEST_TYPE } from '../../constants/REQUEST';
 
-export type Coupon = {
+export type TCoupon = {
     category_id: number;
     date_end_expertise: string;
     date_of_purchase: string;
@@ -39,12 +39,12 @@ export type AddCouponState = {
         warranty_period: number;
     }[];
     coupons: {
-        archived: Coupon[];
-        non_archived: Coupon[];
+        archived: TCoupon[];
+        non_archived: TCoupon[];
     };
     filterCoupons: {
-        archived: Coupon[];
-        non_archived: Coupon[];
+        archived: TCoupon[];
+        non_archived: TCoupon[];
     };
     warrantyPhoto: {
         files: {
