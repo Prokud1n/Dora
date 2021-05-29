@@ -34,17 +34,18 @@ type Props = {
         | 'photo';
     width: string;
     height: string;
+    disabled?: boolean;
     onPress?: (id: string) => void;
 };
 
-const TouchableSVG = ({ svg, width, height, onPress, id }: Props) => {
+const TouchableSVG = ({ svg, width, height, onPress, id, disabled }: Props) => {
     const xml = getXML(svg);
     const handlePress = () => {
         onPress(id);
     };
 
     return (
-        <TouchableOpacity style={styles.container} onPress={handlePress}>
+        <TouchableOpacity style={styles.container} onPress={handlePress} disabled={disabled}>
             <SvgXml xml={xml} width={width} height={height} />
         </TouchableOpacity>
     );

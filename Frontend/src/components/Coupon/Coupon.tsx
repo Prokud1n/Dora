@@ -1,10 +1,10 @@
 import React, { useMemo, useState } from 'react';
 import { Dimensions, View, Text, TouchableOpacity, TextInput } from 'react-native';
 import CustomButton from '../CustomButton/CustomButton';
-import ActiveCouponPhoto from './ActiveCouponPhoto/ActiveCouponPhoto';
-import ActiveCouponWarrantyCase from './ActiveCouponWarrantyCase/ActiveCouponWarrantyCase';
+import CouponPhoto from './CouponPhoto/CouponPhoto';
+import CouponWarrantyCase from './CouponWarrantyCase/CouponWarrantyCase';
 
-import styles from './ActiveCoupon.style';
+import styles from './Coupon.style';
 import SVG from '../SVG/SVG';
 
 type Props = {
@@ -23,7 +23,7 @@ type Props = {
     isSoonEndWarranty: boolean;
 };
 
-const ActiveCoupon = ({
+const Coupon = ({
     userId,
     warrnatyId,
     name,
@@ -86,7 +86,7 @@ const ActiveCoupon = ({
                         <Text style={styles.name}>Документы</Text>
                         <View style={styles.containerPhotos}>
                             {files.map(({ file_url, file_id }) => (
-                                <ActiveCouponPhoto key={file_id} fileUrl={file_url} />
+                                <CouponPhoto key={file_id} fileUrl={file_url} />
                             ))}
                         </View>
                         <Text style={styles.name}>Магазин</Text>
@@ -106,7 +106,7 @@ const ActiveCoupon = ({
                         onPress={handleOpenWarrantyCase}
                     />
                     {isOpenWarrantyCase && (
-                        <ActiveCouponWarrantyCase
+                        <CouponWarrantyCase
                             userId={userId}
                             warrnatyId={warrnatyId}
                             expertise={expertise}
@@ -121,4 +121,4 @@ const ActiveCoupon = ({
     );
 };
 
-export default ActiveCoupon;
+export default Coupon;

@@ -57,7 +57,9 @@ const AddCouponPhoto = () => {
             setHasCameraRollPermission(hasCameraRollPermission);
 
             if (cameraRoll.status !== 'granted') {
-                notificationActions.addNotifications('Sorry, we need camera roll permissions to make this work!');
+                dispatch(
+                    notificationActions.addNotifications('Sorry, we need camera roll permissions to make this work!')
+                );
             }
         })();
     };
@@ -188,7 +190,7 @@ const AddCouponPhoto = () => {
             .then((_) => {
                 setRequestStatus(REQUEST.STILL);
                 dispatch(AddCouponActions.cleanStore());
-                notificationActions.addNotifications('Талон был успешно создан');
+                dispatch(notificationActions.addNotifications('Талон был успешно создан'));
                 history.push('/coupons');
             })
             .catch((err) => {

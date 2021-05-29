@@ -1,7 +1,7 @@
 import { Button, Keyboard, Modal, Text, View } from 'react-native';
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import styles from './ActiveCouponWarrantyCase.style';
+import styles from './CouponWarrantyCase.style';
 import TouchableSVG from '../../TouchableSVG/TouchableSVG';
 import AddCouponActions from '../../../store/actions/addCouponActions';
 import DatePurchase from '../../DatePurchase/DatePurchase';
@@ -19,7 +19,7 @@ type Props = {
 
 const { currentYear, currentMonth, currentDay } = getCurrentDate();
 
-const ActiveCouponWarrantyCase = ({
+const CouponWarrantyCase = ({
     expertise,
     money_returned,
     item_replaced,
@@ -169,4 +169,4 @@ const ActiveCouponWarrantyCase = ({
     );
 };
 
-export default ActiveCouponWarrantyCase;
+export default CouponWarrantyCase;

@@ -1,6 +1,6 @@
 import { Image, Modal, TouchableOpacity, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import styles from './ActiveCouponPhoto.style';
+import styles from './CouponPhoto.style';
 import ErrorIndicator from '../../ErrorBoundary/ErrorIndicator/ErrorIndicator';
 import getBase64FromArrayBuffer from '../../../utils/getBase64FromArrayBuffer';
 import REQUEST from '../../../constants/REQUEST';
@@ -12,7 +12,7 @@ type Props = {
     fileUrl: string;
 };
 
-const ActiveCouponPhoto = ({ fileUrl }: Props) => {
+const CouponPhoto = ({ fileUrl }: Props) => {
     const [photo, setPhoto] = useState('');
     const [isOpenPhoto, setIsOpenPhoto] = useState(false);
     const [requestStatus, setRequestStatus] = useState(REQUEST.STILL);
@@ -70,4 +70,4 @@ const ActiveCouponPhoto = ({ fileUrl }: Props) => {
     );
 };
 
-export default ActiveCouponPhoto;
+export default CouponPhoto;

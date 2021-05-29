@@ -1,5 +1,6 @@
 import { Image, Modal, TouchableOpacity, View } from 'react-native';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import CheckMarkPhoto from '../CheckMarkPhoto/CheckMarkPhoto';
 import Loader from '../Loader/Loader';
 import REQUEST from '../../constants/REQUEST';
@@ -7,6 +8,7 @@ import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 import styles from './PhotoGallery.style';
 import ViewPhoto from '../../page/ViewPhoto/ViewPhoto';
+import { notificationActions } from '../../ducks/notifications';
 
 type Props = {
     photosGallery: any;
@@ -16,9 +18,18 @@ type Props = {
 };
 
 const PhotoGallery = ({ photosGallery, checkedPhoto, onPress, requestStatus }: Props) => {
+    const dispatch = useDispatch();
     const [isOpenPhoto, setIsOpenPhoto] = useState(false);
     const [photo, setPhoto] = useState('');
     const isLoading = requestStatus === REQUEST.LOADING;
+
+    const isCheckedMaxNumber = Object.values(checkedPhoto).filter(Boolean).length === 5;
+
+    useEffect(() => {
+        if (isCheckedMaxNumber) {
+            dispatch(notificationActions.addNotifications('Вы выбрали максимальное количество фотографий'));
+        }
+    }, [isCheckedMaxNumber]);
 
     if (requestStatus === REQUEST.ERROR) {
         return <ErrorMessage errorMessage="Не удалось загрузить фото из вашей галлереи" />;
@@ -33,6 +44,7 @@ const PhotoGallery = ({ photosGallery, checkedPhoto, onPress, requestStatus }: P
                             width="60%"
                             height="60%"
                             checked={checkedPhoto[p.uri]}
+                            disabled={isCheckedMaxNumber && !checkedPhoto[p.uri]}
                             onPress={onPress}
                             uri={p.uri}
                         />

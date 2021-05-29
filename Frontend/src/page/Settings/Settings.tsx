@@ -8,7 +8,6 @@ import InputPassword from '../../components/InputPassword/InputPassword';
 import CustomButton from '../../components/CustomButton/CustomButton';
 import HeaderTitle from '../../components/HeaderTitle/HeaderTitle';
 import ValidError from '../../components/ValidError/ValidError';
-import AuthorizationActions from '../../store/actions/authorizationActions';
 import REQUEST from '../../constants/REQUEST';
 import Loader from '../../components/Loader/Loader';
 
@@ -17,7 +16,7 @@ import { selectors } from '../../store/reducers/authorizationReducer';
 import DismissKeyboard from '../../components/DismissKeyboard/DismissKeyboard';
 import AuthUtils from '../../utils/AuthUtils';
 import * as AuthService from '../../services/AuthService';
-import { ERROR_FORMAT_PASSWORD, ERROR_LENGTH_PASSWORD, HAS_NUMBER_PASSWORD } from '../../constants/errorDescription';
+import { ERROR_LENGTH_PASSWORD, HAS_NUMBER_PASSWORD } from '../../constants/errorDescription';
 import { notificationActions } from '../../ducks/notifications';
 
 const Settings = () => {
@@ -75,7 +74,7 @@ const Settings = () => {
                     setRequestStatus(REQUEST.STILL);
                     setOldPassword('');
                     setNewPassword('');
-                    notificationActions.addNotifications('Пароль успешно изменен!');
+                    dispatch(notificationActions.addNotifications('Пароль успешно изменен!'));
                 })
                 .catch((err) => {
                     console.log(err?.response?.data);

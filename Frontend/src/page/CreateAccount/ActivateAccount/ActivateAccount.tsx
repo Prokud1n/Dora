@@ -45,8 +45,8 @@ const ActivateAccount = () => {
         AuthService.activateAccount(userId, value)
             .then(() => {
                 setRequestStatus(REQUEST.STILL);
+                dispatch(notificationActions.addNotifications('Аккаунт успешно активирован", вход в новый аккаунт'));
                 history.push('/coupons');
-                notificationActions.addNotifications('Аккаунт успешно активирован", вход в новый аккаунт');
             })
             .catch((err) => {
                 console.log(err?.response?.data);

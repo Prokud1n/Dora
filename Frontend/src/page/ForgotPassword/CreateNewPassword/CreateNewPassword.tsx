@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-native';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { SafeAreaView, View } from 'react-native';
 import BackStepButton from '../../../components/BackStepButton/BackStepButton';
 import HeaderTitle from '../../../components/HeaderTitle/HeaderTitle';
@@ -14,11 +14,12 @@ import * as AuthService from '../../../services/AuthService';
 import styles from './CreateNewPassword.style';
 import { selectors } from '../../../store/reducers/authorizationReducer';
 import DismissKeyboard from '../../../components/DismissKeyboard/DismissKeyboard';
-import {ERROR_FORMAT_PASSWORD, ERROR_LENGTH_PASSWORD, HAS_NUMBER_PASSWORD} from "../../../constants/errorDescription";
-import notifications, {notificationActions} from "../../../ducks/notifications";
+import { ERROR_LENGTH_PASSWORD, HAS_NUMBER_PASSWORD } from '../../../constants/errorDescription';
+import { notificationActions } from '../../../ducks/notifications';
 
 const CreateNewPassword = () => {
     const history = useHistory();
+    const dispatch = useDispatch();
 
     const email = useSelector(selectors.email);
     const code = useSelector(selectors.code);
@@ -69,7 +70,7 @@ const CreateNewPassword = () => {
                 await AuthService.resetPassword(code, email, password);
                 setRequestStatus(REQUEST.STILL);
                 history.push('/authorization');
-                notificationActions.addNotifications('Пароль успешно изменен');
+                dispatch(notificationActions.addNotifications('Пароль успешно изменен'));
             } catch (err) {
                 console.log(err?.response?.data);
                 setRequestStatus(REQUEST.ERROR);
