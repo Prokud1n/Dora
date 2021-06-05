@@ -8,14 +8,13 @@ import Loader from '../../../components/Loader/Loader';
 import CustomButton from '../../../components/CustomButton/CustomButton';
 import DismissKeyboard from '../../../components/DismissKeyboard/DismissKeyboard';
 import InputEmail from '../../../components/InputEmail/InputEmail';
-import ErrorMessage from '../../../components/ErrorMessage/ErrorMessage';
 import BackStepButton from '../../../components/BackStepButton/BackStepButton';
-import AuthorizationActions from '../../../store/actions/authorizationActions';
 import regexpEmail from '../../../constants/regexpEmail';
 import REQUEST from '../../../constants/REQUEST';
 import * as AuthService from '../../../services/AuthService';
 
 import styles from './ForgotPasswordInputEmail.style';
+import { authActions } from '../../../ducks/auth';
 
 const ForgotPasswordInputEmail = () => {
     const dispatch = useDispatch();
@@ -44,7 +43,7 @@ const ForgotPasswordInputEmail = () => {
             AuthService.sendCodeToEmailForResetPassword(email)
                 .then(() => {
                     setRequestStatus(REQUEST.STILL);
-                    dispatch(AuthorizationActions.setEmailToStore(email));
+                    dispatch(authActions.saveEmail(email));
                     history.push('/forget-password-code');
                 })
                 .catch((err) => {

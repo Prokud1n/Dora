@@ -6,13 +6,13 @@ import HeaderTitle from '../../../components/HeaderTitle/HeaderTitle';
 import ValidError from '../../../components/ValidError/ValidError';
 import regexpEmail from '../../../constants/regexpEmail';
 import CustomButton from '../../../components/CustomButton/CustomButton';
-import AuthorizationActions from '../../../store/actions/authorizationActions';
 import DismissKeyboard from '../../../components/DismissKeyboard/DismissKeyboard';
 import InputEmail from '../../../components/InputEmail/InputEmail';
 import BackStepButton from '../../../components/BackStepButton/BackStepButton';
 import * as AuthService from '../../../services/AuthService';
 
 import styles from './CreateAccountEmail.style';
+import { authActions } from '../../../ducks/auth';
 
 const CreateAccountEmail = () => {
     const dispatch = useDispatch();
@@ -38,7 +38,7 @@ const CreateAccountEmail = () => {
         if (isValidEmail) {
             AuthService.checkEmail(email)
                 .then(() => {
-                    dispatch(AuthorizationActions.setEmailToStore(email));
+                    dispatch(authActions.saveEmail(email));
                     history.push('/create-account-password');
                 })
                 .catch((err) => {

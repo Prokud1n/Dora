@@ -11,7 +11,7 @@ import CustomButton from '../../../components/CustomButton/CustomButton';
 import REQUEST from '../../../constants/REQUEST';
 import PhotoGallery from '../../../components/PhotoGallery/PhotoGallery';
 import AddCouponActions from '../../../store/actions/addCouponActions';
-import { selectors as selectorsAuthorization } from '../../../store/reducers/authorizationReducer';
+import { authSelectors } from '../../../ducks/auth';
 import { selectors as selectorsAddCoupon } from '../../../store/reducers/addCouponReducer';
 import * as CouponService from '../../../services/CouponService';
 
@@ -27,7 +27,7 @@ const AddCouponPhoto = () => {
     const photosGallery = useSelector(selectorsAddCoupon.photosGallery);
     const infoPurchase = useSelector(selectorsAddCoupon.infoPurchase);
     const infoCategory = useSelector(selectorsAddCoupon.infoCategory);
-    const userId = useSelector(selectorsAuthorization.userId);
+    const userId = useSelector(authSelectors.userId);
     const [requestStatus, setRequestStatus] = useState(REQUEST.STILL);
     const [requestStatusGallery, setRequestStatusGallery] = useState(REQUEST.STILL);
     const [captures, setCaptures] = useState(photosGallery);

@@ -12,7 +12,7 @@ import REQUEST from '../../constants/REQUEST';
 import Loader from '../../components/Loader/Loader';
 
 import styles from './Settings.style';
-import { selectors } from '../../store/reducers/authorizationReducer';
+import { authSelectors } from '../../ducks/auth';
 import DismissKeyboard from '../../components/DismissKeyboard/DismissKeyboard';
 import AuthUtils from '../../utils/AuthUtils';
 import * as AuthService from '../../services/AuthService';
@@ -23,8 +23,8 @@ const Settings = () => {
     const history = useHistory();
     const dispatch = useDispatch();
 
-    const email = useSelector(selectors.email);
-    const userId = useSelector(selectors.userId);
+    const email = useSelector(authSelectors.email);
+    const userId = useSelector(authSelectors.userId);
     const [oldPassword, setOldPassword] = useState('');
     const [newPassword, setNewPassword] = useState('');
     const [isValidPassword, setIsValidPassword] = useState(true);

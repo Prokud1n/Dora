@@ -9,7 +9,6 @@ import InputPassword from '../../components/InputPassword/InputPassword';
 import CustomButton from '../../components/CustomButton/CustomButton';
 import BackStepButton from '../../components/BackStepButton/BackStepButton';
 import Loader from '../../components/Loader/Loader';
-import AuthorizationActions from '../../store/actions/authorizationActions';
 import REQUEST from '../../constants/REQUEST';
 import regexpEmail from '../../constants/regexpEmail';
 import * as AuthService from '../../services/AuthService';
@@ -17,6 +16,7 @@ import * as AuthService from '../../services/AuthService';
 import styles from './Authorization.style';
 import DismissKeyboard from '../../components/DismissKeyboard/DismissKeyboard';
 import AuthUtils from '../../utils/AuthUtils';
+import {authActions} from "../../ducks/auth";
 
 const Authorization = () => {
     const dispatch = useDispatch();
@@ -55,9 +55,8 @@ const Authorization = () => {
                     }
                 };
 
-                dispatch({ type: 'SIGN_IN_SUCCESS', payload });
-                dispatch(AuthorizationActions.setEmailToStore(email));
-
+                dispatch(authActions.signInSuccess(payload));
+                dispatch(authActions.saveEmail(email));
                 setRequestStatus(REQUEST.STILL);
 
                 if (verified) {

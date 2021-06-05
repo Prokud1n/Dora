@@ -12,7 +12,7 @@ import REQUEST from '../../../constants/REQUEST';
 import * as AuthService from '../../../services/AuthService';
 
 import styles from './CreateNewPassword.style';
-import { selectors } from '../../../store/reducers/authorizationReducer';
+import { authSelectors } from '../../../ducks/auth';
 import DismissKeyboard from '../../../components/DismissKeyboard/DismissKeyboard';
 import { ERROR_LENGTH_PASSWORD, HAS_NUMBER_PASSWORD } from '../../../constants/errorDescription';
 import { notificationActions } from '../../../ducks/notifications';
@@ -21,8 +21,8 @@ const CreateNewPassword = () => {
     const history = useHistory();
     const dispatch = useDispatch();
 
-    const email = useSelector(selectors.email);
-    const code = useSelector(selectors.code);
+    const email = useSelector(authSelectors.email);
+    const code = useSelector(authSelectors.code);
     const [requestStatus, setRequestStatus] = useState(REQUEST.STILL);
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');

@@ -7,6 +7,7 @@ import CustomButton from '../../components/CustomButton/CustomButton';
 import * as AuthService from '../../services/AuthService';
 
 import styles from './AboutUs.style';
+import { authActions } from '../../ducks/auth';
 
 const AboutUs = () => {
     const history = useHistory();
@@ -27,7 +28,7 @@ const AboutUs = () => {
                     }
                 };
 
-                dispatch({ type: 'SIGN_IN_SUCCESS', payload });
+                dispatch(authActions.signInSuccess(payload));
                 history.push('/coupons');
             })
             .catch(() => {

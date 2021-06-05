@@ -12,16 +12,16 @@ import * as AuthService from '../../../services/AuthService';
 
 import styles from './CreateAccountPassword.style';
 import ValidError from '../../../components/ValidError/ValidError';
-import { selectors } from '../../../store/reducers/authorizationReducer';
 import ErrorIndicator from '../../../components/ErrorBoundary/ErrorIndicator/ErrorIndicator';
 import DismissKeyboard from '../../../components/DismissKeyboard/DismissKeyboard';
 import AuthUtils from '../../../utils/AuthUtils';
-import { ERROR_FORMAT_PASSWORD, ERROR_LENGTH_PASSWORD, HAS_NUMBER_PASSWORD } from '../../../constants/errorDescription';
+import { ERROR_LENGTH_PASSWORD, HAS_NUMBER_PASSWORD } from '../../../constants/errorDescription';
+import { authSelectors, authActions } from '../../../ducks/auth';
 
 const CreateAccountPassword = () => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const email = useSelector(selectors.email);
+    const email = useSelector(authSelectors.email);
     const [requestStatus, setRequestStatus] = useState(REQUEST.STILL);
     const [password, setPassword] = useState('');
     const [isValidPassword, setIsValidPassword] = useState(true);
@@ -65,9 +65,10 @@ const CreateAccountPassword = () => {
                 await AuthUtils.setAuthMetadata({ token, userId: id, email });
 
                 setRequestStatus(REQUEST.STILL);
-                dispatch({ type: 'SEND_EMAIL_CODE_SUCCESS', payload });
+                dispatch(authActions.sendCodeSuccess(payload));
                 history.push('/activate-account');
             } catch (err) {
+                dispatch(authActions.sendCodeError());
                 console.log(err?.response?.data);
                 setRequestStatus(REQUEST.ERROR);
             }

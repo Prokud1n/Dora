@@ -7,13 +7,12 @@ import HeaderTitle from '../../../components/HeaderTitle/HeaderTitle';
 import ValidError from '../../../components/ValidError/ValidError';
 import CustomButton from '../../../components/CustomButton/CustomButton';
 import Loader from '../../../components/Loader/Loader';
-import AuthorizationActions from '../../../store/actions/authorizationActions';
 import REQUEST from '../../../constants/REQUEST';
 import * as AuthService from '../../../services/AuthService';
 
 import styles from './ForgotPasswordInputCode.style';
 import BackStepButton from '../../../components/BackStepButton/BackStepButton';
-import { selectors } from '../../../store/reducers/authorizationReducer';
+import { authSelectors, authActions } from '../../../ducks/auth';
 
 const ForgotPasswordInputCode = () => {
     const history = useHistory();
@@ -26,7 +25,7 @@ const ForgotPasswordInputCode = () => {
         setValue
     });
 
-    const email = useSelector(selectors.email);
+    const email = useSelector(authSelectors.email);
     const [requestStatus, setRequestStatus] = useState(REQUEST.STILL);
 
     const handleSendCodeToEmail = () => {
@@ -41,7 +40,7 @@ const ForgotPasswordInputCode = () => {
         AuthService.checkCodeFromEmail(email, value)
             .then(() => {
                 setRequestStatus(REQUEST.STILL);
-                dispatch(AuthorizationActions.setCodeToStore(value));
+                dispatch(authActions.saveCode(value));
                 history.push('/create-new-password');
             })
             .catch((err) => {

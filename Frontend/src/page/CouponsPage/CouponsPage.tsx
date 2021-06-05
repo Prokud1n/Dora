@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-native';
 import { useDispatch, useSelector } from 'react-redux';
 import TouchableSVG from '../../components/TouchableSVG/TouchableSVG';
 import AddCouponActions from '../../store/actions/addCouponActions';
-import { selectors as selectorsAuthorization } from '../../store/reducers/authorizationReducer';
+import { authSelectors } from '../../ducks/auth';
 import { selectors as selectorsCoupon } from '../../store/reducers/addCouponReducer';
 import Loader from '../../components/Loader/Loader';
 import REQUEST from '../../constants/REQUEST';
@@ -17,7 +17,7 @@ import DismissKeyboard from '../../components/DismissKeyboard/DismissKeyboard';
 const CouponsPage = () => {
     const history = useHistory();
     const dispatch = useDispatch();
-    const userId = useSelector(selectorsAuthorization.userId);
+    const userId = useSelector(authSelectors.userId);
     const coupons = useSelector(selectorsCoupon.coupons);
     const filterCoupons = useSelector(selectorsCoupon.filterCoupons);
     const requestStatusCoupons = useSelector(selectorsCoupon.requestStatusCoupons);

@@ -12,7 +12,7 @@ import * as AuthService from '../../../services/AuthService';
 
 import styles from './ActivateAccount.style';
 import BackStepButton from '../../../components/BackStepButton/BackStepButton';
-import { selectors } from '../../../store/reducers/authorizationReducer';
+import { authSelectors } from '../../../ducks/auth';
 import { notificationActions } from '../../../ducks/notifications';
 
 const ActivateAccount = () => {
@@ -30,7 +30,7 @@ const ActivateAccount = () => {
         setValue
     });
 
-    const userId = useSelector(selectors.userId);
+    const userId = useSelector(authSelectors.userId);
     const [requestStatus, setRequestStatus] = useState(REQUEST.STILL);
 
     const handleSendCodeToEmail = () => {

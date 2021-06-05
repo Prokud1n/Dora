@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import authorization, { AuthorizationState } from './authorizationReducer';
+import authorization, { AuthorizationState } from '../../ducks/auth';
 import addCoupon, { AddCouponState } from './addCouponReducer';
 import AuthUtils from '../../utils/AuthUtils';
 import notifications, { NotificationState } from '../../ducks/notifications';
