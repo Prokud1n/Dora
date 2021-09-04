@@ -34,11 +34,6 @@ export type Auth = {
     email: string;
 };
 
-export type AuthorizationAction = {
-    type: string;
-    payload?: Auth;
-};
-
 export type AuthorizationState = {
     auth: Auth;
     code: string;

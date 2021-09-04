@@ -19,6 +19,7 @@ import styles from './AddCouponPhoto.style';
 import Loader from '../../../components/Loader/Loader';
 import BackStepButton from '../../../components/BackStepButton/BackStepButton';
 import { notificationActions } from '../../../ducks/notifications';
+import coupon, { couponActions } from '../../../ducks/coupon';
 
 const AddCouponPhoto = () => {
     const history = useHistory();
@@ -88,8 +89,7 @@ const AddCouponPhoto = () => {
                 const media = await MediaLibrary.getAssetsAsync(options);
 
                 setLastPhoto(media.assets[media.assets.length - 1].id);
-
-                dispatch(AddCouponActions.savePhotosGallery(media.assets));
+                dispatch(couponActions.savePhotoGallery(media.assets));
                 setRequestStatusGallery(REQUEST.STILL);
             } catch {
                 setRequestStatusGallery(REQUEST.ERROR);
@@ -104,7 +104,7 @@ const AddCouponPhoto = () => {
             getPhoto(50);
         }
         return () => {
-            dispatch(AddCouponActions.updateCheckedPhoto(checkedPhoto));
+            dispatch(couponActions.updateCheckedPhoto(checkedPhoto));
         };
     }, [hasCameraRollPermission]);
 
@@ -189,7 +189,7 @@ const AddCouponPhoto = () => {
         CouponService.addNewCoupon(coupon)
             .then((_) => {
                 setRequestStatus(REQUEST.STILL);
-                dispatch(AddCouponActions.cleanStore());
+                dispatch(couponActions.cleanStore());
                 dispatch(notificationActions.addNotifications('Талон был успешно создан'));
                 history.push('/coupons');
             })

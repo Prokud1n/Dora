@@ -14,6 +14,7 @@ import getWordShape from '../../../utils/getWordShape';
 import DatePicker from '../../../components/DatePicker/DatePicker';
 import { getCurrentDate, getDateForPicker, getDateWithDot, getDateWithSplit } from '../../../utils/getFormatDate';
 import DismissKeyboard from '../../../components/DismissKeyboard/DismissKeyboard';
+import { couponActions } from '../../../ducks/coupon';
 
 const MONTH_SHAPE = {
     first: 'месяц',
@@ -97,7 +98,7 @@ const AddCouponInfoAboutPurchase = () => {
             );
 
             dispatch(
-                AddCouponActions.saveInfoAboutPurchase({
+                couponActions.saveInfoAboutPurchase({
                     couponName,
                     shopName: shop,
                     dateOfPurchase: date ? getDateWithSplit(date) : null,

@@ -8,6 +8,7 @@ import CategoryIcon from '../../../components/CategoryIcon/CategoryIcon';
 import styles from './AddCouponCategory.style';
 import AddCouponActions from '../../../store/actions/addCouponActions';
 import { selectors } from '../../../store/reducers/addCouponReducer';
+import {couponActions} from "../../../ducks/coupon";
 
 export const DICTIONARY_CATEGORIES = [
     { categoryId: 1, icon: 'householdProducts' },
@@ -25,7 +26,7 @@ const AddCouponCategory = () => {
 
     useEffect(() => {
         if (!categories.length) {
-            dispatch(AddCouponActions.fetchCategory());
+            dispatch(couponActions.fetchCategory());
         }
     }, []);
 
@@ -39,7 +40,7 @@ const AddCouponCategory = () => {
             const infoCategory = categories.find(({ category_id }) => category_id === activeCategoryId);
 
             if (infoCategory) {
-                dispatch(AddCouponActions.saveInfoAboutCategory(infoCategory));
+                dispatch(couponActions.saveCategory(infoCategory));
             }
         };
     }, [categories, iconActiveCategory]);

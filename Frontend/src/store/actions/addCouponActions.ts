@@ -4,53 +4,6 @@ import * as CouponService from '../../services/CouponService';
 import AuthUtils from '../../utils/AuthUtils';
 
 export default class AddCouponActions {
-    static updateCheckedPhoto(checkedPhoto) {
-        return { type: 'UPDATE_CHECKED_PHOTO', payload: { checkedPhoto } };
-    }
-
-    static savePhotosGallery(photosGallery) {
-        return { type: 'SAVE_PHOTOS_GALLERY', payload: photosGallery };
-    }
-
-    static saveInfoAboutPurchase({ couponName, shopName, dateOfPurchase, typeWarrantyPeriod, warrantyPeriod }) {
-        return {
-            type: 'SAVE_INFO_PURCHASE',
-            payload: {
-                infoPurchase: { couponName, shopName, dateOfPurchase, typeWarrantyPeriod, warrantyPeriod }
-            }
-        };
-    }
-
-    static saveInfoAboutCategory(infoCategory) {
-        return {
-            type: 'SAVE_INFO_CATEGORY',
-            payload: {
-                infoCategory
-            }
-        };
-    }
-
-    static cleanStore() {
-        return { type: 'CLEAN_STORE' };
-    }
-
-    static fetchCategory() {
-        return async (dispatch) => {
-            dispatch({ type: 'FETCH_CATEGORY_START' });
-            try {
-                const response = await CouponService.fetchCategory();
-
-                const payload = {
-                    categories: response
-                };
-
-                dispatch({ type: 'FETCH_CATEGORY_SUCCESS', payload });
-            } catch {
-                dispatch({ type: 'FETCH_CATEGORY_ERROR' });
-            }
-        };
-    }
-
     static fetchCoupons(userId) {
         return async (dispatch) => {
             dispatch({ type: 'FETCH_COUPONS_START' });

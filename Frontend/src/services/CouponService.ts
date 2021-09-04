@@ -1,12 +1,13 @@
 import Client from '../client/Client';
 import { RequestMethod, ResponseType } from '../client/BaseHttpClient';
+import {TCategory} from "../ducks/coupon";
 
 export const addNewCoupon = async (formDataCoupon) => {
     return Client.doRequest('warranties', { method: RequestMethod.POST, data: formDataCoupon });
 };
 
 export const fetchCategory = async () => {
-    return Client.doRequest('https://dora.team/api/warranties/categories');
+    return Client.doRequest<TCategory[]>('https://dora.team/api/warranties/categories');
 };
 
 export const fetchCoupons = async (userId) => {

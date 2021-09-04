@@ -5,6 +5,7 @@ import BackStepButton from '../../components/BackStepButton/BackStepButton';
 import AddCouponActions from '../../store/actions/addCouponActions';
 
 import styles from './ViewPhoto.style';
+import { couponActions } from '../../ducks/coupon';
 
 type IProps = {
     onClose: () => void;
@@ -19,7 +20,7 @@ const ViewPhoto = ({ onClose, photo, checkedPhoto }: IProps) => {
         const newCheckedPhoto = { ...checkedPhoto };
 
         newCheckedPhoto[photo] = !checkedPhoto[photo];
-        dispatch(AddCouponActions.updateCheckedPhoto(newCheckedPhoto));
+        dispatch(couponActions.updateCheckedPhoto(newCheckedPhoto));
         onClose();
     };
 
